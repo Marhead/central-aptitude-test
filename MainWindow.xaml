@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:CentralAptitudeTest"
         mc:Ignorable="d"
         Title="적성검사결과정리기" Height="600" Width="800">
+    
     <Grid Background="#07553B" 
           AllowDrop="True" 
-          Drop="Grid_Drop"
+          Drop="Grid_Drop" 
           DragOver="Grid_DragOver">
+        
         <TextBox 
             x:Name="Title" 
             BorderBrush="#07553B" 

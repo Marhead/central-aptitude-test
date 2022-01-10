@@ -6,48 +6,5 @@
         xmlns:local="clr-namespace:CentralAptitudeTest"
         mc:Ignorable="d"
         Title="적성검사결과정리기" Height="600" Width="800">
-    
-    <Grid Background="#07553B" 
-          AllowDrop="True" 
-          Drop="Grid_Drop" 
-          DragOver="Grid_DragOver">
-        
-        <TextBox 
-            x:Name="Title" 
-            BorderBrush="#07553B" 
-            Foreground="#CED46A" 
-            Background="#07553B" 
-            HorizontalAlignment="Center" 
-            Margin="0,10,0,0" 
-            Text="적성 검사 결과 엑셀 변환기" 
-            TextWrapping="Wrap" 
-            VerticalAlignment="Top" 
-            Width="780" 
-            TextChanged="TextBox_TextChanged" 
-            Height="60" 
-            FontSize="48" 
-            FontWeight="Bold" 
-            TextAlignment="Center"/>
-        
-        <Border 
-            BorderThickness="1" 
-            BorderBrush="#CED46A" 
-            Background="#CED46A" 
-            HorizontalAlignment="Left" 
-            Height="300" 
-            Margin="75,200,0,0" 
-            VerticalAlignment="Top" 
-            Width="300"/>
-        
-        <Border 
-            BorderThickness="1" 
-            BorderBrush="#CED46A" 
-            Background="#CED46A" 
-            HorizontalAlignment="Left" 
-            Height="300" 
-            Margin="425,200,0,0" 
-            VerticalAlignment="Top" 
-            Width="300"/>
-
-    </Grid>
+      
 </Window>

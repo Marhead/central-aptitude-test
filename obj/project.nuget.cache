@@ -10,8 +10,8 @@
     {
       "code": "NU1101",
       "level": "Error",
-      "message": "DevExpress.Wpf.Controls 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
-      "libraryId": "DevExpress.Wpf.Controls",
+      "message": "DevExpress.Wpf.Docking 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
+      "libraryId": "DevExpress.Wpf.Docking",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]
@@ -19,8 +19,8 @@
     {
       "code": "NU1101",
       "level": "Error",
-      "message": "DevExpress.Wpf.Docking 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
-      "libraryId": "DevExpress.Wpf.Docking",
+      "message": "DevExpress.Wpf.Controls 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
+      "libraryId": "DevExpress.Wpf.Controls",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]

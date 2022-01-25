@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
+
 namespace CentralAptitudeTest.Commands
 {
     public partial class Automation : Component

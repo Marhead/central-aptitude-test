@@ -10,8 +10,9 @@
 *.userosscache
 *.sln.docstates
 _ReSharper.*
-bin
-/obj
+bin/
+obj/
+.vs/
 packages
 
 # User-specific files (MonoDevelop/Xamarin Studio)

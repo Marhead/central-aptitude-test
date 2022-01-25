@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "jX4ZE3MM6BFknLuNtvn9ZZ/Rsl1cYZbJEuvmbn/BqsBl1gAeuISolt9HUcXxlKhebQv7IoVMAcIcEfUlVzYHGA==",
+  "dgSpecHash": "khtU0rsfZLiqC9+XqrJVtJHqj58HlM+5oUKtO6ROXp/7uzVykKIyHckZIR7fhgV+erZOo5pSNlcahcFU7mp4PA==",
   "success": false,
   "projectFilePath": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\mvvmessentials.wpf\\1.0.3\\mvvmessentials.wpf.1.0.3.nupkg.sha512"
+    "C:\\Users\\win\\.nuget\\packages\\mvvmessentials.wpf\\1.0.3\\mvvmessentials.wpf.1.0.3.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1101",
       "level": "Error",
-      "message": "DevExpress.Wpf.Controls 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
-      "libraryId": "DevExpress.Wpf.Controls",
+      "message": "DevExpress.Wpf.Docking 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org, Package source인 패키지가 없습니다.",
+      "libraryId": "DevExpress.Wpf.Docking",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]
@@ -19,8 +19,8 @@
     {
       "code": "NU1101",
       "level": "Error",
-      "message": "DevExpress.Wpf.Docking 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org인 패키지가 없습니다.",
-      "libraryId": "DevExpress.Wpf.Docking",
+      "message": "DevExpress.Wpf.Controls 패키지를 찾을 수 없습니다. 원본에 ID가 Microsoft Visual Studio Offline Packages, nuget.org, Package source인 패키지가 없습니다.",
+      "libraryId": "DevExpress.Wpf.Controls",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]

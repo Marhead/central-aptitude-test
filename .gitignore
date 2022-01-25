@@ -13,6 +13,12 @@ _ReSharper.*
 bin/
 obj/
 .vs/
+.bin/
+.obj/
+/bin
+/obj
+/.bin
+/.obj
 packages
 
 # User-specific files (MonoDevelop/Xamarin Studio)

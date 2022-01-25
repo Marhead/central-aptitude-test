@@ -6,15 +6,9 @@
       "version": "3.1.0"
     },
     "additionalProbingPaths": [
-<<<<<<< Updated upstream
-      "C:\\Users\\clgns0415@gmail.com\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages",
-      "C:\\Microsoft\\Xamarin\\NuGet"
-=======
       "C:\\Users\\win\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\강동진\\.nuget\\packages",
-      "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages"
->>>>>>> Stashed changes
+      "C:\\Users\\win\\.nuget\\packages",
+      "C:\\Microsoft\\Xamarin\\NuGet"
     ],
     "configProperties": {
       "Microsoft.NETCore.DotNetHostPolicy.SetAppPaths": true

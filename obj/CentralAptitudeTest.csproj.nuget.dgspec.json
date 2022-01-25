@@ -10,14 +10,14 @@
         "projectUniqueName": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
         "projectName": "CentralAptitudeTest",
         "projectPath": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
-        "packagesPath": "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\win\\.nuget\\packages\\",
         "outputPath": "C:\\code\\workingspace\\CentralAptitudeTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\clgns0415@gmail.com\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\win\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -25,6 +25,7 @@
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 21.2\\DevExtreme\\DevExtreme\\System\\DevExtreme\\Bin\\AspNetCore": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -73,7 +74,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

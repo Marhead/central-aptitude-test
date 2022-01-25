@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CentralAptitudeTest.Views
 {
     /// <summary>
-    /// CanvasView.xaml에 대한 상호 작용 논리
+    /// ResultView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class CanvasView : UserControl
+    public partial class ResultView : UserControl
     {
-        public CanvasView()
+        public ResultView()
         {
             InitializeComponent();
         }

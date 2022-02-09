@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CentralAptitudeTest"
         mc:Ignorable="d"
         x:Name="root"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+        Title="중앙적성검사" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
     <Grid>
         <Grid Background="#FFD6D6D6">
             <Grid x:Name="panelHeader" VerticalAlignment="Top" Height="50" Background="#FF0F427A" MouseDown="panelHeader_MouseDown">

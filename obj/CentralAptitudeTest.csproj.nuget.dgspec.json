@@ -53,9 +53,9 @@
               "target": "Package",
               "version": "[21.2.4, )"
             },
-            "MVVMEssentials.WPF": {
+            "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[9.0.1, )"
             }
           },
           "imports": [

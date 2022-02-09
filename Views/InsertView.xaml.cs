@@ -1,21 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CentralAptitudeTest.Models;
+using Microsoft.Win32;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using CentralAptitudeTest.ViewModels;
 
 namespace CentralAptitudeTest.Views
 {
@@ -24,31 +11,34 @@ namespace CentralAptitudeTest.Views
     /// </summary>
     public partial class InsertView : UserControl
     {
-        MainWindow mainWindow = new MainWindow();
+        private Config Config;
 
         public InsertView()
         {
             InitializeComponent();
-            DataContext = new InsertViewModel();
+            Config = Config.GetConfig();
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.ShowDialog();
 
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
             {
-                //myTextBox.Text = File.ReadAllText(openFileDialog.FileName);
-                myTextBox.Text = openFileDialog.FileName;
+                Config conf = new Config();
+                conf.FilePaths.Add(new FilePath() { filePath = openFileDialog.FileName, College = college.Text, Subject = subject.Text });
+                Config.SetConfig(conf);
             }
 
-            //FileStream 클래스 선언하여 진행률 바에 보낼 값 작성
+            Thread.Sleep(500);
+
+            ReadFilePath(openFileDialog.FileName);
         }
 
-        private void NextPageButton_Click(object sender, RoutedEventArgs e)
+        private void ReadFilePath(string filename) 
         {
-            root.Content = new ProgressView(myTextBox.Text);
+            myTextBox.Text = filename;
+            return; 
         }
     }
 }

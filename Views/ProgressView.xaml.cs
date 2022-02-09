@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using CentralAptitudeTest.Models;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using CentralAptitudeTest.ViewModels;
 
 namespace CentralAptitudeTest.Views
 {
@@ -22,15 +8,22 @@ namespace CentralAptitudeTest.Views
     /// </summary>
     public partial class ProgressView : UserControl
     {
-        public ProgressView(string filePath)
+        private Config Config;
+
+        public ProgressView()
         {
             InitializeComponent();
-            TextBlock.Text = filePath;
-        }
-
-        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show(TextBlock.Text);
+            Config = Config.GetConfig();
+            foreach (FilePath fp in Config.FilePaths)
+            {
+                if (fp.filePath != null)
+                {
+                    college.Content = fp.College;
+                    subject.Content = fp.Subject;
+                    TextBlock.Text = fp.filePath;
+                    return;
+                }
+            }
         }
     }
 }

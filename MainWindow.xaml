@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CentralAptitudeTest"
         mc:Ignorable="d"
         x:Name="root"
-        Title="중앙적성검사" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Loaded="root_Loaded">
     <Grid>
         <Grid Background="#FFD6D6D6">
             <Grid x:Name="panelHeader" VerticalAlignment="Top" Height="50" Background="#FF0F427A" MouseDown="panelHeader_MouseDown">
@@ -20,19 +19,19 @@
                         </Button>
                     </Grid>
                     <ListView Name="PanelList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontFamily="Century Gothic" FontSize="14" Foreground="White" BorderBrush="Transparent" Background="Transparent" FontWeight="Bold">
-                        <ListViewItem Height="50" Name="Insert" Selected="Insert_Selected" >
+                        <ListViewItem Height="50" Name="Insert" IsSelected="False" Selected="Insert_Selected" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
                                 <TextBlock Margin="15 0 0 0" Text="데이터 입력" VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="50" Name="Process" Selected="Process_Selected" >
+                        <ListViewItem Height="50" Name="Process" IsSelected="False" Selected="Process_Selected" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
                                 <TextBlock Margin="15 0 0 0" Text="데이터 가공" VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="50" Selected="ListViewItem_Selected" >
+                        <ListViewItem Height="50" Name="Complete" IsSelected="False" Selected="ListViewItem_Selected">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
                                 <TextBlock Margin="15 0 0 0" Text="데이터 완성" VerticalAlignment="Center"/>
@@ -42,8 +41,40 @@
 
                 </StackPanel>
             </Grid>
-            <Grid x:Name="mainPanel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="650" Height="400" Background="#FFD6D6D6" Margin="150,0,0,0">
+            <Grid x:Name="mainPanel" HorizontalAlignment="Left" VerticalAlignment="Center" Width="650" Height="310" Background="#FFD6D6D6" Margin="150,0,0,0">
                 <UserControl x:Name="asd"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="650" Height="75" Background="#FFD6D6D6" Margin="150,0,0,0">
+                <Button Name="PreviewPageButton"
+                Grid.Row="2"
+                Width="100"
+                Height="30"
+                Visibility="Hidden"
+                Background="#FF0F427A"
+                Foreground="White"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Content="← 이전으로" Margin="0,20,200,20" Click="PreviewPageButton_Click"/>
+                <Button Name="NextPageButton"
+                Grid.Row="2"
+                Width="100"
+                Height="30"
+                Background="#FF0F427A"
+                Foreground="White"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Click="NextPageButton_Click"
+                Content="다음으로 →" Margin="0,20,50,20"/>
+                <Button Name="HomeButton"
+                Grid.Row="2"
+                Width="100"
+                Height="30"
+                Visibility="Hidden"
+                Background="#FF0F427A"
+                Foreground="White"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Content="처음으로" Margin="0,20,50,20" Click="HomeButton_Click"/>
             </Grid>
 
         </Grid>

@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using CentralAptitudeTest.Models;
 using CentralAptitudeTest.Views;
 
 namespace CentralAptitudeTest
@@ -21,6 +10,9 @@ namespace CentralAptitudeTest
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Config Config;
+        private int PageNum = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,21 +26,6 @@ namespace CentralAptitudeTest
             }
         }
 
-        private void StackPanel1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //asd.Content = new InsertView();
-        }
-
-        private void StackPanel2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {            
-            //asd.Content = new ProgressView(null);
-        }
-
-        private void StackPanel3_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //asd.Content = new ResultView();
-        }
-
         private void Insert_Selected(object sender, RoutedEventArgs e)
         {
             asd.Content = new InsertView();
@@ -56,12 +33,94 @@ namespace CentralAptitudeTest
 
         private void Process_Selected(object sender, RoutedEventArgs e)
         {
-
+            //asd.Content = new ProgressView(String.Empty);
         }
 
         private void ListViewItem_Selected(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void NextPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (PageNum)
+            {
+                case 0:
+                    this.Insert.IsSelected = false;
+                    this.Complete.IsSelected = false;
+                    this.Process.IsSelected = true;
+                    NextPageButton.Visibility = Visibility.Visible;
+                    PreviewPageButton.Visibility = Visibility.Visible;
+                    HomeButton.Visibility = Visibility.Hidden;
+                    asd.Content = new ProgressView();
+                    PageNum += 1;
+                    break;
+                case 1:
+                    this.Insert.IsSelected = false;
+                    this.Process.IsSelected = false;
+                    this.Complete.IsSelected = true;
+                    NextPageButton.Visibility = Visibility.Hidden;
+                    PreviewPageButton.Visibility = Visibility.Visible;
+                    HomeButton.Visibility = Visibility.Visible;
+                    asd.Content = new ResultView();
+                    PageNum += 1;
+                    break;
+                case 2:
+                    NextPageButton.Visibility = Visibility.Hidden;
+                    PreviewPageButton.Visibility = Visibility.Visible;
+                    HomeButton.Visibility = Visibility.Visible;
+                    break;
+            }
+
+
+        }
+
+        private void PreviewPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (PageNum)
+            {
+                case 0:
+                    NextPageButton.Visibility = Visibility.Visible;
+                    PreviewPageButton.Visibility = Visibility.Hidden;
+                    HomeButton.Visibility = Visibility.Hidden;
+                    break;
+                case 1:
+                    this.Process.IsSelected = false;
+                    this.Complete.IsSelected = false;
+                    this.Insert.IsSelected = true;
+                    NextPageButton.Visibility = Visibility.Visible;
+                    PreviewPageButton.Visibility = Visibility.Hidden;
+                    HomeButton.Visibility = Visibility.Hidden;
+                    asd.Content = new InsertView();
+                    PageNum -= 1;
+                    break;
+                case 2:
+                    this.Insert.IsSelected = false;
+                    this.Complete.IsSelected = false;
+                    this.Process.IsSelected = true;
+                    NextPageButton.Visibility = Visibility.Visible;
+                    PreviewPageButton.Visibility = Visibility.Visible;
+                    HomeButton.Visibility = Visibility.Hidden;
+                    asd.Content = new ProgressView();
+                    PageNum -= 1;
+                    break;
+            }
+        }
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Process.IsSelected = false;
+            this.Complete.IsSelected = false;
+            this.Insert.IsSelected = true;
+            NextPageButton.Visibility = Visibility.Visible;
+            PreviewPageButton.Visibility = Visibility.Hidden;
+            HomeButton.Visibility = Visibility.Hidden;
+            asd.Content = new InsertView();
+            PageNum = 0;
+        }
+
+        private void root_Loaded(object sender, RoutedEventArgs e)
+        {
+            Config = Config.GetConfig();
         }
     }
 }

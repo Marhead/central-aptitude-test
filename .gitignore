@@ -408,3 +408,13 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+obj/CentralAptitudeTest.csproj.nuget.dgspec.json
+obj/CentralAptitudeTest.csproj.nuget.dgspec.json
+obj/CentralAptitudeTest.csproj.nuget.g.props
+obj/CentralAptitudeTest.csproj.nuget.g.targets
+obj/Debug/netcoreapp3.1/App.g.i.cs
+obj/Debug/netcoreapp3.1/CentralAptitudeTest.assets.cache
+obj/Debug/netcoreapp3.1/CentralAptitudeTest.csprojAssemblyReference.cache
+obj/Debug/netcoreapp3.1/MainWindow.g.i.cs
+obj/project.assets.json
+obj/project.nuget.cache

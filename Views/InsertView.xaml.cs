@@ -3,8 +3,6 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using Excel = Microsoft.Office.Interop.Excel;
-using Word = Microsoft.Office.Interop.Word;
 
 namespace CentralAptitudeTest.Views
 {
@@ -28,7 +26,7 @@ namespace CentralAptitudeTest.Views
             if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
             {
                 Config conf = new Config();
-                conf.FilePaths.Add(new FilePath() { filePath = openFileDialog.FileName, College = college.Text, Subject = subject.Text });
+                conf.FilePaths.Add(new FilePath() { filePath = openFileDialog.FileName });
                 Config.SetConfig(conf);
             }
 

@@ -20,20 +20,21 @@ namespace CentralAptitudeTest.Views
 
             Config = Config.GetConfig();
 
+            return;
+        }
+
+        private void NextPageButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
             foreach (FilePath fp in Config.FilePaths)
             {
                 if (fp.filePath != null)
                 {
-                    college.Content = fp.College;
-                    subject.Content = fp.Subject;
-                    TextBlock.Text = fp.filePath;
+                    Config conf = new Config();
+                    conf.FilePaths.Add(new FilePath() { filePath = fp.filePath, College = college.Text, Subject = subject.Text });
+                    Config.SetConfig(conf);
+                    return;
                 }
             }
-
-            // OpenFile 호출, Config에서 주소 불러와서 대입
-            OpenFile(Config.FilePaths);
-
-            return;
         }
 
         //
@@ -67,8 +68,5 @@ namespace CentralAptitudeTest.Views
                 Console.WriteLine("No worksheets available");
             }
         }
-
-
-
     }
 }

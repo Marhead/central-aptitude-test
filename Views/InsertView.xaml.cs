@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Excel = Microsoft.Office.Interop.Excel;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace CentralAptitudeTest.Views
 {

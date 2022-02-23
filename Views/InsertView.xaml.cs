@@ -26,7 +26,7 @@ namespace CentralAptitudeTest.Views
             if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
             {
                 Config conf = new Config();
-                conf.FilePaths.Add(new FilePath() { filePath = openFileDialog.FileName });
+                conf.FilePath = new FilePath() { filePath = openFileDialog.FileName };
                 Config.SetConfig(conf);
             }
 

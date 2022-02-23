@@ -11,14 +11,14 @@ namespace CentralAptitudeTest.Models
         public static string runPath = Path.GetDirectoryName(typeof(Config).Assembly.Location);
         public static string ConfPath = string.Format("{0}/config", runPath);
 
-        public List<FilePath> FilePaths { get; set; }
+        public List<string> Subjects { get; set; }
+
+        public FilePath FilePath { get; set; }
 
         public Config()
         {
-            FilePaths = new List<FilePath>();
+            FilePath = new FilePath();
         }
-
-
 
         public static Config GetConfig()
         {
@@ -32,7 +32,7 @@ namespace CentralAptitudeTest.Models
             else
             {
                 Config conf = new Config();
-                conf.FilePaths.Add(new FilePath() { filePath = "파일 없음" });
+                conf.FilePath = new FilePath() { filePath = "파일 없음" };
                 Config.SetConfig(conf);
                 //ConnectionList = new ObservableCollection<TreeNode>();
                 //ConnectionList.Add(new TreeNode() { Id = "연결", Type = TreeViewItemType.Root });

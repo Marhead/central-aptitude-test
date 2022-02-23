@@ -12,7 +12,9 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <TextBlock 
@@ -21,10 +23,43 @@
             Text="데이터 가공 중..." 
             FontSize="50"/>
 
+
         <Label Grid.Row="1" Content="단과대학 : " Margin="200,0,0,0"/>
         <TextBox Name="college" Grid.Row="1"  Height="20" Width="200" HorizontalAlignment="Center" Margin="200,0,0,0"/>
         <Label Grid.Row="2" Content="학과명 : " Margin="200,0,0,0"/>
-        <TextBox Name="subject" Grid.Row="2"  Height="20" Width="200" HorizontalAlignment="Center" Margin="200,0,0,0"/>
+        <TextBox Name="subject1" Grid.Row="2"  Height="20" Width="200" HorizontalAlignment="Center" Margin="200,0,0,0"/>
+        <Grid Background="#FFFFFF" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="500"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <ComboBox Grid.Row="0" Width="200" Height="20" Name="college_combo">
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <TextBox Name="subject2" Grid.Row="0" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0"/>
+                <TextBox Name="subject3" Grid.Row="1" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0"/>
+                <TextBox Name="subject4" Grid.Row="2" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0"/>
+                <TextBox Name="subject5" Grid.Row="3" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0"/>
+                <TextBox Name="subject6" Grid.Row="4" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0"/>
+            </Grid>
+        </Grid>
+
 
         <TextBlock
             Name="TextBlock"
@@ -32,18 +67,37 @@
             Foreground="Black"
             Padding="15"/>
 
-        <Button Name="NextPageButton"
+        <Button Name="AddCollegeButton"
                 Grid.Row="4"
                 Width="100"
                 Height="30"
                 Background="#FF0F427A"
                 Foreground="white"
-                HorizontalAlignment="Center"
-                Content="검색" 
-                Click="NextPageButton_Click"
-                Margin="0,0,0,20"/>
+                HorizontalAlignment="Left"
+                Content="단과대 추가" 
+                Margin="350,0,0,20" Click="AddCollegeButton_Click"/>
 
-        <dxe:ProgressBarEdit Grid.Row="5" Width="500" Height="20" Value="34" Visibility="Hidden"/>
+        <Button Name="UploadButton"
+                Grid.Row="4"
+                Width="100"
+                Height="30"
+                Background="#FF0F427A"
+                Foreground="white"
+                HorizontalAlignment="Left"
+                Content="데이터 올리기" 
+                Margin="475,0,0,20" Click="UploadButton_Click"/>
+
+        <Button Name="Input_Complete_Button"
+                Grid.Row="4"
+                Width="100"
+                Height="30"
+                Background="#FF0F427A"
+                Foreground="white"
+                HorizontalAlignment="Left"
+                Content="입력 완료" 
+                Margin="600,0,0,20" Click="Input_Complete_Button_Click"/>
+
+        <dxe:ProgressBarEdit Grid.Row="6" Width="500" Height="20" Value="34" Visibility="Hidden"/>
 
     </Grid>
 </UserControl>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Name="root"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Loaded="root_Loaded">
+        Title="MainWindow" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Loaded="root_Loaded">
     <Grid>
         <Grid Background="#FFD6D6D6">
             <Grid x:Name="panelHeader" VerticalAlignment="Top" Height="50" Background="#FF0F427A" MouseDown="panelHeader_MouseDown">
@@ -42,9 +42,9 @@
                 </StackPanel>
             </Grid>
             <Grid x:Name="mainPanel" HorizontalAlignment="Left" VerticalAlignment="Center" Width="650" Height="310" Background="#FFD6D6D6" Margin="150,0,0,0">
-                <UserControl x:Name="asd"/>
+                <UserControl x:Name="asd" Width="750" Height="450" Margin="0, -74, -100, -66"/>
             </Grid>
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="650" Height="75" Background="#FFD6D6D6" Margin="150,0,0,0">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="750" Height="75" Background="#FFD6D6D6" Margin="150,0,0,0">
                 <Button Name="PreviewPageButton"
                 Grid.Row="2"
                 Width="100"

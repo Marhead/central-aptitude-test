@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace CentralAptitudeTest.Views
 {
@@ -67,36 +66,6 @@ namespace CentralAptitudeTest.Views
             // 치훈이 함수 호출 
         }
 
-        //
-        //private void OpenFile(string filepath)
-        //{
-        //    var ExcelApp = new Excel.Application();
-        //    ExcelApp.Visible = true;
-
-        //    Excel.Workbooks books = ExcelApp.Workbooks;
-
-        //    // FilePath 넣는 곳
-        //    Excel.Workbook sheets = books.Open(filepath);
-        //}
-
-        //private void illustrates()
-        //{
-        //    Application excelApplication = new Application();
-
-        //    Excel.Workbook excelWorkBook = Excel.Workbooks.Open(@"D:\Test.xslx");
-
-        //    int worksheetcount = excelWorkBook.Worksheets.Count;
-        //    if (worksheetcount > 0)
-        //    {
-        //        Excel.Worksheet worksheet = (Excel.Worksheet)excelWorkBook.Worksheets[1];
-        //        string worksheetName = worksheet.Name;
-        //        var data = ((Excel.Range)worksheet.Cells[1050, 20]).Value;
-        //        Console.WriteLine(data);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("No worksheets available");
-        //    }
-        //}
+        
     }
 }

@@ -1,41 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Excel = Microsoft.Office.Interop.Excel;
+using CentralAptitudeTest.Models;
+using System.IO;
+using Microsoft.Office.Interop.Excel;
 
 namespace CentralAptitudeTest.Commands
 {
     class ExcelManipulation
     {
-        private void OpenFile(string filepath)
+        private Config config;
+        private Application application;
+        
+        private Workbook InputWorkbook = new Workbook();
+        private Worksheet Worksheet;
+
+        private Workbook OutputWorkbookForAll = new Workbook();
+        private Workbook OutputWorkbookForGraph = new Workbook();
+
+        // 새로운 Excel 파일(워크북) 생성
+        // Workbook workbook = application.Workbooks.Add();
+
+        public ExcelManipulation(string filepath)
         {
-            var ExcelApp = new Excel.Application();
-            ExcelApp.Visible = true;
-
-            Excel.Workbooks books = ExcelApp.Workbooks;
-
-            // FilePath 넣는 곳
-            Excel.Workbook sheets = books.Open(filepath);
+            application = new Application();
+            OpenFile(filepath);
         }
 
-        private void illustrates()
+
+        public void OpenFile(string filepath)
         {
-            Excel.Application excelApplication = new Excel.Application();
+            // Config에서 filepath 뽑아오기
+            //string filepath = config.FilePath.filePath;
 
-            Excel.Workbook excelWorkBook = Excel.Workbooks.Open(@"D:\Test.xslx");
+            // 기존 Excel 파일(워크북) 불러오기
+            InputWorkbook = application.Workbooks.Open(Filename : filepath);
+            OutputWorkbookForAll = application.Workbooks.Add();
+            OutputWorkbookForGraph = application.Workbooks.Add();
+        }
 
-            int worksheetcount = excelWorkBook.Worksheets.Count;
-            if (worksheetcount > 0)
-            {
-                Excel.Worksheet worksheet = (Excel.Worksheet)excelWorkBook.Worksheets[1];
-                string worksheetName = worksheet.Name;
-                var data = ((Excel.Range)worksheet.Cells[1050, 20]).Value;
-                Console.WriteLine(data);
-            }
-            else
-            {
-                Console.WriteLine("No worksheets available");
-            }
+        public void SaveFile()
+        {
+            OutputWorkbookForAll.SaveAs(Filename : @"C:\\test\testforall.xlsx");
+            OutputWorkbookForGraph.SaveAs(Filename : @"C:\\test\testforgraph.xlsx");
+        }
+
+        private void SortingCells()
+        {
+            // workbook에 데이터를 읽거나 쓸 worksheet 생성
+        }
+
+        private void Filtering1()
+        {
+
+        }
+
+        private void Filtering2()
+        {
+
+        }
+        private void Filtering3()
+        {
+
+        }
+        private void Filtering4()
+        {
+
+        }
+        private void Filtering5()
+        {
+
+        }
+        private void Filtering6()
+        {
+
+        }
+        private void Filtering7()
+        {
+
+        }
+        private void Filtering8()
+        {
+
+        }
+        private void Filtering9()
+        {
+
+        }
+        private void Filtering10()
+        {
+
+        }
+        private void Filtering11()
+        {
+
+        }
+
+        private void Filtering12()
+        {
+
+        }
+        private void Filtering13()
+        {
+
+        }
+        private void Filtering14()
+        {
+
+        }
+        private void Filtering15()
+        {
+
+        }
+        private void Filtering16()
+        {
+
         }
     }
 }

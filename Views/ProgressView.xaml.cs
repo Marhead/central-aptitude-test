@@ -1,7 +1,10 @@
 ﻿using CentralAptitudeTest.Models;
+using CentralAptitudeTest.Commands;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows;
+using System;
+using Microsoft.Office.Interop.Excel;
 
 namespace CentralAptitudeTest.Views
 {
@@ -12,6 +15,7 @@ namespace CentralAptitudeTest.Views
     {
         private Config Config;
         private List<Dictionary<string, List<string>>> Temp_College_Dictionarys;
+        //private ExcelManipulation ExcelManipulation = new ExcelManipulation();
 
         public ProgressView()
         {
@@ -63,9 +67,17 @@ namespace CentralAptitudeTest.Views
 
         private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // 치훈이 함수 호출 
-        }
+            // ExcelManipulation 함수 호출
 
-        
+            ExcelManipulation excelManipulation = new ExcelManipulation("C:\\Test\\ExcelTest\test.xlsx");
+
+            //try
+            //{
+            //    ExcelManipulation excelManipulation = new ExcelManipulation(Config);
+            //} catch(System.Exception exception)
+            //{
+            //    Console.WriteLine(exception);
+            //}
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace CentralAptitudeTest.Views
     {
         private Config Config;
         private List<Dictionary<string, List<string>>> Temp_College_Dictionarys;
-        //private ExcelManipulation ExcelManipulation = new ExcelManipulation();
+        private ExcelManipulation ExcelManipulation;
 
         public ProgressView()
         {
@@ -68,7 +68,7 @@ namespace CentralAptitudeTest.Views
         private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // ExcelManipulation 함수 호출
-            ExcelManipulation excelManipulation = new ExcelManipulation("C:\\test\\ExcelTest\\test.xlsx");
+            ExcelManipulation = new ExcelManipulation("C:\\test\\ExcelTest\\test.xlsx");
 
             //try
             //{

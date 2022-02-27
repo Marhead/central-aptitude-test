@@ -41,8 +41,8 @@ namespace CentralAptitudeTest.Commands
 
         public void SaveFile()
         {
-            OutputWorkbookForAll.SaveAs(Filename : @"C:\\test\testforall.xlsx");
-            OutputWorkbookForGraph.SaveAs(Filename : @"C:\\test\testforgraph.xlsx");
+            OutputWorkbookForAll.SaveAs(Filename : @"C:\\test\\testforall.xlsx");
+            OutputWorkbookForGraph.SaveAs(Filename : @"C:\\test\\testforgraph.xlsx");
         }
 
         private void SortingCells()

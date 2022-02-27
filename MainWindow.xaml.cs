@@ -16,6 +16,7 @@ namespace CentralAptitudeTest
         public MainWindow()
         {
             InitializeComponent();
+            asd.Content = new InsertView();
         }
 
         private void panelHeader_MouseDown(object sender, MouseButtonEventArgs e)

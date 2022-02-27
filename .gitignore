@@ -12,7 +12,7 @@
 _ReSharper.*
 bin/
 obj/*
-.vs/
+.vs/*
 /.vs
 .bin/
 .obj/

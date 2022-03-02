@@ -9,34 +9,38 @@ namespace CentralAptitudeTest.Commands
 {
     class ExcelManipulation
     {
-        private Config config;
+        private Config Config;
         private Application application;
         
-        private Workbook InputWorkbook = new Workbook();
+        private Workbook InputWorkbook;
         private Worksheet Worksheet;
 
-        private Workbook OutputWorkbookForAll = new Workbook();
-        private Workbook OutputWorkbookForGraph = new Workbook();
+        private Workbook OutputWorkbookForAll;
+        private Workbook OutputWorkbookForGraph;
 
         // 새로운 Excel 파일(워크북) 생성
         // Workbook workbook = application.Workbooks.Add();
 
-        public ExcelManipulation(string filepath)
+        public ExcelManipulation(Config config)
         {
+            Config = config;
             application = new Application();
-            OpenFile(filepath);
+
+            OpenFile(Config.FilePath.filePath);
         }
 
 
         public void OpenFile(string filepath)
         {
-            // Config에서 filepath 뽑아오기
-            //string filepath = config.FilePath.filePath;
+            // 입력 Excel 파일(워크북) 불러오기
+            InputWorkbook = application.Workbooks.Open(Filename: @filepath);
+            Console.WriteLine("파일 불러오기 성공 \n 파일 경로 : " + filepath);
+            application.Visible = true;
 
             // 기존 Excel 파일(워크북) 불러오기
-            InputWorkbook = application.Workbooks.Open(Filename : filepath);
             OutputWorkbookForAll = application.Workbooks.Add();
             OutputWorkbookForGraph = application.Workbooks.Add();
+
         }
 
         public void SaveFile()

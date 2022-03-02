@@ -25,14 +25,14 @@ namespace CentralAptitudeTest.Views
 
         private void UploadButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Config conf = new Config();
+            Config config = new Config();
 
-            conf.FilePath = new FilePath()
+            config.FilePath = new FilePath()
             {
                 filePath = Config.FilePath.filePath,
                 College_Dictionarys = Temp_College_Dictionarys,
             };
-            Config.SetConfig(conf);
+            Config.SetConfig(config);
             return;
         }
 
@@ -68,15 +68,10 @@ namespace CentralAptitudeTest.Views
         private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // ExcelManipulation 함수 호출
-            ExcelManipulation = new ExcelManipulation(Config.FilePath.filePath);
+            ExcelManipulation = new ExcelManipulation(Config);
 
-            //try
-            //{
-            //    ExcelManipulation excelManipulation = new ExcelManipulation(Config);
-            //} catch(System.Exception exception)
-            //{
-            //    Console.WriteLine(exception);
-            //}
+            MessageBox.Show(Config.FilePath.filePath);
+            //Console.WriteLine("~~~");
         }
     }
 }

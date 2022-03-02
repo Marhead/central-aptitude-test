@@ -68,7 +68,7 @@ namespace CentralAptitudeTest.Views
         private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // ExcelManipulation 함수 호출
-            ExcelManipulation = new ExcelManipulation("C:\\test\\ExcelTest\\test.xlsx");
+            ExcelManipulation = new ExcelManipulation(Config.FilePath.filePath);
 
             //try
             //{

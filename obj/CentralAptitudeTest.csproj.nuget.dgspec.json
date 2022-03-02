@@ -1,36 +1,38 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj": {}
+    "C:\\Users\\Administrator\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj": {}
   },
   "projects": {
-    "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj": {
+    "C:\\Users\\Administrator\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
+        "projectUniqueName": "C:\\Users\\Administrator\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
         "projectName": "CentralAptitudeTest",
-        "projectPath": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
-        "packagesPath": "C:\\Users\\win\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\workingspace\\CentralAptitudeTest\\obj\\",
+        "projectPath": "C:\\Users\\Administrator\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Source\\Repos\\CentralAptitudeTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages"
         ],
         "configFilePaths": [
-          "C:\\Users\\win\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net472"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Components\\System\\Components\\packages": {},
+          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.devexpress.com/j1mQn7jWTOgtc3F6GRpjzu9OG6KGdoNhrO4d4mBmtiiRKoMV59/api": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
+          "net472": {
+            "targetAlias": "net472",
             "projectReferences": {}
           }
         },
@@ -41,7 +43,8 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
+        "net472": {
+          "targetAlias": "net472",
           "dependencies": {
             "DevExpress.Wpf.Controls": {
               "target": "Package",
@@ -64,25 +67,12 @@
               "version": "[9.0.1, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            },
-            "Microsoft.WindowsDesktop.App": {
-              "privateAssets": "none"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win7-x86": {
+          "#import": []
         }
       }
     }

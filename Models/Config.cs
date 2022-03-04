@@ -8,12 +8,13 @@ namespace CentralAptitudeTest.Models
 {
     public class Config
     {
+        // Config.conf 파일 위치
         public static string runPath = Path.GetDirectoryName(typeof(Config).Assembly.Location);
         public static string ConfPath = string.Format("{0}/config", runPath);
 
-        public List<string> Subjects { get; set; }
-
         public FilePath FilePath { get; set; }
+
+        public List<Dictionary<string, List<string>>> CollegeDictionaries { get; set; }
 
         public Config()
         {
@@ -31,12 +32,12 @@ namespace CentralAptitudeTest.Models
             }
             else
             {
-                Config conf = new Config();
-                conf.FilePath = new FilePath() { filePath = "파일 없음" };
-                Config.SetConfig(conf);
+                Config config = new Config();
+                config.FilePath = new FilePath() { filePath = "파일 없음" };
+                Config.SetConfig(config);
                 //ConnectionList = new ObservableCollection<TreeNode>();
                 //ConnectionList.Add(new TreeNode() { Id = "연결", Type = TreeViewItemType.Root });
-                return conf;
+                return config;
             }
 
             //Connections = CollectionViewSource.GetDefaultView(ConnectionList);

@@ -14,8 +14,9 @@ namespace CentralAptitudeTest.Views
     public partial class ProgressView : UserControl
     {
         private Config Config;
-        private List<Dictionary<string, List<string>>> Temp_College_Dictionarys;
+        private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
         private ExcelManipulation ExcelManipulation;
+        private List<string> tempList;
 
         public ProgressView()
         {
@@ -27,11 +28,10 @@ namespace CentralAptitudeTest.Views
         {
             Config config = new Config();
 
-            config.FilePath = new FilePath()
-            {
-                filePath = Config.FilePath.filePath,
-                College_Dictionarys = Temp_College_Dictionarys,
-            };
+            config.FilePath = new FilePath() {filePath = Config.FilePath.filePath};
+
+            config.CollegeDictionaries = TempCollegeDictionaries;
+
             Config.SetConfig(config);
             return;
         }
@@ -41,20 +41,18 @@ namespace CentralAptitudeTest.Views
             // 단과대 정보 추가
             if (Config.FilePath != null)
             {
-                Config conf = new Config();
-
-                conf.Subjects = new List<string> { subject1.Text, subject2.Text, subject3.Text, subject4.Text, subject5.Text, subject6.Text };
+                tempList = new List<string> { subject1.Text, subject2.Text, subject3.Text, subject4.Text, subject5.Text, subject6.Text };
                 Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>() {
-                        { college.Text, conf.Subjects },
+                        { college.Text, tempList },
                     };
 
-                if (Temp_College_Dictionarys != null)
+                if (TempCollegeDictionaries != null)
                 {
-                    Temp_College_Dictionarys.Add(dictionary);
+                    TempCollegeDictionaries.Add(dictionary);
                 }
                 else
                 {
-                    Temp_College_Dictionarys = new List<Dictionary<string, List<string>>>() { { dictionary }, };
+                    TempCollegeDictionaries = new List<Dictionary<string, List<string>>>() { { dictionary }, };
                 }
 
                 foreach (string key in dictionary.Keys)

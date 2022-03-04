@@ -10,13 +10,17 @@ namespace CentralAptitudeTest.Commands
     class ExcelManipulation
     {
         private Config Config;
+        private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
+
         private Application application;
         
         private Workbook InputWorkbook;
-        private Worksheet Worksheet;
-
         private Workbook OutputWorkbookForAll;
         private Workbook OutputWorkbookForGraph;
+
+        private Sheets WorksheetInput;
+        private Sheets WorksheetOutputAll;
+        private Sheets WorksheetOutputGraph;
 
         // 새로운 Excel 파일(워크북) 생성
         // Workbook workbook = application.Workbooks.Add();
@@ -27,6 +31,8 @@ namespace CentralAptitudeTest.Commands
             application = new Application();
 
             OpenFile(Config.FilePath.filePath);
+            SaveFile();
+            CloseFile();
         }
 
 
@@ -34,19 +40,32 @@ namespace CentralAptitudeTest.Commands
         {
             // 입력 Excel 파일(워크북) 불러오기
             InputWorkbook = application.Workbooks.Open(Filename: @filepath);
-            Console.WriteLine("파일 불러오기 성공 \n 파일 경로 : " + filepath);
             application.Visible = true;
 
             // 기존 Excel 파일(워크북) 불러오기
             OutputWorkbookForAll = application.Workbooks.Add();
             OutputWorkbookForGraph = application.Workbooks.Add();
 
+            // worksheet 생성하기
+            WorksheetInput = InputWorkbook.Sheets;
+            WorksheetOutputAll = OutputWorkbookForAll.Sheets;
+            WorksheetOutputGraph = OutputWorkbookForGraph.Sheets;
+
         }
 
         public void SaveFile()
         {
+            OutputWorkbookForAll.Save();
+            OutputWorkbookForGraph.Save();
             OutputWorkbookForAll.SaveAs(Filename : @"C:\\test\\testforall.xlsx");
             OutputWorkbookForGraph.SaveAs(Filename : @"C:\\test\\testforgraph.xlsx");
+        }
+
+        public void CloseFile()
+        {
+            InputWorkbook.Close();
+            OutputWorkbookForAll.Close();
+            OutputWorkbookForGraph.Close();
         }
 
         private void SortingCells()

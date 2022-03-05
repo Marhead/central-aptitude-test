@@ -1,22 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "f1ApuFC+mfqAoKp9feYM77GTpxrEeoEs8urdcntWhIyN1AA4z0wc3x4POuXaL8bk/RHtvSu85+LMnEzxV68m/Q==",
+  "dgSpecHash": "csSw1GroKZybUWZVOFAH2dZO7vz8lWlt3Rs94dmZH+RBKz1JdUV517AFBJfTBH+jBK87qra57FeogBfhLcQvRA==",
   "success": true,
   "projectFilePath": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.data\\21.2.4\\devexpress.data.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.data.desktop\\21.2.4\\devexpress.data.desktop.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.mvvm\\21.2.4\\devexpress.mvvm.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.pdf.core\\21.2.4\\devexpress.pdf.core.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.pdf.drawing\\21.2.4\\devexpress.pdf.drawing.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.printing.core\\21.2.4\\devexpress.printing.core.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.wpf.controls\\21.2.4\\devexpress.wpf.controls.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.wpf.core\\21.2.4\\devexpress.wpf.core.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.wpf.docking\\21.2.4\\devexpress.wpf.docking.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\devexpress.wpf.themes.office2019colorful\\21.2.4\\devexpress.wpf.themes.office2019colorful.21.2.4.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\microsoft.office.interop.excel\\15.0.4795.1000\\microsoft.office.interop.excel.15.0.4795.1000.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\microsoft.office.interop.word\\15.0.4797.1003\\microsoft.office.interop.word.15.0.4797.1003.nupkg.sha512",
-    "C:\\Users\\win\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512"
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.data\\21.2.4\\devexpress.data.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.data.desktop\\21.2.4\\devexpress.data.desktop.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.mvvm\\21.2.4\\devexpress.mvvm.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.pdf.core\\21.2.4\\devexpress.pdf.core.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.pdf.drawing\\21.2.4\\devexpress.pdf.drawing.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.printing.core\\21.2.4\\devexpress.printing.core.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.wpf.controls\\21.2.4\\devexpress.wpf.controls.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.wpf.core\\21.2.4\\devexpress.wpf.core.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.wpf.docking\\21.2.4\\devexpress.wpf.docking.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\devexpress.wpf.themes.office2019colorful\\21.2.4\\devexpress.wpf.themes.office2019colorful.21.2.4.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\microsoft.office.interop.excel\\15.0.4795.1000\\microsoft.office.interop.excel.15.0.4795.1000.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\microsoft.office.interop.word\\15.0.4797.1003\\microsoft.office.interop.word.15.0.4797.1003.nupkg.sha512",
+    "C:\\Users\\clgns0415@gmail.com\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512"
   ],
   "logs": []
 }

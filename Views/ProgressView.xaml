@@ -13,7 +13,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -24,7 +24,7 @@
             FontSize="50"/>
 
         <Button Name="OpenFileButton"
-                Grid.Row="1"
+                Grid.Row="4"
                 Width="100"
                 Height="30"
                 Background="#FF0F427A"
@@ -36,10 +36,10 @@
                  Text="가공용 학과 파일을 업로드하세요."
                  Height="30"
                  Width="450"
-                 Grid.Row="1" Margin="20,0,170,0" />
+                 Grid.Row="4" Margin="20,0,170,0" />
 
 
-        <Label Grid.Row="2" Content="단과대학 : " Margin="200,0,0,0"/>
+        <!--<Label Grid.Row="2" Content="단과대학 : " Margin="200,0,0,0"/>
         <TextBox Name="college" Grid.Row="2"  Height="20" Width="200" HorizontalAlignment="Center" Margin="200,0,0,0"/>
         <Label Grid.Row="3" Content="학과명 : " Margin="200,0,0,0"/>
         <TextBox Name="subject1" Grid.Row="3"  Height="20" Width="200" HorizontalAlignment="Center" Margin="200,0,0,0" KeyDown="subject1_KeyDown"/>
@@ -97,9 +97,9 @@
                 <TextBox Name="subject6" Grid.Row="4" Height="20" Width="200" HorizontalAlignment="Center" Margin="75,0,225,0" Visibility="Hidden" KeyDown="subject1_KeyDown"/>
                 <TextBlock Name="Enter_info6" Grid.Row="4" Text="추가 입력 시 -Enter-" Height="20" Width="150" HorizontalAlignment="Right" Margin="0,0,40,0" Visibility="Hidden"/>
             </Grid>
-        </Grid>
+        </Grid>-->
 
-        <Button Name="AddCollegeButton"
+        <!--<Button Name="AddCollegeButton"
                 Grid.Row="5"
                 Width="100"
                 Height="30"
@@ -107,7 +107,7 @@
                 Foreground="white"
                 HorizontalAlignment="Left"
                 Content="단과대 추가" 
-                Margin="200,0,0,20" Click="AddCollegeButton_Click"/>
+                Margin="200,0,0,20" Click="AddCollegeButton_Click"/>-->
 
         <Button Name="UploadButton"
                 Grid.Row="5"
@@ -117,7 +117,7 @@
                 Foreground="white"
                 HorizontalAlignment="Left"
                 Content="데이터 올리기" 
-                Margin="350,0,0,20" Click="UploadButton_Click"/>
+                Margin="400,0,0,20" Click="UploadButton_Click"/>
 
         <Button Name="Input_Complete_Button"
                 Grid.Row="5"
@@ -127,7 +127,7 @@
                 Foreground="white"
                 HorizontalAlignment="Left"
                 Content="입력 완료" 
-                Margin="500,0,0,20" Click="Input_Complete_Button_Click"/>
+                Margin="550,0,0,20" Click="Input_Complete_Button_Click"/>
 
         <dxe:ProgressBarEdit Grid.Row="6" Width="500" Height="20" Value="34" Visibility="Hidden"/>
 

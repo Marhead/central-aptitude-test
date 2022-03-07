@@ -68,7 +68,7 @@ namespace CentralAptitudeTest.Views
             // ExcelManipulation 함수 호출
             ExcelManipulation = new ExcelManipulation(Config);
 
-            MessageBox.Show(Config.FilePath.filePath);
+            MessageBox.Show(ExcelManipulation.ReadCell(3,3));
             //Console.WriteLine("~~~");
         }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using CentralAptitudeTest.Models;
-using System.IO;
 using Microsoft.Office.Interop.Excel;
 
 namespace CentralAptitudeTest.Commands
@@ -13,17 +12,16 @@ namespace CentralAptitudeTest.Commands
         private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
 
         private Application application;
-        
+
         private Workbook InputWorkbook;
-        private Workbook OutputWorkbookForAll;
-        private Workbook OutputWorkbookForGraph;
+        private Workbook OutputAllWorkbook;
+        private Workbook OutputGraphWorkbook;
 
-        private Sheets WorksheetInput;
-        private Sheets WorksheetOutputAll;
-        private Sheets WorksheetOutputGraph;
+        private Worksheet InputWorksheet;
+        private Worksheet OutputAllWorksheet;
+        private Worksheet OutputGraphWorksheet;
 
-        // 새로운 Excel 파일(워크북) 생성
-        // Workbook workbook = application.Workbooks.Add();
+        string Datetime = DateTime.Now.ToString("hhmmss");
 
         public ExcelManipulation(Config config)
         {
@@ -31,6 +29,8 @@ namespace CentralAptitudeTest.Commands
             application = new Application();
 
             OpenFile(Config.FilePath.filePath);
+
+            // Save -> Close 순으로 수행
             SaveFile();
             CloseFile();
         }
@@ -39,33 +39,47 @@ namespace CentralAptitudeTest.Commands
         public void OpenFile(string filepath)
         {
             // 입력 Excel 파일(워크북) 불러오기
-            InputWorkbook = application.Workbooks.Open(Filename: @filepath);
+            InputWorkbook = application.Workbooks.Open(filepath);
+
+            // Excel 화면 창 띄우기
             application.Visible = true;
 
             // 기존 Excel 파일(워크북) 불러오기
-            OutputWorkbookForAll = application.Workbooks.Add();
-            OutputWorkbookForGraph = application.Workbooks.Add();
+            OutputAllWorkbook = application.Workbooks.Add();
+            OutputGraphWorkbook = application.Workbooks.Add();
 
             // worksheet 생성하기
-            WorksheetInput = InputWorkbook.Sheets;
-            WorksheetOutputAll = OutputWorkbookForAll.Sheets;
-            WorksheetOutputGraph = OutputWorkbookForGraph.Sheets;
+            InputWorksheet = (Worksheet)InputWorkbook.Sheets[1];
+            OutputAllWorksheet = (Worksheet)OutputAllWorkbook.Sheets.Add();
+            OutputGraphWorksheet = (Worksheet)OutputGraphWorkbook.Sheets.Add();
 
         }
 
         public void SaveFile()
         {
-            OutputWorkbookForAll.Save();
-            OutputWorkbookForGraph.Save();
-            OutputWorkbookForAll.SaveAs(Filename : @"C:\\test\\testforall.xlsx");
-            OutputWorkbookForGraph.SaveAs(Filename : @"C:\\test\\testforgraph.xlsx");
+            // Save -> SaveAs 순으로 수행
+            InputWorkbook.Save();
+            OutputAllWorkbook.Save();
+            OutputGraphWorkbook.Save();
+            OutputAllWorkbook.SaveAs(Filename: @"C:\\test\\{0}testforall.xlsx", Datetime);
+            OutputGraphWorkbook.SaveAs(Filename: @"C:\\test\\{0}testforgraph.xlsx", Datetime);
         }
 
         public void CloseFile()
         {
             InputWorkbook.Close();
-            OutputWorkbookForAll.Close();
-            OutputWorkbookForGraph.Close();
+            OutputAllWorkbook.Close();
+            OutputGraphWorkbook.Close();
+        }
+
+        public string ReadCell(int i, int j)
+        {
+            Range
+        }
+
+        public void WriteToCell()
+        {
+
         }
 
         private void SortingCells()

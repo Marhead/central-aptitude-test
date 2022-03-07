@@ -153,7 +153,6 @@ namespace CentralAptitudeTest.Views
             ExcelManipulation = new ExcelManipulation(Config);
 
             MessageBox.Show(Config.FilePath.whole_data_filePath);
-            //Console.WriteLine("~~~");
         }
 
 

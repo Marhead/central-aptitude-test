@@ -564,25 +564,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\win\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\dongj\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
+      "projectUniqueName": "C:\\Users\\dongj\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
       "projectName": "CentralAptitudeTest",
-      "projectPath": "C:\\code\\workingspace\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
-      "packagesPath": "C:\\Users\\win\\.nuget\\packages\\",
-      "outputPath": "C:\\code\\workingspace\\CentralAptitudeTest\\obj\\",
+      "projectPath": "C:\\Users\\dongj\\Source\\Repos\\CentralAptitudeTest\\CentralAptitudeTest.csproj",
+      "packagesPath": "C:\\Users\\dongj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dongj\\Source\\Repos\\CentralAptitudeTest\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\win\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\dongj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net472"
@@ -594,6 +589,7 @@
       },
       "frameworks": {
         "net472": {
+          "targetAlias": "net472",
           "projectReferences": {}
         }
       },
@@ -605,6 +601,7 @@
     },
     "frameworks": {
       "net472": {
+        "targetAlias": "net472",
         "dependencies": {
           "DevExpress.Wpf.Controls": {
             "target": "Package",
@@ -627,7 +624,7 @@
             "version": "[9.0.1, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

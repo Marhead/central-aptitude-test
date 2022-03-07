@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using CentralAptitudeTest;
 
 namespace CentralAptitudeTest.Views
 {
@@ -26,19 +27,24 @@ namespace CentralAptitudeTest.Views
             if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
             {
                 Config conf = new Config();
-                conf.FilePath = new FilePath() { filePath = openFileDialog.FileName };
+                conf.FilePath = new FilePath() { whole_data_filePath = openFileDialog.FileName };
                 Config.SetConfig(conf);
             }
 
             Thread.Sleep(500);
 
             ReadFilePath(openFileDialog.FileName);
+
+            if (!string.IsNullOrEmpty(myTextBox.Text))
+            {
+                ((MainWindow)Application.Current.MainWindow).NextPageButton.IsEnabled = true;
+            }
         }
 
-        private void ReadFilePath(string filename) 
+        private void ReadFilePath(string filename)
         {
             myTextBox.Text = filename;
-            return; 
+            return;
         }
     }
 }

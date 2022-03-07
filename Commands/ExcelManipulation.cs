@@ -28,7 +28,7 @@ namespace CentralAptitudeTest.Commands
             Config = config;
             application = new Application();
 
-            OpenFile(Config.FilePath.filePath);
+            OpenFile(Config.FilePath.whole_data_filePath);
 
             // Save -> Close 순으로 수행
             SaveFile();

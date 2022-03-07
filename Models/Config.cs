@@ -33,7 +33,7 @@ namespace CentralAptitudeTest.Models
             else
             {
                 Config config = new Config();
-                config.FilePath = new FilePath() { filePath = "파일 없음" };
+                config.FilePath = new FilePath() { whole_data_filePath = "파일 없음" };
                 Config.SetConfig(config);
                 //ConnectionList = new ObservableCollection<TreeNode>();
                 //ConnectionList.Add(new TreeNode() { Id = "연결", Type = TreeViewItemType.Root });

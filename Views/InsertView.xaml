@@ -28,6 +28,8 @@
                 VerticalAlignment="Center"
                 Content="OpenFile" Margin="400,0,0,0" Click="OpenFileButton_Click"/>
         <TextBox Name="myTextBox"
+                 IsEnabled="False"
+                 Foreground="black" 
                  Height="30"
                  Width="450"
                  Grid.Row="3" Margin="20,0,170,0" />

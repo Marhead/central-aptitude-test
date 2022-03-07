@@ -9,11 +9,12 @@ namespace CentralAptitudeTest.Models
 {
     public class FilePath
     {
-        public string filePath { get; set; }
-        
+        public string whole_data_filePath { get; set; }
+        public string process_data_filePath { get; set; }
+
         public FilePath()
         {
-            
+
         }
     }
 }

@@ -41,6 +41,8 @@ namespace CentralAptitudeTest.Commands
             // 입력 Excel 파일(워크북) 불러오기
             InputWorkbook = application.Workbooks.Open(filepath);
 
+            Console.WriteLine(InputWorkbook.Worksheets.Count);
+
             // Excel 화면 창 띄우기
             application.Visible = true;
 
@@ -70,6 +72,15 @@ namespace CentralAptitudeTest.Commands
             InputWorkbook.Close();
             OutputAllWorkbook.Close();
             OutputGraphWorkbook.Close();
+
+            application.Quit();
+
+            // background에서 실행중인 객체들 마저 확실하게 해제시켜주기 위하여 사용.
+            Marshal.ReleaseComObject(InputWorkbook);
+            Marshal.ReleaseComObject(OutputAllWorkbook);
+            Marshal.ReleaseComObject(OutputGraphWorkbook);
+            Marshal.ReleaseComObject(application);
+
         }
 
         public string ReadCell(int i, int j)

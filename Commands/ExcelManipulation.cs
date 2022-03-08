@@ -1,7 +1,7 @@
 ﻿using CentralAptitudeTest.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
 using Microsoft.Office.Interop.Excel;   // 액셀 사용을 위한 참조
 
@@ -90,7 +90,15 @@ namespace CentralAptitudeTest.Commands
 
         public string ReadCell()
         {
-            Range ColleageName = InputWorksheet.Range["A"];
+            Range ColleageName = InputWorksheet.UsedRange;
+
+            for(int row = )
+            {
+                for()
+                {
+
+                }
+            }
 
             return "";
         }

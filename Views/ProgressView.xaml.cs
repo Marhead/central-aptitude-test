@@ -27,6 +27,7 @@ namespace CentralAptitudeTest.Views
             InitializeComponent();
             Config = Config.GetConfig();
         }
+
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -53,6 +54,19 @@ namespace CentralAptitudeTest.Views
             Config.SetConfig(config);
             return;
         }
+
+        private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // ExcelManipulation 함수 호출
+            ExcelManipulation = new ExcelManipulation(Config);
+
+            ExcelManipulation.WriteToCell();
+
+            ExcelManipulation.CloseFile();
+
+            MessageBox.Show(Config.FilePath.whole_data_filePath);
+        }
+
         //public void PutData()
         //{
         //    tempList = new List<string> { subject1.Text, subject2.Text, subject3.Text, subject4.Text, subject5.Text, subject6.Text };
@@ -146,19 +160,6 @@ namespace CentralAptitudeTest.Views
         //        return;
         //    }
         //}
-
-        private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            // ExcelManipulation 함수 호출
-            ExcelManipulation = new ExcelManipulation(Config);
-
-            ExcelManipulation.WriteToCell();
-
-            ExcelManipulation.CloseFile();
-
-            MessageBox.Show(Config.FilePath.whole_data_filePath);
-        }
-
 
         //private void college_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //{

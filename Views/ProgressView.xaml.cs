@@ -152,6 +152,10 @@ namespace CentralAptitudeTest.Views
             // ExcelManipulation 함수 호출
             ExcelManipulation = new ExcelManipulation(Config);
 
+            ExcelManipulation.WriteToCell();
+
+            ExcelManipulation.CloseFile();
+
             MessageBox.Show(Config.FilePath.whole_data_filePath);
         }
 

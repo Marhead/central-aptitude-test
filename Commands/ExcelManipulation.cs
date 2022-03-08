@@ -10,11 +10,8 @@ namespace CentralAptitudeTest.Commands
     class ExcelManipulation
     {
         private Config Config;
-        private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
 
-        private Application InputApplication;
-        private Application OutputAllApplication;
-        private Application OutputGraphApplication;
+        private Application application;
 
         private Workbook InputWorkbook;
         private Workbook OutputAllWorkbook;
@@ -24,77 +21,71 @@ namespace CentralAptitudeTest.Commands
         private Worksheet OutputAllWorksheet;
         private Worksheet OutputGraphWorksheet;
 
+        string DesktopPath;
         string Datetime = DateTime.Now.ToString("hhmmss");
 
         public ExcelManipulation(Config config)
         {
             // 바탕화면 경로 불러오기
-            string DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             // Excel 파일 저장 경로 및 파일 이름 설정
-            string path = Path.Combine(DesktopPath, "전체.xlsx");
+            // path = Path.Combine(DesktopPath, "{0}.xlsx", Datetime);
 
             Config = config;
-            InputApplication = new Application();
-            OutputAllApplication = new Application();
-            OutputGraphApplication = new Application();
+            application = new Application();
 
             OpenFile(Config.FilePath.whole_data_filePath);
-
-            // Save -> Close 순으로 수행
-            SaveFile();
-            CloseFile();
         }
 
 
         public void OpenFile(string filepath)
         {
             // 입력 Excel 파일(워크북) 불러오기
-            InputWorkbook = InputApplication.Workbooks.Open(filepath);
+            InputWorkbook = application.Workbooks.Open(filepath);
 
             Console.WriteLine(InputWorkbook.Worksheets.Count);
 
             // Excel 화면 창 띄우기
-            InputApplication.Visible = true;
+            // application.Visible = true;
 
             // 기존 Excel 파일(워크북) 불러오기
-            OutputAllWorkbook = OutputAllApplication.Workbooks.Add();
-            OutputGraphWorkbook = OutputGraphApplication.Workbooks.Add();
+            OutputAllWorkbook = application.Workbooks.Add();
+            OutputGraphWorkbook = application.Workbooks.Add();
 
             // worksheet 생성하기
             InputWorksheet = (Worksheet)InputWorkbook.Sheets[1];
-            OutputAllWorksheet = (Worksheet)OutputAllWorkbook.Sheets.Add();
-            OutputGraphWorksheet = (Worksheet)OutputGraphWorkbook.Sheets.Add();
+            OutputAllWorksheet = (Worksheet)OutputAllWorkbook.ActiveSheet;
+            OutputGraphWorksheet = (Worksheet)OutputGraphWorkbook.ActiveSheet;
 
-        }
-
-        public void SaveFile()
-        {
-            // Save -> SaveAs 순으로 수행
-            InputWorkbook.Save();
-            OutputAllWorkbook.SaveAs(Filename: "C:\\test\\{0} testforall.xlsx", Datetime);
-            OutputGraphWorkbook.SaveAs(Filename: "C:\\test\\{0} testforgraph.xlsx", Datetime);
         }
 
         public void CloseFile()
         {
+            // Save -> Close 순으로 수행
+            string allfilenaming = "전체" + Datetime + ".xlsx";
+            string graphfilenaming = "그래프" + Datetime + ".xlsx";
+
+            string allpath = Path.Combine(DesktopPath, allfilenaming);
+            string graphpath = Path.Combine(DesktopPath, graphfilenaming);
+
+            // Save -> SaveAs 순으로 수행
+            // InputWorkbook.Save();
+            OutputAllWorkbook.SaveAs(Filename: allpath);
+            OutputGraphWorkbook.SaveAs(Filename: graphpath);
+
             InputWorkbook.Close();
             OutputAllWorkbook.Close();
             OutputGraphWorkbook.Close();
 
-            InputApplication.Quit();
-            OutputAllApplication.Quit();
-            OutputGraphApplication.Quit();
+            application.Quit();
 
             // background에서 실행중인 객체들 마저 확실하게 해제시켜주기 위하여 사용.
             Marshal.ReleaseComObject(InputWorkbook);
             Marshal.ReleaseComObject(OutputAllWorkbook);
             Marshal.ReleaseComObject(OutputGraphWorkbook);
 
-            Marshal.ReleaseComObject(InputApplication);
-            Marshal.ReleaseComObject(OutputAllApplication);
-            Marshal.ReleaseComObject(OutputGraphApplication);
-
+            Marshal.ReleaseComObject(application);
         }
 
         public string ReadCell()
@@ -106,79 +97,8 @@ namespace CentralAptitudeTest.Commands
 
         public void WriteToCell()
         {
-
-        }
-
-        private void SortingCells()
-        {
-            // workbook에 데이터를 읽거나 쓸 worksheet 생성
-        }
-
-        private void Filtering1()
-        {
-
-        }
-
-        private void Filtering2()
-        {
-
-        }
-        private void Filtering3()
-        {
-
-        }
-        private void Filtering4()
-        {
-
-        }
-        private void Filtering5()
-        {
-
-        }
-        private void Filtering6()
-        {
-
-        }
-        private void Filtering7()
-        {
-
-        }
-        private void Filtering8()
-        {
-
-        }
-        private void Filtering9()
-        {
-
-        }
-        private void Filtering10()
-        {
-
-        }
-        private void Filtering11()
-        {
-
-        }
-
-        private void Filtering12()
-        {
-
-        }
-        private void Filtering13()
-        {
-
-        }
-        private void Filtering14()
-        {
-
-        }
-        private void Filtering15()
-        {
-
-        }
-        private void Filtering16()
-        {
-
+            Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
+            rg1.Value = "hello world";
         }
     }
 }

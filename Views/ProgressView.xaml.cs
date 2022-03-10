@@ -16,25 +16,41 @@ namespace CentralAptitudeTest.Views
     public partial class ProgressView : UserControl
     {
         private Config Config;
-        private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
-        private Dictionary<string, List<string>> dictionary;
-        private ExcelManipulation ExcelManipulation;
-        private List<string> tempList;
-        private int Add_Subject_Number = 1;
+        //private List<Dictionary<string, List<string>>> TempCollegeDictionaries;
+        //private Dictionary<string, List<string>> dictionary;
+        //private ExcelManipulation ExcelManipulation;
+        //private List<string> tempList;
+        //private int Add_Subject_Number = 1;
 
         public ProgressView()
         {
+            // 대학 엑셀 파일 입력창 시작 시
             InitializeComponent();
             Config = Config.GetConfig();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).NextPageButton.IsEnabled = false;
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
+            // 대학 엑셀 파일 경로 얻기
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.ShowDialog();
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
+            {
+                Config conf = new Config();
+                conf.FilePath = new FilePath() { whole_data_filePath = Config.FilePath.whole_data_filePath, process_data_filePath = openFileDialog.FileName };
+                Config.SetConfig(conf);
+            }
+
+            // 파일 경로 업로드 딜레이
+            Thread.Sleep(500);
 
             ReadFilePath(openFileDialog.FileName);
+
+            if (!string.IsNullOrEmpty(myTextBox.Text))
+            {
+                ((MainWindow)System.Windows.Application.Current.MainWindow).NextPageButton.IsEnabled = true;
+            }
         }
 
         private void ReadFilePath(string filename)
@@ -43,30 +59,30 @@ namespace CentralAptitudeTest.Views
             return;
         }
 
-        private void UploadButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Config config = new Config();
+        //private void UploadButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        //{
+        //    Config config = new Config();
 
-            config.FilePath = new FilePath() { whole_data_filePath = Config.FilePath.whole_data_filePath, process_data_filePath = myTextBox.Text };
+        //    config.FilePath = new FilePath() { whole_data_filePath = Config.FilePath.whole_data_filePath, process_data_filePath = myTextBox.Text };
 
-            //config.CollegeDictionaries = TempCollegeDictionaries;
+        //    //config.CollegeDictionaries = TempCollegeDictionaries;
 
-            Config.SetConfig(config);
-            return;
-        }
+        //    Config.SetConfig(config);
+        //    return;
+        //}
 
-        private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            // ExcelManipulation 함수 호출
-            ExcelManipulation = new ExcelManipulation(Config);
+        //private void Input_Complete_Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        //{
+        //    // ExcelManipulation 함수 호출
+        //    ExcelManipulation = new ExcelManipulation(Config);
 
-            ExcelManipulation.WriteToCell();
+        //    ExcelManipulation.WriteToCell();
 
-            // MessageBox.Show(ExcelManipulation.ReadCollege());
+        //    // MessageBox.Show(ExcelManipulation.ReadCollege());
 
-            ExcelManipulation.CloseFile();
-            // MessageBox.Show(Config.FilePath.whole_data_filePath);
-        }
+        //    ExcelManipulation.CloseFile();
+        //    // MessageBox.Show(Config.FilePath.whole_data_filePath);
+        //}
 
         //public void PutData()
         //{

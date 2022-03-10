@@ -16,12 +16,15 @@ namespace CentralAptitudeTest.Views
 
         public InsertView()
         {
+            // 전체 엑셀 파일 입력창 시작 시
             InitializeComponent();
             Config = Config.GetConfig();
+            ((MainWindow)Application.Current.MainWindow).NextPageButton.IsEnabled = false;
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
+            // 전체 엑셀 파일 경로 입력 버튼 클릭 시
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             if (openFileDialog.ShowDialog() == true && openFileDialog.FileName != null)
@@ -31,6 +34,7 @@ namespace CentralAptitudeTest.Views
                 Config.SetConfig(conf);
             }
 
+            // 파일 경로 업로드 시 딜레이
             Thread.Sleep(500);
 
             ReadFilePath(openFileDialog.FileName);

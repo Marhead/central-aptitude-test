@@ -16,7 +16,8 @@ namespace CentralAptitudeTest
         public MainWindow()
         {
             InitializeComponent();
-            asd.Content = new InsertView();
+            MainControl.Content = new InsertView();
+            this.Insert.IsSelected = true;    
         }
 
         private void panelHeader_MouseDown(object sender, MouseButtonEventArgs e)
@@ -29,7 +30,7 @@ namespace CentralAptitudeTest
 
         private void Insert_Selected(object sender, RoutedEventArgs e)
         {
-            asd.Content = new InsertView();
+            //asd.Content = new InsertView();
         }
 
         private void Process_Selected(object sender, RoutedEventArgs e)
@@ -53,7 +54,7 @@ namespace CentralAptitudeTest
                     NextPageButton.Visibility = Visibility.Visible;
                     PreviewPageButton.Visibility = Visibility.Visible;
                     HomeButton.Visibility = Visibility.Hidden;
-                    asd.Content = new ProgressView();
+                    MainControl.Content = new ProgressView();
                     PageNum += 1;
                     break;
                 case 1:
@@ -63,7 +64,7 @@ namespace CentralAptitudeTest
                     NextPageButton.Visibility = Visibility.Hidden;
                     PreviewPageButton.Visibility = Visibility.Visible;
                     HomeButton.Visibility = Visibility.Visible;
-                    asd.Content = new ResultView();
+                    MainControl.Content = new ResultView();
                     PageNum += 1;
                     break;
                 case 2:
@@ -92,7 +93,7 @@ namespace CentralAptitudeTest
                     NextPageButton.Visibility = Visibility.Visible;
                     PreviewPageButton.Visibility = Visibility.Hidden;
                     HomeButton.Visibility = Visibility.Hidden;
-                    asd.Content = new InsertView();
+                    MainControl.Content = new InsertView();
                     PageNum -= 1;
                     break;
                 case 2:
@@ -102,7 +103,7 @@ namespace CentralAptitudeTest
                     NextPageButton.Visibility = Visibility.Visible;
                     PreviewPageButton.Visibility = Visibility.Visible;
                     HomeButton.Visibility = Visibility.Hidden;
-                    asd.Content = new ProgressView();
+                    MainControl.Content = new ProgressView();
                     PageNum -= 1;
                     break;
             }
@@ -115,7 +116,7 @@ namespace CentralAptitudeTest
             NextPageButton.Visibility = Visibility.Visible;
             PreviewPageButton.Visibility = Visibility.Hidden;
             HomeButton.Visibility = Visibility.Hidden;
-            asd.Content = new InsertView();
+            MainControl.Content = new InsertView();
             PageNum = 0;
         }
 

@@ -42,7 +42,7 @@
                 </StackPanel>
             </Grid>
             <Grid x:Name="mainPanel" HorizontalAlignment="Left" VerticalAlignment="Center" Width="650" Height="310" Background="#FFD6D6D6" Margin="150,0,0,0">
-                <UserControl x:Name="asd" Width="750" Height="450" Margin="0, -74, -100, -66"/>
+                <UserControl x:Name="MainControl" Width="750" Height="450" Margin="0, -74, -100, -66"/>
             </Grid>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="750" Height="75" Background="#FFD6D6D6" Margin="150,0,0,0">
                 <Button Name="PreviewPageButton"

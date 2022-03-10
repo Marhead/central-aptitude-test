@@ -7,8 +7,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="#FFFFFF">
         <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <TextBlock 
@@ -16,6 +16,14 @@
             Padding="15" 
             Text="엑셀 파일 변환 완료" 
             FontSize="50"/>
+        <Button Name="AddCollegeButton"
+                Grid.Row="1"
+                Width="300"
+                Height="50"
+                Background="#FF0F427A"
+                Foreground="white"
+                HorizontalAlignment="Center"
+                Content="변환 시작" Click="AddCollegeButton_Click"/>
 
 
     </Grid>

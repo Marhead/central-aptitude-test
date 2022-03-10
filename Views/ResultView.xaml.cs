@@ -24,5 +24,10 @@ namespace CentralAptitudeTest.Views
         {
             InitializeComponent();
         }
+
+        private void AddCollegeButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 변환 시작 클릭 시 동작
+        }
     }
 }

@@ -62,9 +62,10 @@ namespace CentralAptitudeTest.Views
 
             ExcelManipulation.WriteToCell();
 
-            ExcelManipulation.CloseFile();
+            // MessageBox.Show(ExcelManipulation.ReadCollege());
 
-            MessageBox.Show(Config.FilePath.whole_data_filePath);
+            ExcelManipulation.CloseFile();
+            // MessageBox.Show(Config.FilePath.whole_data_filePath);
         }
 
         //public void PutData()

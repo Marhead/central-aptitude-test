@@ -15,9 +15,9 @@
         </Grid.RowDefinitions>
         <TextBlock 
             Grid.Row="0"
-            Padding="15" 
-            Text="엑셀 파일을 입력해 주세요." 
-            FontSize="50"/>
+            Padding="15"
+            Text="전체 엑셀 파일을 입력해주세요." 
+            FontSize="45"/>
 
         <Button Name="OpenFileButton"
                 Grid.Row="3"

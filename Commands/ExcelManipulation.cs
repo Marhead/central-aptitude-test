@@ -1,6 +1,7 @@
 ﻿using CentralAptitudeTest.Models;
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
 using Microsoft.Office.Interop.Excel;   // 액셀 사용을 위한 참조
@@ -13,16 +14,21 @@ namespace CentralAptitudeTest.Commands
 
         private Application application;
 
-        private Workbook InputWorkbook;
+        private Workbook InputDataWorkbook;
+        private Workbook InputCollegeWorkbook;
         private Workbook OutputAllWorkbook;
         private Workbook OutputGraphWorkbook;
 
-        private Worksheet InputWorksheet;
+        private Worksheet InputDataWorksheet;
+        private Worksheet InputCollegeWorksheet;
         private Worksheet OutputAllWorksheet;
         private Worksheet OutputGraphWorksheet;
 
         string DesktopPath;
         string Datetime = DateTime.Now.ToString("hhmmss");
+
+        private Range CollegeListRange;
+        private List<string> CollegeList = null;
 
         public ExcelManipulation(Config config)
         {
@@ -35,16 +41,17 @@ namespace CentralAptitudeTest.Commands
             Config = config;
             application = new Application();
 
-            OpenFile(Config.FilePath.whole_data_filePath);
+            OpenFile(config);
         }
 
 
-        public void OpenFile(string filepath)
+        public void OpenFile(Config config)
         {
             // 입력 Excel 파일(워크북) 불러오기
-            InputWorkbook = application.Workbooks.Open(filepath);
+            InputDataWorkbook = application.Workbooks.Open(config.FilePath.whole_data_filePath);
+            InputCollegeWorkbook = application.Workbooks.Open(config.FilePath.process_data_filePath);
 
-            Console.WriteLine(InputWorkbook.Worksheets.Count);
+            Console.WriteLine(InputDataWorkbook.Worksheets.Count);
 
             // Excel 화면 창 띄우기
             // application.Visible = true;
@@ -54,10 +61,12 @@ namespace CentralAptitudeTest.Commands
             OutputGraphWorkbook = application.Workbooks.Add();
 
             // worksheet 생성하기
-            InputWorksheet = (Worksheet)InputWorkbook.Sheets[1];
+            InputDataWorksheet = (Worksheet)InputDataWorkbook.Sheets[1];
+            InputCollegeWorksheet = (Worksheet)InputCollegeWorkbook.Sheets[1];
             OutputAllWorksheet = (Worksheet)OutputAllWorkbook.ActiveSheet;
             OutputGraphWorksheet = (Worksheet)OutputGraphWorkbook.ActiveSheet;
 
+            CollegeListRange = InputCollegeWorksheet.UsedRange;
         }
 
         public void CloseFile()
@@ -70,37 +79,38 @@ namespace CentralAptitudeTest.Commands
             string graphpath = Path.Combine(DesktopPath, graphfilenaming);
 
             // Save -> SaveAs 순으로 수행
-            // InputWorkbook.Save();
+            // InputDataWorkbook.Save();
             OutputAllWorkbook.SaveAs(Filename: allpath);
             OutputGraphWorkbook.SaveAs(Filename: graphpath);
 
-            InputWorkbook.Close();
+            InputDataWorkbook.Close();
+            InputCollegeWorkbook.Close();
             OutputAllWorkbook.Close();
             OutputGraphWorkbook.Close();
 
             application.Quit();
 
             // background에서 실행중인 객체들 마저 확실하게 해제시켜주기 위하여 사용.
-            Marshal.ReleaseComObject(InputWorkbook);
+            Marshal.ReleaseComObject(InputDataWorkbook);
+            Marshal.ReleaseComObject(InputCollegeWorkbook);
             Marshal.ReleaseComObject(OutputAllWorkbook);
             Marshal.ReleaseComObject(OutputGraphWorkbook);
 
             Marshal.ReleaseComObject(application);
         }
 
-        public string ReadCell()
+        public List<string> ReadCollege()
         {
-            Range ColleageName = InputWorksheet.UsedRange;
+            int CollegeRow = CollegeListRange.Rows.Count;
+            int CollegeColumn = CollegeListRange.Columns.Count;
 
-            for(int row = )
+            for(int row = 1; row < CollegeRow; row++)
             {
-                for()
-                {
-
-                }
+                CollegeList.Add(CollegeListRange.Cells[row, 1].ToString());
+                Console.WriteLine(CollegeList);
             }
 
-            return "";
+            return CollegeList;
         }
 
         public void WriteToCell()

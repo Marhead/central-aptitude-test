@@ -1,7 +1,6 @@
 ﻿using CentralAptitudeTest.Models;
 using System;
 using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
 using Microsoft.Office.Interop.Excel;   // 액셀 사용을 위한 참조
@@ -56,9 +55,12 @@ namespace CentralAptitudeTest.Commands
             // Excel 화면 창 띄우기
             // application.Visible = true;
 
+            //OutputAllWorkbook = application.Workbooks.Add();
+            //OutputGraphWorkbook = application.Workbooks.Add();
+
             // 기존 Excel 파일(워크북) 불러오기
-            OutputAllWorkbook = application.Workbooks.Add();
-            OutputGraphWorkbook = application.Workbooks.Add();
+            OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
+            OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");
 
             // worksheet 생성하기
             InputDataWorksheet = (Worksheet)InputDataWorkbook.Sheets[1];

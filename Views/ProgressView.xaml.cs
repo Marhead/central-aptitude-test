@@ -1,11 +1,9 @@
 ﻿using CentralAptitudeTest.Models;
-using CentralAptitudeTest.Commands;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows;
 using Microsoft.Win32;
 using System;
-using Microsoft.Office.Interop.Excel;
 using System.Threading;
 
 namespace CentralAptitudeTest.Views

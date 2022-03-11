@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Office.Interop.Excel;
+using CentralAptitudeTest.Commands;
+using CentralAptitudeTest.Models;
 
 namespace CentralAptitudeTest.Views
 {
@@ -20,14 +23,25 @@ namespace CentralAptitudeTest.Views
     /// </summary>
     public partial class ResultView : UserControl
     {
+        private Config config;
+
         public ResultView()
         {
             InitializeComponent();
+            config = Config.GetConfig();
         }
 
         private void AddCollegeButton_Click(object sender, RoutedEventArgs e)
         {
-            // 변환 시작 클릭 시 동작
+            //ExcelManipulation 함수 호출
+            ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
+
+            // ExcelManipulation.WriteToCell();
+
+            // MessageBox.Show(ExcelManipulation.ReadCollege());
+
+            ExcelManipulation.CloseFile();
+            MessageBox.Show("변환 완료!");
         }
     }
 }

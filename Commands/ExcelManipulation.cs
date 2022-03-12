@@ -27,7 +27,9 @@ namespace CentralAptitudeTest.Commands
         string Datetime = DateTime.Now.ToString("hhmmss");
 
         private Range CollegeListRange;
-        private List<string> CollegeList = null;
+
+        private List<string> CollegeList = new List<string>();
+        private List<string> DepartList = new List<string>();
 
         public ExcelManipulation(Config config)
         {
@@ -104,17 +106,34 @@ namespace CentralAptitudeTest.Commands
             Marshal.ReleaseComObject(OutputGraphWorkbook);
 
             Marshal.ReleaseComObject(application);
+
+            GC.Collect();
         }
 
+        // summary
+        // 2번째 입력파일에서 부터 각 "단대"와 "학과"를 읽어오기
+        // 읽어온 데이터로, 전체 데이터 "워크시트" 생성하기
         public List<string> ReadCollege()
         {
+            string temp;
             int CollegeRow = CollegeListRange.Rows.Count;
             int CollegeColumn = CollegeListRange.Columns.Count;
 
             for(int row = 1; row < CollegeRow; row++)
             {
-                CollegeList.Add(CollegeListRange.Cells[row, 1].ToString());
+                temp = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                CollegeList.Add(temp);
                 Console.WriteLine(CollegeList);
+
+                Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
+                collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+
+                temp = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
+                DepartList.Add(temp);
+                Console.WriteLine(DepartList);
+
+                Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
+                departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
             }
 
             return CollegeList;
@@ -125,5 +144,7 @@ namespace CentralAptitudeTest.Commands
             Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
             rg1.Value = "hello world";
         }
+
+
     }
 }

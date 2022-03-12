@@ -35,6 +35,7 @@ namespace CentralAptitudeTest.Views
         {
             //ExcelManipulation 함수 호출
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
+            ExcelManipulation.ReadCollege();
 
             // ExcelManipulation.WriteToCell();
 

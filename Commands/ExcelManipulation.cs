@@ -93,6 +93,11 @@ namespace CentralAptitudeTest.Commands
             application.Quit();
 
             // background에서 실행중인 객체들 마저 확실하게 해제시켜주기 위하여 사용.
+            Marshal.ReleaseComObject(InputDataWorksheet);
+            Marshal.ReleaseComObject(InputCollegeWorksheet);
+            Marshal.ReleaseComObject(OutputAllWorksheet);
+            Marshal.ReleaseComObject(OutputGraphWorksheet);
+
             Marshal.ReleaseComObject(InputDataWorkbook);
             Marshal.ReleaseComObject(InputCollegeWorkbook);
             Marshal.ReleaseComObject(OutputAllWorkbook);

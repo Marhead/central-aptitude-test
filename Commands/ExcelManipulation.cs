@@ -136,6 +136,8 @@ namespace CentralAptitudeTest.Commands
                 departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
             }
 
+            OutputAllWorkbook.Worksheets.Add(Count: CollegeList.Count);
+
             return CollegeList;
         }
 
@@ -144,7 +146,6 @@ namespace CentralAptitudeTest.Commands
             Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
             rg1.Value = "hello world";
         }
-
 
     }
 }

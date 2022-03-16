@@ -1,6 +1,7 @@
 ﻿using CentralAptitudeTest.Models;
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
 using Microsoft.Office.Interop.Excel;   // 액셀 사용을 위한 참조
@@ -33,7 +34,7 @@ namespace CentralAptitudeTest.Commands
 
         public ExcelManipulation(Config config)
         {
-            Console.WriteLine("생성사 동작 시작...");
+            Debug.WriteLine("생성자 동작 시작...");
 
             // 바탕화면 경로 불러오기
             DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -50,12 +51,12 @@ namespace CentralAptitudeTest.Commands
 
         public void OpenFile(Config config)
         {
-            Console.WriteLine("파일 열기 시작...");
+            Debug.WriteLine("파일 열기 시작...");
             // 입력 Excel 파일(워크북) 불러오기
             InputDataWorkbook = application.Workbooks.Open(config.FilePath.whole_data_filePath);
             InputCollegeWorkbook = application.Workbooks.Open(config.FilePath.process_data_filePath);
 
-            Console.WriteLine(InputDataWorkbook.Worksheets.Count);
+            Debug.WriteLine(InputDataWorkbook.Worksheets.Count);
 
             // Excel 화면 창 띄우기
             // application.Visible = true;
@@ -78,7 +79,7 @@ namespace CentralAptitudeTest.Commands
 
         public void CloseFile()
         {
-            Console.WriteLine("작업 완료, 파일 닫기 시작...");
+            Debug.WriteLine("작업 완료, 파일 닫기 시작...");
 
             // Save -> Close 순으로 수행
             string allfilenaming = "전체" + Datetime + ".xlsx";
@@ -120,7 +121,7 @@ namespace CentralAptitudeTest.Commands
         // 읽어온 데이터로, 전체 데이터 "워크시트" 생성하기
         public List<string> ReadCollege()
         {
-            Console.WriteLine("단과대, 학과 읽기 시작...");
+            Debug.WriteLine("단과대, 학과 읽기 시작...");
 
             string temp;
             var CollegeRow = CollegeListRange.Rows.Count;
@@ -129,19 +130,27 @@ namespace CentralAptitudeTest.Commands
             for(int row = 1; row < CollegeRow; row++)
             {
                 temp = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+
                 CollegeList.Add(temp);
-                Console.WriteLine(CollegeList.Count);
+                if(temp == null)
+                {
+
+                }
+                Debug.WriteLine("단과대 : " + temp);
 
                 Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
                 collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
                 temp = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
                 DepartList.Add(temp);
-                Console.WriteLine(DepartList.Count);
+                Debug.WriteLine("학과 : " + temp);
 
                 Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
                 departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
             }
+
+            Debug.WriteLine(CollegeList);
+            Debug.WriteLine(DepartList);
 
             OutputAllWorkbook.Worksheets.Add(Count: CollegeList.Count);
 

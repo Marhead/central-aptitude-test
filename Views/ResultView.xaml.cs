@@ -33,18 +33,15 @@ namespace CentralAptitudeTest.Views
 
         private void AddCollegeButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("엑셀 생성자 생성...");
             //ExcelManipulation 함수 호출
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
 
-            Console.WriteLine("단과대, 학과 읽기 시작...");
             ExcelManipulation.ReadCollege();
 
             // ExcelManipulation.WriteToCell();
 
             // MessageBox.Show(ExcelManipulation.ReadCollege());
 
-            Console.WriteLine("작업 완료, 파일 닫기 시작...");
             ExcelManipulation.CloseFile();
             MessageBox.Show("변환 완료!");
         }

@@ -31,6 +31,7 @@ namespace CentralAptitudeTest.Commands
 
         private List<string> CollegeList = new List<string>();
         private List<string> DepartList = new List<string>();
+        private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
 
         public ExcelManipulation(Config config)
         {
@@ -56,7 +57,7 @@ namespace CentralAptitudeTest.Commands
             InputDataWorkbook = application.Workbooks.Open(config.FilePath.whole_data_filePath);
             InputCollegeWorkbook = application.Workbooks.Open(config.FilePath.process_data_filePath);
 
-            Debug.WriteLine(InputDataWorkbook.Worksheets.Count);
+            Debug.WriteLine("입력 데이터 활성화 worksheet : " + InputDataWorkbook.Worksheets.Count);
 
             // Excel 화면 창 띄우기
             // application.Visible = true;
@@ -119,42 +120,70 @@ namespace CentralAptitudeTest.Commands
         // summary
         // 2번째 입력파일에서 부터 각 "단대"와 "학과"를 읽어오기
         // 읽어온 데이터로, 전체 데이터 "워크시트" 생성하기
-        public List<string> ReadCollege()
+        public void ReadCollege()
         {
             Debug.WriteLine("단과대, 학과 읽기 시작...");
 
-            string temp;
+            var tempDepart = "";
+            var tempCollege = "";
+            var tempInputKey = new List<int>();
+            var tempDepartInput = new List<string>();
             var CollegeRow = CollegeListRange.Rows.Count;
             var CollegeColumn = CollegeListRange.Columns.Count;
 
-            for(int row = 1; row < CollegeRow; row++)
+            var isPutDict = false;
+
+            // 첫째줄 제목을 지우기 위해 row=2부터 시작
+            for(int row = 2; row < CollegeRow; row++)
             {
-                temp = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                tempCollege = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                tempDepart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
 
-                CollegeList.Add(temp);
-                if(temp == null)
+                CollegeList.Add(tempCollege);
+                Debug.WriteLine("단과대 : " + tempCollege);
+                // Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
+                // collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+
+                if(tempCollege != null)
                 {
-
+                    tempInputKey.Add(row);
+                    Debug.WriteLine("입력 row 수 : {0}", row);
                 }
-                Debug.WriteLine("단과대 : " + temp);
 
-                Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
-                collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
-
-                temp = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
-                DepartList.Add(temp);
-                Debug.WriteLine("학과 : " + temp);
-
-                Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
-                departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
+                DepartList.Add(tempDepart);
+                Debug.WriteLine("학과 : " + tempDepart);
+                // Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
+                // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
             }
 
-            Debug.WriteLine(CollegeList);
-            Debug.WriteLine(DepartList);
+            // 마지막 row 넣기
+            tempInputKey.Add(CollegeRow);
 
-            OutputAllWorkbook.Worksheets.Add(Count: CollegeList.Count);
+            for (int start = 0; start < CollegeList.Count-1; start++)
+            {
+                // 초기화
+                tempDepartInput.Clear();
 
-            return CollegeList;
+                // 넣기 전에 임시 리스트 생성
+                for (int getpoint = tempInputKey[start]; getpoint < tempInputKey[start+1]; getpoint++)
+                {
+                    tempDepartInput.Add(DepartList[getpoint]);
+                }
+
+                // 딕셔너리에 삽입
+                ClassData.Add(CollegeList[tempInputKey[start]-2], tempDepartInput);
+
+                Debug.WriteLine("{0}번째 에러 발생", start);
+            }
+
+            CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
+            DepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
+
+            foreach(KeyValuePair<string, List<string>> items in ClassData)
+            {
+                OutputAllWorkbook.Worksheets.Add(items.Key);
+                Debug.WriteLine("{0}. {1}", items.Key, items.Value);
+            }            
         }
 
         public void WriteToCell()

@@ -35,7 +35,7 @@ namespace CentralAptitudeTest.Commands
 
         public ExcelManipulation(Config config)
         {
-            Debug.WriteLine("생성자 동작 시작...");
+            Debug.WriteLine("=============================생성자 동작 시작=============================");
 
             // 바탕화면 경로 불러오기
             DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -52,7 +52,7 @@ namespace CentralAptitudeTest.Commands
 
         public void OpenFile(Config config)
         {
-            Debug.WriteLine("파일 열기 시작...");
+            Debug.WriteLine("=============================파일 열기 시작=============================");
             // 입력 Excel 파일(워크북) 불러오기
             InputDataWorkbook = application.Workbooks.Open(config.FilePath.whole_data_filePath);
             InputCollegeWorkbook = application.Workbooks.Open(config.FilePath.process_data_filePath);
@@ -80,7 +80,7 @@ namespace CentralAptitudeTest.Commands
 
         public void CloseFile()
         {
-            Debug.WriteLine("작업 완료, 파일 닫기 시작...");
+            Debug.WriteLine("=============================작업 완료, 파일 닫기 시작=============================");
 
             // Save -> Close 순으로 수행
             string allfilenaming = "전체" + Datetime + ".xlsx";
@@ -122,7 +122,7 @@ namespace CentralAptitudeTest.Commands
         // 읽어온 데이터로, 전체 데이터 "워크시트" 생성하기
         public void ReadCollege()
         {
-            Debug.WriteLine("단과대, 학과 읽기 시작...");
+            Debug.WriteLine("=============================단과대학 및 학과 읽기 시작=============================");
 
             var tempDepart = "";
             var tempCollege = "";
@@ -131,13 +131,11 @@ namespace CentralAptitudeTest.Commands
             var CollegeRow = CollegeListRange.Rows.Count;
             var CollegeColumn = CollegeListRange.Columns.Count;
 
-            var isPutDict = false;
-
             // 첫째줄 제목을 지우기 위해 row=2부터 시작
             for(int row = 2; row < CollegeRow; row++)
             {
-                tempCollege = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
                 tempDepart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
+                tempCollege = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
                 CollegeList.Add(tempCollege);
                 Debug.WriteLine("단과대 : " + tempCollege);
@@ -146,7 +144,7 @@ namespace CentralAptitudeTest.Commands
 
                 if(tempCollege != null)
                 {
-                    tempInputKey.Add(row);
+                    tempInputKey.Add(row-2);
                     Debug.WriteLine("입력 row 수 : {0}", row);
                 }
 
@@ -156,24 +154,29 @@ namespace CentralAptitudeTest.Commands
                 // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
             }
 
-            // 마지막 row 넣기
-            tempInputKey.Add(CollegeRow);
+            // 마지막 row 값 넣기
+            tempInputKey.Add(CollegeRow-2);
 
-            for (int start = 0; start < CollegeList.Count-1; start++)
+            for (int tempInputKeyIndex = 0; tempInputKeyIndex < tempInputKey.Count-1; tempInputKeyIndex++)
             {
                 // 초기화
                 tempDepartInput.Clear();
-
-                // 넣기 전에 임시 리스트 생성
-                for (int getpoint = tempInputKey[start]; getpoint < tempInputKey[start+1]; getpoint++)
+                try
                 {
-                    tempDepartInput.Add(DepartList[getpoint]);
+                    // 넣기 전에 임시 리스트 생성
+                    for (int getpoint = tempInputKey[tempInputKeyIndex]; getpoint < tempInputKey[tempInputKeyIndex + 1]; getpoint++)
+                    {
+                        tempDepartInput.Add(DepartList[getpoint]);
+                    }
+
+                    // 딕셔너리에 삽입
+                    ClassData.Add(CollegeList[tempInputKey[tempInputKeyIndex]], tempDepartInput);
+                    Debug.WriteLine("{0} 딕셔너리 생성 완료!!!", CollegeList[tempInputKey[tempInputKeyIndex]]);
                 }
-
-                // 딕셔너리에 삽입
-                ClassData.Add(CollegeList[tempInputKey[start]-2], tempDepartInput);
-
-                Debug.WriteLine("{0}번째 에러 발생", start);
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Debug.WriteLine("딕셔너리 생성 종료");
+                }
             }
 
             CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
@@ -181,9 +184,10 @@ namespace CentralAptitudeTest.Commands
 
             foreach(KeyValuePair<string, List<string>> items in ClassData)
             {
-                OutputAllWorkbook.Worksheets.Add(items.Key);
                 Debug.WriteLine("{0}. {1}", items.Key, items.Value);
-            }            
+            }
+
+            OutputAllWorkbook.Worksheets.Add(After)
         }
 
         public void WriteToCell()

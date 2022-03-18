@@ -10,6 +10,7 @@ namespace CentralAptitudeTest.Commands
 {
     class ExcelManipulation
     {
+        // OpenFile() 에서 사용
         private Config Config;
 
         private Application application;
@@ -28,7 +29,9 @@ namespace CentralAptitudeTest.Commands
         string Datetime = DateTime.Now.ToString("hhmmss");
 
         private Range CollegeListRange;
+        private Range WholeInputDataRange;
 
+        // ReadCollege() 에서 사용
         private List<string> CollegeList = new List<string>();
         private List<string> DepartList = new List<string>();
         private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
@@ -41,6 +44,7 @@ namespace CentralAptitudeTest.Commands
             DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             // Excel 파일 저장 경로 및 파일 이름 설정
+            // string 내부에서  {0}을 통한 combine 실패. 해당 코드 사용 불가!!!
             // path = Path.Combine(DesktopPath, "{0}.xlsx", Datetime);
 
             Config = config;
@@ -62,12 +66,20 @@ namespace CentralAptitudeTest.Commands
             // Excel 화면 창 띄우기
             // application.Visible = true;
 
-            OutputAllWorkbook = application.Workbooks.Add();
-            OutputGraphWorkbook = application.Workbooks.Add();
-
+            if (config.FilePath.whole_data_filePath.Contains("대구가톨릭"))
+            {
+                OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
+                OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");
+            }
+            else
+            {
+                OutputAllWorkbook = application.Workbooks.Add();
+                OutputGraphWorkbook = application.Workbooks.Add();
+            }            
+            // Test용
             // 기존 Excel 파일(워크북) 불러오기
             //OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
-            //OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");
+            //OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");         
 
             // worksheet 생성하기
             InputDataWorksheet = (Worksheet)InputDataWorkbook.Sheets[1];
@@ -75,6 +87,10 @@ namespace CentralAptitudeTest.Commands
             OutputAllWorksheet = (Worksheet)OutputAllWorkbook.ActiveSheet;
             OutputGraphWorksheet = (Worksheet)OutputGraphWorkbook.ActiveSheet;
 
+            // 전체 입력 data 영역 설정
+            WholeInputDataRange = InputDataWorksheet.UsedRange;
+
+            // 단과 대학 영역 설정
             CollegeListRange = InputCollegeWorksheet.UsedRange;
         }
 
@@ -179,21 +195,80 @@ namespace CentralAptitudeTest.Commands
                 }
             }
 
+            // CollegeList 에서 null값 전부 제거
+            CollegeList.RemoveAll(item => item == null);
+
             CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
             DepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
 
+            // ClassData Dictionary 검사 부분
             foreach(KeyValuePair<string, List<string>> items in ClassData)
             {
                 Debug.WriteLine("{0}. {1}", items.Key, items.Value);
             }
 
-            OutputAllWorkbook.Worksheets.Add(After)
+            // 결과 엑셀에 학과별 worksheet 생성
+            for(int workSheetNum = 0; workSheetNum < ClassData.Keys.Count; workSheetNum++)
+            {
+                OutputAllWorkbook.Worksheets.Add(After: OutputAllWorkbook.Worksheets[workSheetNum + 1]);
+                var workSheetName = OutputAllWorkbook.Worksheets.Item[workSheetNum + 1] as Worksheet;
+                workSheetName.Name = CollegeList[workSheetNum];
+            }
+
+            var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;
+            lastWorksheet.Name = "부적응Data";
         }
 
-        public void WriteToCell()
+        public void GraphFileTask()
         {
-            Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
-            rg1.Value = "hello world";
+            var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
+            graphSheet.Name = "그래프Data";
+        }
+
+        public void SeparateEachDepart()
+        {
+            var temptest = ClassData["사범대학"];
+            temptest.ForEach(item => Debug.WriteLine("testdata : " + item));
+
+            temptest = ClassData["유스티노자유대학"];
+            temptest.ForEach(item => Debug.WriteLine("testdata : " + item));
+
+            // Excel에 값 삽입하는 기본 문법
+            // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
+            // rg1.Value = "hello world";
+
+            var StudentDepartName = "";
+            var tempCollegeName = "";
+
+            var dataRowNum = WholeInputDataRange.Rows.Count;
+            var dataColumnNum = WholeInputDataRange.Columns.Count;
+
+            for(int workSheetCount = 1; workSheetCount < OutputAllWorkbook.Worksheets.Count; workSheetCount++)
+            {
+                Debug.WriteLine(OutputAllWorkbook.Worksheets.Count - workSheetCount + "만큼 반복 수행 시작!!!");
+
+                var targetWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetCount] as Worksheet;
+                tempCollegeName = targetWorksheet.Name;
+
+                Debug.WriteLine(tempCollegeName + "작업 준비");
+
+                var tempDepartNameList = ClassData["유스티노자유대학"];
+
+                foreach(string tempDepartName in tempDepartNameList)
+                {
+                    Debug.WriteLine(tempDepartName + "작업 시작 !!!");
+                    Debug.WriteLine(dataRowNum + " 만큼 반복 시작 대기중!!!");
+                    for(int rowCount = 1; rowCount < dataRowNum; rowCount++)
+                    {
+                        if(tempDepartName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2)
+                        {
+                            Debug.WriteLine(rowCount + "번 째 진행중");
+                            targetWorksheet.Rows[targetWorksheet.Rows.Count.ToString()] = InputDataWorksheet.Rows[rowCount.ToString()];
+                        }
+                    }
+                }
+            }
+
         }
 
     }

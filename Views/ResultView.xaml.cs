@@ -37,10 +37,7 @@ namespace CentralAptitudeTest.Views
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
 
             ExcelManipulation.ReadCollege();
-
-            // ExcelManipulation.WriteToCell();
-
-            // MessageBox.Show(ExcelManipulation.ReadCollege());
+            ExcelManipulation.GraphFileTask();
 
             ExcelManipulation.CloseFile();
             MessageBox.Show("변환 완료!");

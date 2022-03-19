@@ -208,11 +208,16 @@ namespace CentralAptitudeTest.Commands
             }
 
             // 결과 엑셀에 학과별 worksheet 생성
-            for(int workSheetNum = 0; workSheetNum < ClassData.Keys.Count; workSheetNum++)
+            for (int workSheetNum = 0; workSheetNum < ClassData.Keys.Count; workSheetNum++)
             {
                 OutputAllWorkbook.Worksheets.Add(After: OutputAllWorkbook.Worksheets[workSheetNum + 1]);
-                var workSheetName = OutputAllWorkbook.Worksheets.Item[workSheetNum + 1] as Worksheet;
-                workSheetName.Name = CollegeList[workSheetNum];
+                var currentWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetNum + 1] as Worksheet;
+
+                Debug.WriteLine(CollegeList[workSheetNum]);
+
+                currentWorksheet.Name = CollegeList[workSheetNum];
+
+                Debug.WriteLine("변경 성공!");
             }
 
             var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;

@@ -66,16 +66,9 @@ namespace CentralAptitudeTest.Commands
             // Excel 화면 창 띄우기
             // application.Visible = true;
 
-            if (config.FilePath.whole_data_filePath.Contains("대구가톨릭"))
-            {
-                OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
-                OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");
-            }
-            else
-            {
-                OutputAllWorkbook = application.Workbooks.Add();
-                OutputGraphWorkbook = application.Workbooks.Add();
-            }            
+            OutputAllWorkbook = application.Workbooks.Add();
+            OutputGraphWorkbook = application.Workbooks.Add();
+               
             // Test용
             // 기존 Excel 파일(워크북) 불러오기
             //OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
@@ -140,71 +133,74 @@ namespace CentralAptitudeTest.Commands
         {
             Debug.WriteLine("=============================단과대학 및 학과 읽기 시작=============================");
 
-            var tempDepart = "";
-            var tempCollege = "";
-            var tempInputKey = new List<int>();
-            var tempDepartInput = new List<string>();
+            var Depart = "";
+            var College = "";
+            var DictInputDepartList = new List<string>();
+            var DepartStartIndexList = new List<int>();
             var CollegeRow = CollegeListRange.Rows.Count;
             var CollegeColumn = CollegeListRange.Columns.Count;
 
             // 첫째줄 제목을 지우기 위해 row=2부터 시작
             for(int row = 2; row < CollegeRow; row++)
             {
-                tempDepart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
-                tempCollege = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                Depart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
+                College = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
-                CollegeList.Add(tempCollege);
-                Debug.WriteLine("단과대 : " + tempCollege);
+                CollegeList.Add(College);
+                Debug.WriteLine("단과대 : " + College);
                 // Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
                 // collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
-                if(tempCollege != null)
+                if(College != null)
                 {
-                    tempInputKey.Add(row-2);
+                    DepartStartIndexList.Add(row-2);
                     Debug.WriteLine("입력 row 수 : {0}", row);
                 }
 
-                DepartList.Add(tempDepart);
-                Debug.WriteLine("학과 : " + tempDepart);
+                DepartList.Add(Depart);
+                Debug.WriteLine("학과 : " + Depart);
                 // Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
                 // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
-            }
-
-            // 마지막 row 값 넣기
-            tempInputKey.Add(CollegeRow-2);
-
-            for (int tempInputKeyIndex = 0; tempInputKeyIndex < tempInputKey.Count-1; tempInputKeyIndex++)
-            {
-                // 초기화
-                tempDepartInput.Clear();
-                try
-                {
-                    // 넣기 전에 임시 리스트 생성
-                    for (int getpoint = tempInputKey[tempInputKeyIndex]; getpoint < tempInputKey[tempInputKeyIndex + 1]; getpoint++)
-                    {
-                        tempDepartInput.Add(DepartList[getpoint]);
-                    }
-
-                    // 딕셔너리에 삽입
-                    ClassData.Add(CollegeList[tempInputKey[tempInputKeyIndex]], tempDepartInput);
-                    Debug.WriteLine("{0} 딕셔너리 생성 완료!!!", CollegeList[tempInputKey[tempInputKeyIndex]]);
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Debug.WriteLine("딕셔너리 생성 종료");
-                }
             }
 
             // CollegeList 에서 null값 전부 제거
             CollegeList.RemoveAll(item => item == null);
 
+            DepartStartIndexList.Add(CollegeRow-2);
+
+            DepartStartIndexList.ForEach(departstartindex => Debug.WriteLine(departstartindex));
+
+            // 딕셔너리 생성 loop
+            Debug.WriteLine("ClassData 딕셔너리 생성 시작");
+            for (int DepartIndex = 0; DepartIndex < DepartStartIndexList.Count-1; DepartIndex++)
+            {
+                // 임시 리스트 초기화
+                DictInputDepartList.Clear();
+
+                // 딕셔너리 Value 생성
+                if(DepartStartIndexList[DepartIndex] == DepartStartIndexList[DepartIndex + 1] - 1)
+                {
+                    DictInputDepartList.Add(DepartList[DepartIndex]);
+                }
+                else
+                {
+                    DictInputDepartList = DepartList.GetRange(DepartStartIndexList[DepartIndex], DepartStartIndexList[DepartIndex + 1]);
+                }
+                DictInputDepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
+                ClassData.Add(CollegeList[DepartIndex], DictInputDepartList);
+            }
+            Debug.WriteLine("ClassData 딕셔너리 생성 완료");
+
+            /* data 확인용 출력
             CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
             DepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
+            */
 
             // ClassData Dictionary 검사 부분
             foreach(KeyValuePair<string, List<string>> items in ClassData)
             {
-                Debug.WriteLine("{0}. {1}", items.Key, items.Value);
+                Debug.WriteLine(items.Key);
+                items.Value.ForEach(depart => Debug.WriteLine(depart));
             }
 
             // 결과 엑셀에 학과별 worksheet 생성

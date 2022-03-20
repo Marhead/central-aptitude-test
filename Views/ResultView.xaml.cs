@@ -35,15 +35,8 @@ namespace CentralAptitudeTest.Views
         {
             //ExcelManipulation 함수 호출
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
-            if(config.FilePath.process_data_filePath.Contains("대구"))
-            {
-
-            }
-            else
-            {
-                ExcelManipulation.ReadCollege();
-                ExcelManipulation.GraphFileTask();
-            }
+            ExcelManipulation.ReadCollege();
+            ExcelManipulation.GraphFileTask();
 
             ExcelManipulation.CloseFile();
             MessageBox.Show("변환 완료!");

@@ -171,25 +171,21 @@ namespace CentralAptitudeTest.Commands
             DepartStartIndexList.ForEach(departstartindex => Debug.WriteLine(departstartindex));
 
             // 딕셔너리 생성 loop
-            Debug.WriteLine("ClassData 딕셔너리 생성 시작");
+            Debug.WriteLine("***ClassData 딕셔너리 생성 시작***");
             for (int DepartIndex = 0; DepartIndex < DepartStartIndexList.Count-1; DepartIndex++)
             {
                 // 임시 리스트 초기화
                 DictInputDepartList.Clear();
 
                 // 딕셔너리 Value 생성
-                if(DepartStartIndexList[DepartIndex] == DepartStartIndexList[DepartIndex + 1] - 1)
-                {
-                    DictInputDepartList.Add(DepartList[DepartIndex]);
-                }
-                else
-                {
-                    DictInputDepartList = DepartList.GetRange(DepartStartIndexList[DepartIndex], DepartStartIndexList[DepartIndex + 1]);
-                }
+                DictInputDepartList = DepartList.GetRange(DepartStartIndexList[DepartIndex], DepartStartIndexList[DepartIndex + 1] - DepartStartIndexList[DepartIndex]);
+
                 DictInputDepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
+                Debug.WriteLine("***Dictionary 데이터 주입 준비***");
+
                 ClassData.Add(CollegeList[DepartIndex], DictInputDepartList);
             }
-            Debug.WriteLine("ClassData 딕셔너리 생성 완료");
+            Debug.WriteLine("***ClassData 딕셔너리 생성 완료***");
 
             /* data 확인용 출력
             CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
@@ -200,7 +196,7 @@ namespace CentralAptitudeTest.Commands
             foreach(KeyValuePair<string, List<string>> items in ClassData)
             {
                 Debug.WriteLine(items.Key);
-                items.Value.ForEach(depart => Debug.WriteLine(depart));
+                ClassData[items.Key].ForEach(depart => Debug.WriteLine(depart));
             }
 
             // 결과 엑셀에 학과별 worksheet 생성
@@ -209,11 +205,9 @@ namespace CentralAptitudeTest.Commands
                 OutputAllWorkbook.Worksheets.Add(After: OutputAllWorkbook.Worksheets[workSheetNum + 1]);
                 var currentWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetNum + 1] as Worksheet;
 
-                Debug.WriteLine(CollegeList[workSheetNum]);
-
                 currentWorksheet.Name = CollegeList[workSheetNum];
 
-                Debug.WriteLine("변경 성공!");
+                Debug.WriteLine(CollegeList[workSheetNum] + "***워크 시트 이름 변경 성공!***");
             }
 
             var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;
@@ -228,45 +222,70 @@ namespace CentralAptitudeTest.Commands
 
         public void SeparateEachDepart()
         {
-            var temptest = ClassData["사범대학"];
-            temptest.ForEach(item => Debug.WriteLine("testdata : " + item));
-
-            temptest = ClassData["유스티노자유대학"];
-            temptest.ForEach(item => Debug.WriteLine("testdata : " + item));
-
+            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입=============================");
+            
             // Excel에 값 삽입하는 기본 문법
             // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
             // rg1.Value = "hello world";
 
-            var StudentDepartName = "";
-            var tempCollegeName = "";
+            var InputDataList = new List<Range>();
 
+            var StudentDepartName = "";
+            var CollegeName = "";
+
+            var copyStartIndex = 0;
+            var copyEndIndex = 0;
+
+            var targetWorksheet = new Worksheet();
             var dataRowNum = WholeInputDataRange.Rows.Count;
             var dataColumnNum = WholeInputDataRange.Columns.Count;
 
             for(int workSheetCount = 1; workSheetCount < OutputAllWorkbook.Worksheets.Count; workSheetCount++)
             {
-                Debug.WriteLine(OutputAllWorkbook.Worksheets.Count - workSheetCount + "만큼 반복 수행 시작!!!");
+                targetWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetCount] as Worksheet;
+                CollegeName = targetWorksheet.Name;
 
-                var targetWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetCount] as Worksheet;
-                tempCollegeName = targetWorksheet.Name;
+                Debug.WriteLine(CollegeName + " 작업 준비");
 
-                Debug.WriteLine(tempCollegeName + "작업 준비");
+                var collegeNameList = ClassData.Keys;
 
-                var tempDepartNameList = ClassData["유스티노자유대학"];
+                ClassData[CollegeName].ForEach(depart => Debug.WriteLine(depart));
 
-                foreach(string tempDepartName in tempDepartNameList)
+                foreach(string collegeName in collegeNameList)
                 {
-                    Debug.WriteLine(tempDepartName + "작업 시작 !!!");
-                    Debug.WriteLine(dataRowNum + " 만큼 반복 시작 대기중!!!");
-                    for(int rowCount = 1; rowCount < dataRowNum; rowCount++)
+                    var isCopyStartIndex = true;
+                    var departNameList = ClassData[collegeName];
+
+                    foreach (string departName in departNameList)
                     {
-                        if(tempDepartName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2)
+                        Debug.WriteLine(departName + "작업 시작 !!!");
+                        Debug.WriteLine(dataRowNum + " 만큼 반복 시작 대기중!!!");
+
+                        for (int rowCount = 1; rowCount <dataRowNum; rowCount++)
                         {
-                            Debug.WriteLine(rowCount + "번 째 진행중");
-                            targetWorksheet.Rows[targetWorksheet.Rows.Count.ToString()] = InputDataWorksheet.Rows[rowCount.ToString()];
+                            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex)
+                            {
+                                copyStartIndex = rowCount;
+                                isCopyStartIndex = false;
+                            }
+
+                            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex == false)
+                            {
+                                copyEndIndex = rowCount;
+                                Debug.WriteLine(rowCount + "번 째 진행중");
+                            }
                         }
                     }
+
+                    var nextStartIndex = copyEndIndex;
+
+                    var fromIndex = "A" + copyStartIndex.ToString() + ":" + "Z" + copyEndIndex.ToString();
+                    var toIndex = "A" + nextStartIndex.ToString() + ":Z" + (copyEndIndex - copyStartIndex).ToString();
+
+                    var from = InputDataWorksheet.Range[fromIndex];
+                    var to = OutputAllWorksheet.Range[toIndex];
+
+                    from.Copy(to);
                 }
             }
 

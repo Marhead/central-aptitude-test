@@ -51,6 +51,7 @@ namespace CentralAptitudeTest.Commands
             application = new Application();
 
             OpenFile(config);
+            Debug.WriteLine("=============================생성자 동작 종료=============================");
         }
 
 
@@ -85,6 +86,8 @@ namespace CentralAptitudeTest.Commands
 
             // 단과 대학 영역 설정
             CollegeListRange = InputCollegeWorksheet.UsedRange;
+            
+            Debug.WriteLine("=============================파일 열기 종료=============================");
         }
 
         public void CloseFile()
@@ -135,7 +138,6 @@ namespace CentralAptitudeTest.Commands
 
             var Depart = "";
             var College = "";
-            var DictInputDepartList = new List<string>();
             var DepartStartIndexList = new List<int>();
             var CollegeRow = CollegeListRange.Rows.Count;
             var CollegeColumn = CollegeListRange.Columns.Count;
@@ -168,24 +170,28 @@ namespace CentralAptitudeTest.Commands
 
             DepartStartIndexList.Add(CollegeRow-2);
 
-            DepartStartIndexList.ForEach(departstartindex => Debug.WriteLine(departstartindex));
-
             // 딕셔너리 생성 loop
-            Debug.WriteLine("***ClassData 딕셔너리 생성 시작***");
+            Debug.WriteLine("=============================ClassData 딕셔너리 생성 시작=============================");
             for (int DepartIndex = 0; DepartIndex < DepartStartIndexList.Count-1; DepartIndex++)
             {
                 // 임시 리스트 초기화
-                DictInputDepartList.Clear();
+                var DictInputDepartList = new List<string>();
 
                 // 딕셔너리 Value 생성
+                // GetRange( int 시작인덱스, int 갯수 )
                 DictInputDepartList = DepartList.GetRange(DepartStartIndexList[DepartIndex], DepartStartIndexList[DepartIndex + 1] - DepartStartIndexList[DepartIndex]);
 
-                DictInputDepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
+                Debug.WriteLine("주입할 대학 이름 : " + CollegeList[DepartIndex]);
+                DictInputDepartList.ForEach(item => Debug.WriteLine("주입할 학부 이름 : " + item));
+
                 Debug.WriteLine("***Dictionary 데이터 주입 준비***");
 
                 ClassData.Add(CollegeList[DepartIndex], DictInputDepartList);
+
+                Debug.WriteLine("***Dictionary 데이터 주입 완료***");
             }
-            Debug.WriteLine("***ClassData 딕셔너리 생성 완료***");
+
+            Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
 
             /* data 확인용 출력
             CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
@@ -207,22 +213,28 @@ namespace CentralAptitudeTest.Commands
 
                 currentWorksheet.Name = CollegeList[workSheetNum];
 
-                Debug.WriteLine(CollegeList[workSheetNum] + "***워크 시트 이름 변경 성공!***");
+                Debug.WriteLine(CollegeList[workSheetNum] + "로 워크 시트 이름 변경 성공!");
             }
 
             var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;
             lastWorksheet.Name = "부적응Data";
+
+            Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
         }
 
         public void GraphFileTask()
         {
+            Debug.WriteLine("=============================그래프 파일 시작=============================");
+
             var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
             graphSheet.Name = "그래프Data";
+
+            Debug.WriteLine("=============================그래프 파일 종료=============================");
         }
 
         public void SeparateEachDepart()
         {
-            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입=============================");
+            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
             
             // Excel에 값 삽입하는 기본 문법
             // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
@@ -277,7 +289,7 @@ namespace CentralAptitudeTest.Commands
                         }
                     }
 
-                    var nextStartIndex = copyEndIndex;
+                    var nextStartIndex = 1;
 
                     var fromIndex = "A" + copyStartIndex.ToString() + ":" + "Z" + copyEndIndex.ToString();
                     var toIndex = "A" + nextStartIndex.ToString() + ":Z" + (copyEndIndex - copyStartIndex).ToString();
@@ -286,10 +298,12 @@ namespace CentralAptitudeTest.Commands
                     var to = OutputAllWorksheet.Range[toIndex];
 
                     from.Copy(to);
+
+                    nextStartIndex = copyEndIndex - copyStartIndex;
                 }
             }
+            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
 
         }
-
     }
 }

@@ -295,7 +295,7 @@ namespace CentralAptitudeTest.Commands
                     var toIndex = "A" + nextStartIndex.ToString() + ":Z" + (copyEndIndex - copyStartIndex).ToString();
 
                     var from = InputDataWorksheet.Range[fromIndex];
-                    var to = OutputAllWorksheet.Range[toIndex];
+                    var to = OutputAllWorksheet.Index[.Range[toIndex];
 
                     from.Copy(to);
 

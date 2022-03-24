@@ -39,8 +39,6 @@ namespace CentralAptitudeTest.Commands
         private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
         private Dictionary<string, int> StudentNum = new Dictionary<string, int>();
 
-        private List<int> CollegeStudentCount = new List<int>();
-
         public ExcelManipulation(Config config)
         {
             Debug.WriteLine("=============================생성자 동작 시작=============================");
@@ -230,12 +228,35 @@ namespace CentralAptitudeTest.Commands
             Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
         }
 
+        // StudentNum 딕셔너리 생성이 아직 안되었기에, SeparateEachDepart 다음에 호출
         public void GraphFileTask()
         {
             Debug.WriteLine("=============================그래프 파일 시작=============================");
 
             var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
             graphSheet.Name = "그래프Data";
+
+            var from = WholeInputDataRange.Range["E1:Z1"];
+            var to = graphSheet.Range["B1:W1"];
+
+            from.Copy(to);
+
+            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
+
+            var graphinputcollegelist = new List<string>(StudentNum.Keys);
+
+            var studentkeysindex = 0;
+
+            for(int graphcollegeindex = 2; graphcollegeindex < ClassData.Keys.Count + 1; graphcollegeindex+=2)
+            {
+                var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + StudentNum[graphinputcollegelist[studentkeysindex]] + ")";
+
+                var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
+                targetCell.Value = inputtitle;
+
+                targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
+                targetCell.Value = inputtitle;
+            }
 
             Debug.WriteLine("=============================그래프 파일 종료=============================");
         }

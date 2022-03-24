@@ -29,9 +29,11 @@
                 Content="OpenFile" Margin="400,0,0,0" Click="OpenFileButton_Click"/>
         <TextBox Name="myTextBox"
                  IsEnabled="False"
-                 Foreground="black" 
+                 Foreground="black"
+                 Text="검사 결과 파일을 업로드하세요."
                  Height="30"
                  Width="450"
+                 VerticalContentAlignment="Center"
                  Grid.Row="3" Margin="20,0,170,0" />
     </Grid>
 </UserControl>

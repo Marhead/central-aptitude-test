@@ -241,13 +241,11 @@ namespace CentralAptitudeTest.Commands
 
             from.Copy(to);
 
-            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
-
             var graphinputcollegelist = new List<string>(StudentNum.Keys);
 
             var studentkeysindex = 0;
 
-            for(int graphcollegeindex = 2; graphcollegeindex < ClassData.Keys.Count + 1; graphcollegeindex+=2)
+            for(int graphcollegeindex = 2; graphcollegeindex < ClassData.Keys.Count * 2 + 1; graphcollegeindex+=2)
             {
                 var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + StudentNum[graphinputcollegelist[studentkeysindex]] + ")";
 
@@ -256,6 +254,8 @@ namespace CentralAptitudeTest.Commands
 
                 targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
                 targetCell.Value = inputtitle;
+
+                studentkeysindex++;
             }
 
             Debug.WriteLine("=============================그래프 파일 종료=============================");
@@ -353,8 +353,90 @@ namespace CentralAptitudeTest.Commands
                 StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
 
                 Debug.WriteLine(targetWorksheet.UsedRange.Rows.Count);
-            }            
+            }
+            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
+
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
+        }
+
+        public void misfitFiltering()
+        {
+            // 스트레스 취약성
+            var indexStressColumn = 24;
+
+            // PTSD
+            var indexPtsdColumn = 15;
+
+            // 편집증
+            var indexParanoiaColumn = 19;
+
+            // 정신증
+            var indexPsychosisColumn = 20;
+
+            // 우울
+            var indexDepressedColumn = 7;
+
+            // 불안
+            var indexUnrestColumn = 8;
+
+            // 중독
+            var indexAddictionColumn = 22;
+
+            // 공포불안
+            var indexFearColumn = 9;
+
+            // 분노공격
+            var indexAngerColumn = 16;
+
+            // 조증
+            var indexManiaColumn = 18;
+
+            var preventAptitudeRecList = new List<int>();
+            var preventStressList = new List<int>();
+            var preventTraumaList = new List<int>();
+            var preventIsolateList = new List<int>();
+            var preventIPConflictList = new List<int>();
+
+            var seriousAptitudeRecList = new List<int>();
+            var seriousStressList = new List<int>();
+            var seriousTraumaList = new List<int>();
+            var seriousIsolateList = new List<int>();
+            var seriousIPConflictList = new List<int>();
+
+            for (int rowCount = 2; rowCount < WholeInputDataRange.Rows.Count; rowCount++)
+            {
+                if(((int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 > 60 && (int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 < 70) 
+                    || ((int)(WholeInputDataRange.Cells[rowCount, indexParanoiaColumn] as Range).Value2 > 60)
+                    || ((int)(WholeInputDataRange.Cells[rowCount, indexPsychosisColumn] as Range).Value2 > 60))
+                {
+                    preventAptitudeRecList.Add(rowCount);
+                }
+
+                if (((int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 > 60 && (int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 < 70)
+                    || ((int)(WholeInputDataRange.Cells[rowCount, indexParanoiaColumn] as Range).Value2 > 60)
+                    || ((int)(WholeInputDataRange.Cells[rowCount, indexPsychosisColumn] as Range).Value2 > 60))
+                {
+                    aptitudeRecList.Add(rowCount);
+                }
+            }
+        }
+
+        public void misfitWriting()
+        {
+            var targetWorksheet = OutputAllWorkbook.Worksheets.Item[outputAllSheetName] as Worksheet;
+
+            var preventRowIndex = 1;
+            var preventTitleColumnIndex = 1;
+
+            var seriousRowIndex = 0;
+            var seriousTitleColumnIndex = 10;
+
+            (targetWorksheet.Cells[preventRowIndex, preventTitleColumnIndex] as Range).Value = "예방집단-적성인식";
+
+            for(int dataRow = 1; dataRow < WholeInputDataRange.Rows.Count; dataRow++)
+            {
+
+            }
         }
     }
 }

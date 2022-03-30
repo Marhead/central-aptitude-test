@@ -35,15 +35,34 @@ namespace CentralAptitudeTest.Views
         {
             //ExcelManipulation 함수 호출
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
-            if(config.FilePath.process_data_filePath.Contains("대구"))
-            {
+            ExcelManipulation.ReadCollege();
 
-            }
-            else
+            ExcelManipulation.MisfitFiltering();
+
+            //try
+            //{
+            //    ExcelManipulation.MisfitFiltering();
+            //}
+            //catch (Exception exception)
+            //{
+            //    MessageBox.Show("필터링 중 오류발생!!!\n다시 작동 시켜주세요!");
+            //}
+
+            try
             {
-                ExcelManipulation.ReadCollege();
-                ExcelManipulation.GraphFileTask();
+                ExcelManipulation.SeparateEachDepart();
+            }catch(Exception exception)
+            {
+                MessageBox.Show("Excel 입력 데이터 오류 발견!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
             }
+
+            try
+            {
+                ExcelManipulation.GraphFileTask();
+            }catch(Exception exception)
+            {
+                MessageBox.Show("Excel graph 결과 출력 오류!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
+            }            
 
             ExcelManipulation.CloseFile();
             MessageBox.Show("변환 완료!");

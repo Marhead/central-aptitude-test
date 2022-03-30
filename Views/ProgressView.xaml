@@ -34,6 +34,7 @@
         <TextBox Name="myTextBox"
                  IsEnabled="False"
                  Text="가공용 학과 파일을 업로드하세요."
+                 VerticalContentAlignment="Center"
                  Height="30"
                  Width="450"
                  Grid.Row="4" Margin="20,0,170,0" />

@@ -24,7 +24,5 @@
                 Foreground="white"
                 HorizontalAlignment="Center"
                 Content="변환 시작" Click="AddCollegeButton_Click"/>
-
-
     </Grid>
 </UserControl>

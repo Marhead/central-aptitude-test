@@ -37,6 +37,17 @@ namespace CentralAptitudeTest.Views
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config);
             ExcelManipulation.ReadCollege();
 
+            ExcelManipulation.MisfitFiltering();
+
+            //try
+            //{
+            //    ExcelManipulation.MisfitFiltering();
+            //}
+            //catch (Exception exception)
+            //{
+            //    MessageBox.Show("필터링 중 오류발생!!!\n다시 작동 시켜주세요!");
+            //}
+
             try
             {
                 ExcelManipulation.SeparateEachDepart();
@@ -51,7 +62,7 @@ namespace CentralAptitudeTest.Views
             }catch(Exception exception)
             {
                 MessageBox.Show("Excel graph 결과 출력 오류!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
-            }
+            }            
 
             ExcelManipulation.CloseFile();
             MessageBox.Show("변환 완료!");

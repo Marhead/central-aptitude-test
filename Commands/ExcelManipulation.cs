@@ -39,6 +39,48 @@ namespace CentralAptitudeTest.Commands
         private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
         private Dictionary<string, int> StudentNum = new Dictionary<string, int>();
 
+        // 스트레스 취약성
+        private int IndexStressColumn = 24;
+
+        // PTSD
+        private int IndexPtsdColumn = 15;
+
+        // 편집증
+        private int IndexParanoiaColumn = 19;
+
+        // 정신증
+        private int IndexPsychosisColumn = 20;
+
+        // 우울
+        private int IndexDepressedColumn = 7;
+
+        // 불안
+        private int IndexUnrestColumn = 8;
+
+        // 중독
+        private int IndexAddictionColumn = 22;
+
+        // 공포불안
+        private int IndexFearColumn = 9;
+
+        // 분노공격
+        private int IndexAngerColumn = 16;
+
+        // 조증
+        private int IndexManiaColumn = 18;
+
+        List<int> PreventAptitudeRecList = new List<int>();
+        List<int> PreventStressList = new List<int>();
+        List<int> PreventTraumaList = new List<int>();
+        List<int> PreventIsolateList = new List<int>();
+        List<int> PreventIPConflictList = new List<int>();
+
+        List<int> SeriousAptitudeRecList = new List<int>();
+        List<int> SeriousStressList = new List<int>();
+        List<int> SeriousTraumaList = new List<int>();
+        List<int> SeriousIsolateList = new List<int>();
+        List<int> SeriousIPConflictList = new List<int>();
+
         public ExcelManipulation(Config config)
         {
             Debug.WriteLine("=============================생성자 동작 시작=============================");
@@ -359,38 +401,9 @@ namespace CentralAptitudeTest.Commands
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
         }
 
-        public void misfitFiltering()
+        public void MisfitFiltering()
         {
-            // 스트레스 취약성
-            var indexStressColumn = 24;
-
-            // PTSD
-            var indexPtsdColumn = 15;
-
-            // 편집증
-            var indexParanoiaColumn = 19;
-
-            // 정신증
-            var indexPsychosisColumn = 20;
-
-            // 우울
-            var indexDepressedColumn = 7;
-
-            // 불안
-            var indexUnrestColumn = 8;
-
-            // 중독
-            var indexAddictionColumn = 22;
-
-            // 공포불안
-            var indexFearColumn = 9;
-
-            // 분노공격
-            var indexAngerColumn = 16;
-
-            // 조증
-            var indexManiaColumn = 18;
-
+            Debug.WriteLine("=============================부적응자 필터링 시작=============================");
             var preventAptitudeRecList = new List<int>();
             var preventStressList = new List<int>();
             var preventTraumaList = new List<int>();
@@ -403,40 +416,237 @@ namespace CentralAptitudeTest.Commands
             var seriousIsolateList = new List<int>();
             var seriousIPConflictList = new List<int>();
 
+            // 전체 데이터 처음 인자부터 돌면서 문제되는 열 탐색.
             for (int rowCount = 2; rowCount < WholeInputDataRange.Rows.Count; rowCount++)
             {
-                if(((int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 > 60 && (int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 < 70) 
-                    || ((int)(WholeInputDataRange.Cells[rowCount, indexParanoiaColumn] as Range).Value2 > 60)
-                    || ((int)(WholeInputDataRange.Cells[rowCount, indexPsychosisColumn] as Range).Value2 > 60))
+                var targetValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexStressColumn] as Range).Value2);
+
+                var paranoiaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexParanoiaColumn] as Range).Value2);
+                var psychosisValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPsychosisColumn] as Range).Value2);
+                var depressedValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexDepressedColumn] as Range).Value2);
+                var unrestValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexUnrestColumn] as Range).Value2);
+                var ptsdValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPtsdColumn] as Range).Value2);
+                var addictionValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAddictionColumn] as Range).Value2);
+                var fearValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexFearColumn] as Range).Value2);
+                var maniaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexManiaColumn] as Range).Value2);
+                var angerValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAngerColumn] as Range).Value2);
+
+                // 예방집단
+                if (targetValue >= 60 && targetValue < 70)
                 {
-                    preventAptitudeRecList.Add(rowCount);
+                    // 적성인식
+                    if ( paranoiaValue >= 60 || psychosisValue >= 60)
+                    {
+                        Debug.WriteLine("적성인식-예방 열정보 삽입");
+                        preventAptitudeRecList.Add(rowCount);
+                    }
+
+                    // 스트레스
+                    if ( depressedValue >= 60 || unrestValue >= 60)
+                    {
+                        Debug.WriteLine("스트레스-예방 열정보 삽입");
+                        preventStressList.Add(rowCount);
+                    }
+
+                    // 외상경험
+                    if ( ptsdValue >= 60 || addictionValue >= 60)
+                    {
+                        Debug.WriteLine("외상경험-예방 열정보 삽입");
+                        preventTraumaList.Add(rowCount);
+                    }
+
+                    // 고립
+                    if ( fearValue >= 60 || paranoiaValue >= 60)
+                    {
+                        Debug.WriteLine("고립-예방 열정보 삽입");
+                        preventIsolateList.Add(rowCount);
+                    }
+
+                    // 대인갈등
+                    if ( maniaValue >= 60 || angerValue >= 60)
+                    {
+                        Debug.WriteLine("대인갈등-예방 열정보 삽입");
+                        preventIPConflictList.Add(rowCount);
+                    }
                 }
 
-                if (((int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 > 60 && (int)(WholeInputDataRange.Cells[rowCount, indexStressColumn] as Range).Value2 < 70)
-                    || ((int)(WholeInputDataRange.Cells[rowCount, indexParanoiaColumn] as Range).Value2 > 60)
-                    || ((int)(WholeInputDataRange.Cells[rowCount, indexPsychosisColumn] as Range).Value2 > 60))
+
+                // 문제집단
+                if (targetValue >= 70)
                 {
-                    aptitudeRecList.Add(rowCount);
+                    // 적성인식
+                    if ( paranoiaValue >= 70 || psychosisValue >= 70)
+                    {
+                        Debug.WriteLine("적성인식-문제 열정보 삽입");
+                        seriousAptitudeRecList.Add(rowCount);
+                    }
+
+                    // 스트레스
+                    if ( depressedValue >= 70 || unrestValue >= 70)
+                    {
+                        Debug.WriteLine("스트레스-문제 열정보 삽입");
+                        seriousStressList.Add(rowCount);
+                    }
+
+                    // 외상경험
+                    if ( ptsdValue >= 70 || addictionValue >= 70)
+                    {
+                        Debug.WriteLine("외상경험-문제 열정보 삽입");
+                        seriousTraumaList.Add(rowCount);
+                    }
+
+                    // 고립
+                    if (fearValue >= 70 || paranoiaValue >= 70)
+                    {
+                        Debug.WriteLine("고립-문제 열정보 삽입");
+                        seriousIsolateList.Add(rowCount);
+                    }
+
+                    // 대인갈등
+                    if ( maniaValue >= 70 || angerValue >= 70)
+                    {
+                        Debug.WriteLine("대인갈등-문제 열정보 삽입");
+                        seriousIPConflictList.Add(rowCount);
+                    }
                 }
             }
+            PreventAptitudeRecList = preventAptitudeRecList;
+            PreventStressList = preventStressList;
+            PreventTraumaList = preventTraumaList;
+            PreventIsolateList = preventIsolateList;
+            PreventIPConflictList = preventIPConflictList;
+
+            SeriousAptitudeRecList = seriousAptitudeRecList;
+            SeriousStressList = seriousStressList;
+            SeriousTraumaList = seriousTraumaList;
+            SeriousIsolateList = seriousIsolateList;
+            SeriousIPConflictList = seriousIPConflictList;
+
+            Debug.WriteLine("=============================부적응자 필터링 종료=============================");
+
+            Debug.WriteLine("=============================부적응자 데이터 작성 시작=============================");
+            MisfitPreventWriting();
+            Debug.WriteLine("=============================부적응자 데이터 작성 완료=============================");
+
         }
 
-        public void misfitWriting()
+        public void MisfitPreventWriting()
+        {
+            int rowIndex = 1;
+            rowIndex = MisfitWrite(false, rowIndex, IndexParanoiaColumn, IndexPsychosisColumn, "적성인식-예방");
+            rowIndex = MisfitWrite(false, rowIndex, IndexDepressedColumn, IndexUnrestColumn, "스트레스-예방");
+            rowIndex = MisfitWrite(false, rowIndex, IndexPtsdColumn, IndexAddictionColumn, "외상경험-예방");
+            rowIndex = MisfitWrite(false, rowIndex, IndexFearColumn, IndexParanoiaColumn, "고립-예방");
+            rowIndex = MisfitWrite(false, rowIndex, IndexManiaColumn, IndexAngerColumn, "대인갈등-예방");
+
+            rowIndex = 1;
+            rowIndex = MisfitWrite(true, rowIndex, IndexParanoiaColumn, IndexPsychosisColumn, "적성인식-문제");
+            rowIndex = MisfitWrite(true, rowIndex, IndexDepressedColumn, IndexUnrestColumn, "스트레스-문제");
+            rowIndex = MisfitWrite(true, rowIndex, IndexPtsdColumn, IndexAddictionColumn, "외상경험-문제");
+            rowIndex = MisfitWrite(true, rowIndex, IndexFearColumn, IndexParanoiaColumn, "고립-문제");
+            rowIndex = MisfitWrite(true, rowIndex, IndexManiaColumn, IndexAngerColumn, "대인갈등-문제");
+
+        }
+
+        public int MisfitWrite(Boolean isSerious, int rowIndex, int target1, int target2, string title)
         {
             var targetWorksheet = OutputAllWorkbook.Worksheets.Item[outputAllSheetName] as Worksheet;
 
-            var preventRowIndex = 1;
+            var currentRowIndex = rowIndex;
             var preventTitleColumnIndex = 1;
 
-            var seriousRowIndex = 0;
-            var seriousTitleColumnIndex = 10;
+            var targetlist = new List<int>();
 
-            (targetWorksheet.Cells[preventRowIndex, preventTitleColumnIndex] as Range).Value = "예방집단-적성인식";
+            var departIndex = 1;
+            var numIndex = 2;
+            var nameIndex = 3;
+            var sexIndex = 4;
+            var target1Index = 5;
+            var target2Index = 6;
+            var stressIndex = 7;
 
-            for(int dataRow = 1; dataRow < WholeInputDataRange.Rows.Count; dataRow++)
+            if (isSerious)
             {
+                preventTitleColumnIndex = 10;
+                departIndex = 10;
+                numIndex = 11;
+                nameIndex = 12;
+                sexIndex = 13;
+                target1Index = 14;
+                target2Index = 15;
+                stressIndex = 16;
 
+                if (title.Contains("적성인식"))
+                {
+                    targetlist = SeriousAptitudeRecList;
+                }
+                if (title.Contains("스트레스"))
+                {
+                    targetlist = SeriousStressList;
+                }
+                if (title.Contains("외상경험"))
+                {
+                    targetlist = SeriousTraumaList;
+                }
+                if (title.Contains("고립"))
+                {
+                    targetlist = SeriousIsolateList;
+                }
+                if (title.Contains("대인갈등"))
+                {
+                    targetlist = SeriousIPConflictList;
+                }
             }
+            else
+            {
+                if (title.Contains("적성인식"))
+                {
+                    targetlist = PreventAptitudeRecList;
+                }
+                if (title.Contains("스트레스"))
+                {
+                    targetlist = PreventStressList;
+                }
+                if (title.Contains("외상경험"))
+                {
+                    targetlist = PreventTraumaList;
+                }
+                if (title.Contains("고립"))
+                {
+                    targetlist = PreventIsolateList;
+                }
+                if (title.Contains("대인갈등"))
+                {
+                    targetlist = PreventIPConflictList;
+                }
+            }
+
+            (targetWorksheet.Cells[currentRowIndex, preventTitleColumnIndex] as Range).Value = title;
+
+            currentRowIndex+=2;
+
+            (targetWorksheet.Cells[currentRowIndex, departIndex] as Range).Value = "학과";
+            (targetWorksheet.Cells[currentRowIndex, numIndex] as Range).Value = "학번";
+            (targetWorksheet.Cells[currentRowIndex, nameIndex] as Range).Value = "성명";
+            (targetWorksheet.Cells[currentRowIndex, sexIndex] as Range).Value = "성별";
+            (targetWorksheet.Cells[currentRowIndex, target1Index] as Range).Value = (WholeInputDataRange.Cells[1, target1] as Range).Value2;
+            (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value = (WholeInputDataRange.Cells[1, target2] as Range).Value2;
+            (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value = "스트레스취약성";
+
+            foreach (var index in targetlist)
+            {
+                (targetWorksheet.Cells[currentRowIndex, departIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 1] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, numIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 2] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, nameIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 3] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, sexIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 4] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, target1Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target1Index] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target2Index] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, stressIndex] as Range).Value2;
+
+                currentRowIndex++;
+            }
+
+            return currentRowIndex;
         }
     }
 }

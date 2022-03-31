@@ -241,11 +241,6 @@ namespace CentralAptitudeTest.Commands
 
             Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
 
-            /* data 확인용 출력
-            CollegeList.ForEach(CollegeList => Debug.WriteLine(CollegeList));
-            DepartList.ForEach(DepartList => Debug.WriteLine(DepartList));
-            */
-
             // ClassData Dictionary 검사 부분
             foreach(KeyValuePair<string, List<string>> items in ClassData)
             {
@@ -287,15 +282,18 @@ namespace CentralAptitudeTest.Commands
 
             var studentkeysindex = 0;
 
-            for(int graphcollegeindex = 2; graphcollegeindex < ClassData.Keys.Count * 2 + 1; graphcollegeindex+=2)
+            for(int graphcollegeindex = 2; graphcollegeindex < StudentNum.Keys.Count * 2 + 1; graphcollegeindex+=2)
             {
                 var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + StudentNum[graphinputcollegelist[studentkeysindex]] + ")";
+                
+                if(StudentNum[graphinputcollegelist[studentkeysindex]] >= 2)
+                {
+                    var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
+                    targetCell.Value = inputtitle;
 
-                var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
-                targetCell.Value = inputtitle;
-
-                targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
-                targetCell.Value = inputtitle;
+                    targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
+                    targetCell.Value = inputtitle;
+                }
 
                 studentkeysindex++;
             }
@@ -315,6 +313,7 @@ namespace CentralAptitudeTest.Commands
 
             // 단과대 모음 리스트
             var collegeNameList = ClassData.Keys;
+            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
 
             foreach (string collegename in collegeNameList)
             {
@@ -391,14 +390,46 @@ namespace CentralAptitudeTest.Commands
                         from.Copy(to);
                     }                    
                 }
-
-                StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
-
                 Debug.WriteLine(targetWorksheet.UsedRange.Rows.Count);
-            }
-            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
 
-            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
+                if (targetWorksheet.UsedRange.Rows.Count >= 2)
+                {
+                    StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
+                }
+            }            
+            Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
+        }
+
+        public void ResultEachCollege()
+        {
+            var collegelist = ClassData.Keys;
+
+            foreach(var college in collegelist)
+            {
+                var targetworksheet = OutputAllWorkbook.Worksheets.Item[college] as Worksheet;
+
+                var studentcountindex = targetworksheet.UsedRange.Rows.Count + 3;
+
+                var writeplace = targetworksheet.Range[targetworksheet.Cells[studentcountindex, 5], targetworksheet.Cells[studentcountindex, 26]];
+
+                writeplace.Value2 = StudentNum[college];
+
+                studentcountindex -= 1;
+
+                for(var columnindex = 5;  columnindex<27; columnindex++)
+                {
+                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = ColumnCounter(targetworksheet, columnindex);
+                }
+            }
+        }
+
+        public int ColumnCounter(Worksheet targetworksheet, int columnindex)
+        {
+            var count = 0;
+
+
+
+            return count;
         }
 
         public void MisfitFiltering()
@@ -524,14 +555,13 @@ namespace CentralAptitudeTest.Commands
 
             Debug.WriteLine("=============================부적응자 필터링 종료=============================");
 
-            Debug.WriteLine("=============================부적응자 데이터 작성 시작=============================");
             MisfitPreventWriting();
-            Debug.WriteLine("=============================부적응자 데이터 작성 완료=============================");
-
         }
 
         public void MisfitPreventWriting()
         {
+            Debug.WriteLine("=============================부적응자 데이터 작성 시작=============================");
+
             int rowIndex = 1;
             rowIndex = MisfitWrite(false, rowIndex, IndexParanoiaColumn, IndexPsychosisColumn, "적성인식-예방");
             rowIndex = MisfitWrite(false, rowIndex, IndexDepressedColumn, IndexUnrestColumn, "스트레스-예방");
@@ -546,6 +576,7 @@ namespace CentralAptitudeTest.Commands
             rowIndex = MisfitWrite(true, rowIndex, IndexFearColumn, IndexParanoiaColumn, "고립-문제");
             rowIndex = MisfitWrite(true, rowIndex, IndexManiaColumn, IndexAngerColumn, "대인갈등-문제");
 
+            Debug.WriteLine("=============================부적응자 데이터 작성 완료=============================");
         }
 
         public int MisfitWrite(Boolean isSerious, int rowIndex, int target1, int target2, string title)

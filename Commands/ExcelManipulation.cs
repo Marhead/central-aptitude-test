@@ -398,6 +398,8 @@ namespace CentralAptitudeTest.Commands
                 }
             }            
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
+
+            ResultEachCollege();
         }
 
         public void ResultEachCollege()
@@ -418,16 +420,23 @@ namespace CentralAptitudeTest.Commands
 
                 for(var columnindex = 5;  columnindex<27; columnindex++)
                 {
-                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = ColumnCounter(targetworksheet, columnindex);
+                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = ColumnCounter(targetworksheet, columnindex, college);
                 }
             }
         }
 
-        public int ColumnCounter(Worksheet targetworksheet, int columnindex)
+        public int ColumnCounter(Worksheet targetworksheet, int columnindex, string college)
         {
             var count = 0;
 
-
+            for(var index = 1; index < StudentNum[college]; index++)
+            {
+                var temp = Convert.ToInt32((targetworksheet.Cells[index, columnindex] as Range).Value2);
+                if(temp > 70)
+                {
+                    count++;
+                }
+            }
 
             return count;
         }

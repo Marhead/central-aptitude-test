@@ -399,7 +399,7 @@ namespace CentralAptitudeTest.Commands
             }            
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
 
-            ResultEachCollege();
+            // ResultEachCollege();
         }
 
         public void ResultEachCollege()
@@ -409,29 +409,46 @@ namespace CentralAptitudeTest.Commands
             foreach(var college in collegelist)
             {
                 var targetworksheet = OutputAllWorkbook.Worksheets.Item[college] as Worksheet;
+                var graphworksheet = OutputGraphWorkbook.Worksheets.Item["그래프Data"] as Worksheet;
 
+                // 총 단과대 인원 작성
                 var studentcountindex = targetworksheet.UsedRange.Rows.Count + 3;
 
                 var writeplace = targetworksheet.Range[targetworksheet.Cells[studentcountindex, 5], targetworksheet.Cells[studentcountindex, 26]];
 
                 writeplace.Value2 = StudentNum[college];
 
-                studentcountindex -= 1;
+                // 개별 단과대 개별 이상자 인원수 파악
+                studentcountindex -= 1; // 카운트 낱개 갯수 위치 조정
 
-                for(var columnindex = 5;  columnindex<27; columnindex++)
+                var graphrowindex = 2;
+
+                for (var columnindex = 5;  columnindex < 27; columnindex++)
                 {
-                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = ColumnCounter(targetworksheet, columnindex, college);
+                    var columncount = ColumnCounter(targetworksheet, columnindex, college);
+                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = columncount;
+                    (graphworksheet.Cells[graphrowindex, columnindex - 2] as Range).Value2 = columncount;
+
+                    graphrowindex++;
+                    studentcountindex += 2;
+
+                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = columncount / StudentNum[college];
+                    (graphworksheet.Cells[graphrowindex, columnindex - 2] as Range).Value2 = columncount / StudentNum[college];
+                    
+                    graphrowindex++;
+                    studentcountindex -= 2;
                 }
             }
         }
 
-        public int ColumnCounter(Worksheet targetworksheet, int columnindex, string college)
+        private int ColumnCounter(Worksheet targetworksheet, int columnindex, string college)
         {
             var count = 0;
 
             for(var index = 1; index < StudentNum[college]; index++)
             {
                 var temp = Convert.ToInt32((targetworksheet.Cells[index, columnindex] as Range).Value2);
+
                 if(temp > 70)
                 {
                     count++;
@@ -567,7 +584,7 @@ namespace CentralAptitudeTest.Commands
             MisfitPreventWriting();
         }
 
-        public void MisfitPreventWriting()
+        private void MisfitPreventWriting()
         {
             Debug.WriteLine("=============================부적응자 데이터 작성 시작=============================");
 
@@ -588,7 +605,7 @@ namespace CentralAptitudeTest.Commands
             Debug.WriteLine("=============================부적응자 데이터 작성 완료=============================");
         }
 
-        public int MisfitWrite(Boolean isSerious, int rowIndex, int target1, int target2, string title)
+        private int MisfitWrite(Boolean isSerious, int rowIndex, int target1, int target2, string title)
         {
             var targetWorksheet = OutputAllWorkbook.Worksheets.Item[outputAllSheetName] as Worksheet;
 

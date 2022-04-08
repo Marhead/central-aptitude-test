@@ -13,7 +13,7 @@
             </Grid>
             <Grid x:Name="sidePanel" HorizontalAlignment="Left" Width="150" Background="#FF0F427A">
                 <StackPanel>
-                    <Grid Height="50" Background="White">
+                    <Grid Height="50" Background="#FF0F427A">
                         <Button HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" BorderBrush="Transparent" Height="33" Width="53">
                             <Image Source="icons/menu.png" Height="23" Width="34" RenderTransformOrigin="1.691,-0.087"/>
                         </Button>

@@ -402,42 +402,101 @@ namespace CentralAptitudeTest.Commands
             // ResultEachCollege();
         }
 
+        Dictionary<string, int> ResultIndexDictionary = new Dictionary<string, int>();
+
         public void ResultEachCollege()
         {
-            var collegelist = ClassData.Keys;
+            var collegelist = StudentNum.Keys;
 
             foreach(var college in collegelist)
             {
+                Debug.WriteLine(college + " 결과 작성 시작");
+
+                if(college == "전체인원")
+                {
+                    continue;
+                }
+
                 var targetworksheet = OutputAllWorkbook.Worksheets.Item[college] as Worksheet;
-                var graphworksheet = OutputGraphWorkbook.Worksheets.Item["그래프Data"] as Worksheet;
 
                 // 총 단과대 인원 작성
                 var studentcountindex = targetworksheet.UsedRange.Rows.Count + 3;
 
-                var writeplace = targetworksheet.Range[targetworksheet.Cells[studentcountindex, 5], targetworksheet.Cells[studentcountindex, 26]];
+                ResultIndexDictionary.Add(college, studentcountindex);
 
+                var writeplace = targetworksheet.Range[targetworksheet.Cells[studentcountindex, 5], targetworksheet.Cells[studentcountindex, 26]];
+                
                 writeplace.Value2 = StudentNum[college];
 
                 // 개별 단과대 개별 이상자 인원수 파악
                 studentcountindex -= 1; // 카운트 낱개 갯수 위치 조정
 
-                var graphrowindex = 2;
-
+                // 마지막 끝나느 studentcountindex == 컬럼 갯수 위치
                 for (var columnindex = 5;  columnindex < 27; columnindex++)
                 {
                     var columncount = ColumnCounter(targetworksheet, columnindex, college);
                     (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = columncount;
-                    (graphworksheet.Cells[graphrowindex, columnindex - 2] as Range).Value2 = columncount;
 
-                    graphrowindex++;
                     studentcountindex += 2;
 
-                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = columncount / StudentNum[college];
-                    (graphworksheet.Cells[graphrowindex, columnindex - 2] as Range).Value2 = columncount / StudentNum[college];
+                    var input = Math.Round((float)columncount / StudentNum[college], 4);
+                    (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = input;
                     
-                    graphrowindex++;
                     studentcountindex -= 2;
                 }
+            }
+
+            GraphResultWriting();
+        }
+
+        private void GraphResultWriting()
+        {
+            var startIndex = 4;
+            var graphworksheet = OutputGraphWorkbook.Worksheets.Item["그래프Data"] as Worksheet;
+            var contentsList = ResultIndexDictionary.Keys;
+
+            foreach(var contents in contentsList)
+            {
+                var originalIndex = ResultIndexDictionary[contents] - 1;
+                var targetworksheet = OutputAllWorkbook.Worksheets.Item[contents] as Worksheet;
+
+                var fromIndex = "E" + originalIndex + ":Z" + originalIndex;
+                var toIndex = "B" + startIndex + ":W" + startIndex;
+
+                var from = targetworksheet.Range[fromIndex];
+                var to = graphworksheet.Range[toIndex];
+                from.Copy(to);
+
+                // 퍼센테이지 copy
+
+                startIndex++;
+                originalIndex += 2;
+
+                fromIndex = "E" + originalIndex + ":Z" + originalIndex;
+                toIndex = "B" + startIndex + ":W" + startIndex;
+
+                from = targetworksheet.Range[fromIndex];
+                to = graphworksheet.Range[toIndex];
+                from.Copy(to);
+
+                startIndex++;
+            }
+
+            for(var columnIndex = 2; columnIndex < graphworksheet.UsedRange.Columns.Count+1; columnIndex++)
+            {
+                var inputValue = 0;
+
+                for(var rowIndex = 4; rowIndex < graphworksheet.UsedRange.Rows.Count; rowIndex+=2)
+                {
+                    var temp = Convert.ToInt32((graphworksheet.Cells[rowIndex, columnIndex] as Range).Value2);
+                    inputValue += temp;
+                }
+
+                (graphworksheet.Cells[2, columnIndex] as Range).Value2 = inputValue;
+
+                var inputPercentageValue = Math.Round((float)inputValue / StudentNum["전체인원"], 4);
+
+                (graphworksheet.Cells[3, columnIndex] as Range).Value2 = inputPercentageValue;
             }
         }
 
@@ -449,7 +508,7 @@ namespace CentralAptitudeTest.Commands
             {
                 var temp = Convert.ToInt32((targetworksheet.Cells[index, columnindex] as Range).Value2);
 
-                if(temp > 70)
+                if(temp >= 70)
                 {
                     count++;
                 }

@@ -16,11 +16,12 @@
         <TextBlock 
             Grid.Row="0"
             Padding="15" 
-            Text="엑셀 파일 변환 완료" 
+            Text="엑셀 파일 변환 시작" 
             FontSize="50"/>
         <TextBlock
             Grid.Row="1"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Name="ProgressTextBlock"/>
         <ProgressBar 
             Grid.Row="2"

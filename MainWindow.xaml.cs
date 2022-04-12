@@ -73,8 +73,6 @@ namespace CentralAptitudeTest
                     HomeButton.Visibility = Visibility.Visible;
                     break;
             }
-
-
         }
 
         private void PreviewPageButton_Click(object sender, RoutedEventArgs e)

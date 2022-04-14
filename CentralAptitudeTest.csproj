@@ -17,7 +17,6 @@
     <PackageReference Include="DevExpress.Wpf.Controls" Version="21.2.4" />
     <PackageReference Include="DevExpress.Wpf.Docking" Version="21.2.4" />
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
-    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1003" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 

@@ -5,46 +5,132 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Name="root"
-        Title="MainWindow" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Loaded="root_Loaded">
+        Title="중앙적성검사자동화프로그램" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Loaded="root_Loaded">
     <Grid>
-        <Grid Background="#FFD6D6D6">
-            <Grid x:Name="panelHeader" VerticalAlignment="Top" Height="50" Background="#FF0F427A" MouseDown="panelHeader_MouseDown">
-                <TextBlock Text="중앙적성검사" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="22" FontWeight="Bold" Foreground="White"/>
+        <Grid 
+            Background="#FFD6D6D6">
+            <Grid 
+                x:Name="panelHeader" 
+                VerticalAlignment="Top" 
+                Height="50" 
+                Background="#FF0F427A" 
+                MouseDown="panelHeader_MouseDown">
+                <TextBlock 
+                    Text="중앙적성검사" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    FontFamily="Century Gothic" 
+                    FontSize="22" 
+                    FontWeight="Bold" 
+                    Foreground="White"/>
             </Grid>
-            <Grid x:Name="sidePanel" HorizontalAlignment="Left" Width="150" Background="#FF0F427A">
+            <Grid 
+                x:Name="sidePanel" 
+                HorizontalAlignment="Left" 
+                Width="150" 
+                Background="#155BA7">
                 <StackPanel>
-                    <Grid Height="50" Background="White">
-                        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" BorderBrush="Transparent" Height="33" Width="53">
-                            <Image Source="icons/menu.png" Height="23" Width="34" RenderTransformOrigin="1.691,-0.087"/>
+                    <Grid 
+                        Height="50" 
+                        Background="#FF0F427A">
+                        <Button 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent" 
+                            Height="33" 
+                            Width="53">
+                            <Image 
+                                Source="icons/menu.png" 
+                                Height="23" 
+                                Width="34" 
+                                RenderTransformOrigin="1.691,-0.087"/>
                         </Button>
                     </Grid>
-                    <ListView Name="PanelList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontFamily="Century Gothic" FontSize="14" Foreground="White" BorderBrush="Transparent" Background="Transparent" FontWeight="Bold">
-                        <ListViewItem Height="50" Name="Insert" IsSelected="False" Selected="Insert_Selected" >
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
-                                <TextBlock Margin="15 0 0 0" Text="데이터 입력" VerticalAlignment="Center"/>
+                    <ListView 
+                        Name="PanelList" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                        FontFamily="Century Gothic" 
+                        FontSize="14" 
+                        Foreground="White" 
+                        BorderBrush="Transparent" 
+                        Background="Transparent" 
+                        FontWeight="Bold">
+                        <ListViewItem 
+                            Height="50" 
+                            Name="Insert" 
+                            IsSelected="False" 
+                            Selected="Insert_Selected" >
+                            <StackPanel 
+                                Orientation="Horizontal">
+                                <Image 
+                                    Source="icons/user.ico" 
+                                    Height="20" 
+                                    VerticalAlignment="Center"/>
+                                <TextBlock 
+                                    Margin="15 0 0 0" 
+                                    Text="데이터 입력" 
+                                    VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="50" Name="Process" IsSelected="False" Selected="Process_Selected" >
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
-                                <TextBlock Margin="15 0 0 0" Text="데이터 가공" VerticalAlignment="Center"/>
+                        <ListViewItem 
+                            Height="50" 
+                            Name="Process" 
+                            IsSelected="False" 
+                            Selected="Process_Selected" >
+                            <StackPanel 
+                                Orientation="Horizontal">
+                                <Image 
+                                    Source="icons/user.ico" 
+                                    Height="20" 
+                                    VerticalAlignment="Center"/>
+                                <TextBlock 
+                                    Margin="15 0 0 0" 
+                                    Text="데이터 가공" 
+                                    VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="50" Name="Complete" IsSelected="False" Selected="ListViewItem_Selected">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="icons/user.ico" Height="20" VerticalAlignment="Center"/>
-                                <TextBlock Margin="15 0 0 0" Text="데이터 완성" VerticalAlignment="Center"/>
+                        <ListViewItem 
+                            Height="50" 
+                            Name="Complete" 
+                            IsSelected="False" 
+                            Selected="ListViewItem_Selected">
+                            <StackPanel 
+                                Orientation="Horizontal">
+                                <Image 
+                                    Source="icons/user.ico" 
+                                    Height="20" 
+                                    VerticalAlignment="Center"/>
+                                <TextBlock 
+                                    Margin="15 0 0 0" 
+                                    Text="데이터 완성" 
+                                    VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
                     </ListView>
-
                 </StackPanel>
             </Grid>
-            <Grid x:Name="mainPanel" HorizontalAlignment="Left" VerticalAlignment="Center" Width="650" Height="310" Background="#FFD6D6D6" Margin="150,0,0,0">
-                <UserControl x:Name="MainControl" Width="750" Height="450" Margin="0, -74, -100, -66"/>
+            <Grid 
+                x:Name="mainPanel" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Center" 
+                Width="650" 
+                Height="310" 
+                Background="#FFD6D6D6" 
+                Margin="150,0,0,0">
+                <UserControl 
+                    x:Name="MainControl" 
+                    Width="750" 
+                    Height="450" 
+                    Margin="0, -74, -100, -66"/>
             </Grid>
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="750" Height="75" Background="#FFD6D6D6" Margin="150,0,0,0">
+            <Grid 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Bottom" 
+                Width="750" 
+                Height="75" 
+                Background="#FFD6D6D6" 
+                Margin="150,0,0,0">
                 <Button Name="PreviewPageButton"
                 Grid.Row="2"
                 Width="100"
@@ -76,7 +162,6 @@
                 VerticalAlignment="Bottom"
                 Content="처음으로" Margin="0,20,50,20" Click="HomeButton_Click"/>
             </Grid>
-
         </Grid>
     </Grid>
 </Window>

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
 using Microsoft.Office.Interop.Excel;   // 액셀 사용을 위한 참조
+using System.ComponentModel;
 
 namespace CentralAptitudeTest.Commands
 {
@@ -12,6 +13,7 @@ namespace CentralAptitudeTest.Commands
     {
         // OpenFile() 에서 사용
         private Config Config;
+        private BackgroundWorker Worker;
 
         private string outputAllSheetName = "부적응Data";
 
@@ -81,9 +83,10 @@ namespace CentralAptitudeTest.Commands
         List<int> SeriousIsolateList = new List<int>();
         List<int> SeriousIPConflictList = new List<int>();
 
-        public ExcelManipulation(Config config)
+        public ExcelManipulation(Config config, BackgroundWorker worker)
         {
-            Debug.WriteLine("=============================생성자 동작 시작=============================");
+            Worker = worker;
+            worker.ReportProgress(10, String.Format("생성자 동작 시작"));
 
             // 바탕화면 경로 불러오기
             DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -96,13 +99,13 @@ namespace CentralAptitudeTest.Commands
             application = new Application();
 
             OpenFile(config);
-            Debug.WriteLine("=============================생성자 동작 종료=============================");
+            worker.ReportProgress(11, String.Format("생성자 동작 종료"));
         }
 
 
         public void OpenFile(Config config)
         {
-            Debug.WriteLine("=============================파일 열기 시작=============================");
+            Worker.ReportProgress(12, String.Format("파일 열기 시작"));
             // 입력 Excel 파일(워크북) 불러오기
             InputDataWorkbook = application.Workbooks.Open(config.FilePath.whole_data_filePath);
             InputCollegeWorkbook = application.Workbooks.Open(config.FilePath.process_data_filePath);
@@ -131,12 +134,14 @@ namespace CentralAptitudeTest.Commands
 
             // 단과 대학 영역 설정
             CollegeListRange = InputCollegeWorksheet.UsedRange;
-            
-            Debug.WriteLine("=============================파일 열기 종료=============================");
+
+            Worker.ReportProgress(13, String.Format("파일 열기 종료"));
         }
 
         public void CloseFile()
         {
+            Worker.ReportProgress(97, String.Format("작업 완료, 파일 닫기 시작!!!"));
+
             Debug.WriteLine("=============================작업 완료, 파일 닫기 시작=============================");
 
             // Save -> Close 순으로 수행
@@ -172,15 +177,17 @@ namespace CentralAptitudeTest.Commands
             Marshal.ReleaseComObject(application);
 
             GC.Collect();
+
+            Worker.ReportProgress(100, String.Format("작업 파일 종료중..."));
+
+            Debug.WriteLine("=============================작업 완료, 파일 닫기 종료=============================");
         }
 
-        // summary
-        // 2번째 입력파일에서 부터 각 "단대"와 "학과"를 읽어오기
-        // 읽어온 데이터로, 전체 데이터 "워크시트" 생성하기
+        // 1번째 수행 함수
         public void ReadCollege()
         {
             Debug.WriteLine("=============================단과대학 및 학과 읽기 시작=============================");
-
+            Worker.ReportProgress(14, String.Format("단과대학 및 학과 읽기 시작"));
             var Depart = "";
             var College = "";
             var DepartStartIndexList = new List<int>();
@@ -213,6 +220,8 @@ namespace CentralAptitudeTest.Commands
                 // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
             }
 
+            Worker.ReportProgress(17, String.Format("단과대학 및 학과 읽는 중."));
+
             // CollegeList 에서 null값 전부 제거
             CollegeList.RemoveAll(item => item == null);
 
@@ -237,16 +246,18 @@ namespace CentralAptitudeTest.Commands
                 ClassData.Add(CollegeList[DepartIndex], DictInputDepartList);
 
                 Debug.WriteLine("***Dictionary 데이터 주입 완료***");
+
+                Worker.ReportProgress(20, String.Format("단과대학 및 학과 읽는 중.."));
             }
 
             Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
 
             // ClassData Dictionary 검사 부분
-            foreach(KeyValuePair<string, List<string>> items in ClassData)
-            {
-                Debug.WriteLine(items.Key);
-                ClassData[items.Key].ForEach(depart => Debug.WriteLine(depart));
-            }
+            //foreach(KeyValuePair<string, List<string>> items in ClassData)
+            //{
+            //    Debug.WriteLine(items.Key);
+            //    ClassData[items.Key].ForEach(depart => Debug.WriteLine(depart));
+            //}
 
             // 결과 엑셀에 학과별 worksheet 생성
             for (int workSheetNum = 0; workSheetNum < ClassData.Keys.Count; workSheetNum++)
@@ -257,17 +268,22 @@ namespace CentralAptitudeTest.Commands
                 currentWorksheet.Name = CollegeList[workSheetNum];
 
                 Debug.WriteLine(CollegeList[workSheetNum] + "로 워크 시트 이름 변경 성공!");
+
+                Worker.ReportProgress(23, String.Format("단과대학 및 학과 읽는 중..."));
             }
 
             var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;
             lastWorksheet.Name = outputAllSheetName;
 
+            Worker.ReportProgress(25, String.Format("단과대학 및 학과 읽기 종료"));
             Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
         }
 
+        // 4번째 수행 함수
         // StudentNum 딕셔너리 생성이 아직 안되었기에, SeparateEachDepart 다음에 호출
         public void GraphFileTask()
         {
+            Worker.ReportProgress(69, String.Format("그래프 파일 작업 시작"));
             Debug.WriteLine("=============================그래프 파일 시작=============================");
 
             var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
@@ -297,12 +313,15 @@ namespace CentralAptitudeTest.Commands
 
                 studentkeysindex++;
             }
+            Worker.ReportProgress(70, String.Format("그래프 파일 작업 종료"));
 
             Debug.WriteLine("=============================그래프 파일 종료=============================");
         }
 
+        // 3번째 수행 함수
         public void SeparateEachDepart()
         {
+            Worker.ReportProgress(36, String.Format("단과대학 별 학과 분류 데이터 기입 시작"));
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
             
             // Excel에 값 삽입하는 기본 문법
@@ -315,8 +334,39 @@ namespace CentralAptitudeTest.Commands
             var collegeNameList = ClassData.Keys;
             StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
 
+            var progresscount = 1;
+
             foreach (string collegename in collegeNameList)
             {
+                if(progresscount == collegeNameList.Count / 5)
+                {
+                    Worker.ReportProgress(40, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+                }
+                if (progresscount == collegeNameList.Count / 4)
+                {
+                    Worker.ReportProgress(44, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
+                }
+                if (progresscount == collegeNameList.Count / 3)
+                {
+                    Worker.ReportProgress(48, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
+                }
+                if (progresscount == collegeNameList.Count / 2)
+                {
+                    Worker.ReportProgress(52, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+                }
+                if (progresscount == (collegeNameList.Count / 3) * 2)
+                {
+                    Worker.ReportProgress(56, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
+                }
+                if (progresscount == (collegeNameList.Count / 4) * 3)
+                {
+                    Worker.ReportProgress(60, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
+                }
+                if (progresscount == (collegeNameList.Count / 5) * 4)
+                {
+                    Worker.ReportProgress(64, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+                }
+                progresscount++;
                 // 출력 워크시트 설정
                 var targetWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
 
@@ -398,15 +448,18 @@ namespace CentralAptitudeTest.Commands
                 }
             }            
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
-
-            // ResultEachCollege();
+            Worker.ReportProgress(68, String.Format("단과대학 별 학과 분류 데이터 기입 종료"));
         }
 
         Dictionary<string, int> ResultIndexDictionary = new Dictionary<string, int>();
 
+        // 5번째 수행 함수
         public void ResultEachCollege()
         {
+            Worker.ReportProgress(71, String.Format("최종 결과 작성 작업 시작"));
             var collegelist = StudentNum.Keys;
+
+            var progressCount = 1;
 
             foreach(var college in collegelist)
             {
@@ -415,6 +468,19 @@ namespace CentralAptitudeTest.Commands
                 if(college == "전체인원")
                 {
                     continue;
+                }
+
+                if(progressCount == collegelist.Count / 3)
+                {
+                    Worker.ReportProgress(76, String.Format("최종 결과 작성 작업 중."));
+                }
+                if (progressCount == collegelist.Count / 2)
+                {
+                    Worker.ReportProgress(81, String.Format("최종 결과 작성 작업 중.."));
+                }
+                if (progressCount == (collegelist.Count / 3) * 2)
+                {
+                    Worker.ReportProgress(86, String.Format("최종 결과 작성 작업 중..."));
                 }
 
                 var targetworksheet = OutputAllWorkbook.Worksheets.Item[college] as Worksheet;
@@ -498,6 +564,8 @@ namespace CentralAptitudeTest.Commands
 
                 (graphworksheet.Cells[3, columnIndex] as Range).Value2 = inputPercentageValue;
             }
+
+            Worker.ReportProgress(90, String.Format("최종 결과 작성 작업 시작"));
         }
 
         private int ColumnCounter(Worksheet targetworksheet, int columnindex, string college)
@@ -517,8 +585,11 @@ namespace CentralAptitudeTest.Commands
             return count;
         }
 
+        // 2번째 수행 함수
         public void MisfitFiltering()
         {
+            Worker.ReportProgress(26, String.Format("부적응자 필터링 시작"));
+
             Debug.WriteLine("=============================부적응자 필터링 시작=============================");
             var preventAptitudeRecList = new List<int>();
             var preventStressList = new List<int>();
@@ -623,7 +694,21 @@ namespace CentralAptitudeTest.Commands
                     {
                         Debug.WriteLine("대인갈등-문제 열정보 삽입");
                         seriousIPConflictList.Add(rowCount);
-                    }
+                    }                    
+                }
+                if (rowCount == rowCount / 3)
+                {
+                    Worker.ReportProgress(28, String.Format("부적응자 필터링 중."));
+                }
+
+                if (rowCount == rowCount / 2)
+                {
+                    Worker.ReportProgress(30, String.Format("부적응자 필터링 중.."));
+                }
+
+                if (rowCount == (rowCount / 3) * 2)
+                {
+                    Worker.ReportProgress(32, String.Format("부적응자 필터링 중..."));
                 }
             }
             PreventAptitudeRecList = preventAptitudeRecList;
@@ -662,6 +747,7 @@ namespace CentralAptitudeTest.Commands
             rowIndex = MisfitWrite(true, rowIndex, IndexManiaColumn, IndexAngerColumn, "대인갈등-문제");
 
             Debug.WriteLine("=============================부적응자 데이터 작성 완료=============================");
+            Worker.ReportProgress(35, String.Format("부적응자 필터링 종료"));
         }
 
         private int MisfitWrite(Boolean isSerious, int rowIndex, int target1, int target2, string title)

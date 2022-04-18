@@ -45,9 +45,6 @@ namespace CentralAptitudeTest.Commands
         // 각 워크시트 옮겨 적을 때 사용
         private Dictionary<string, int> ResultRowcountDictionary = new Dictionary<string, int>();
 
-        private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
-        private Dictionary<string, int> StudentNum = new Dictionary<string, int>();
-
         // 스트레스 취약성
         private int IndexStressColumn = 24;
 
@@ -265,44 +262,150 @@ namespace CentralAptitudeTest.Commands
             Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
         }
 
-        // 4번째 수행 함수
-        // StudentNum 딕셔너리 생성이 아직 안되었기에, SeparateEachDepart 다음에 호출
-        public void GraphFileTask()
+        // 2번째 수행 함수
+        public void MisfitFiltering()
         {
-            Worker.ReportProgress(69, String.Format("그래프 파일 작업 시작"));
-            Debug.WriteLine("=============================그래프 파일 시작=============================");
+            Worker.ReportProgress(26, String.Format("부적응자 필터링 시작"));
 
-            var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
-            graphSheet.Name = "그래프Data";
+            Debug.WriteLine("=============================부적응자 필터링 시작=============================");
+            var preventAptitudeRecList = new List<int>();
+            var preventStressList = new List<int>();
+            var preventTraumaList = new List<int>();
+            var preventIsolateList = new List<int>();
+            var preventIPConflictList = new List<int>();
 
-            var from = WholeInputDataRange.Range["E1:Z1"];
-            var to = graphSheet.Range["B1:W1"];
+            var seriousAptitudeRecList = new List<int>();
+            var seriousStressList = new List<int>();
+            var seriousTraumaList = new List<int>();
+            var seriousIsolateList = new List<int>();
+            var seriousIPConflictList = new List<int>();
 
-            from.Copy(to);
-
-            var graphinputcollegelist = new List<string>(StudentNum.Keys);
-
-            var studentkeysindex = 0;
-
-            for(int graphcollegeindex = 2; graphcollegeindex < StudentNum.Keys.Count * 2 + 1; graphcollegeindex+=2)
+            // 전체 데이터 처음 인자부터 돌면서 문제되는 열 탐색.
+            for (int rowCount = 2; rowCount < WholeInputDataRange.Rows.Count; rowCount++)
             {
-                var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + StudentNum[graphinputcollegelist[studentkeysindex]] + ")";
-                
-                if(StudentNum[graphinputcollegelist[studentkeysindex]] >= 2)
-                {
-                    var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
-                    targetCell.Value = inputtitle;
+                var targetValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexStressColumn] as Range).Value2);
 
-                    targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
-                    targetCell.Value = inputtitle;
+                var paranoiaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexParanoiaColumn] as Range).Value2);
+                var psychosisValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPsychosisColumn] as Range).Value2);
+                var depressedValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexDepressedColumn] as Range).Value2);
+                var unrestValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexUnrestColumn] as Range).Value2);
+                var ptsdValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPtsdColumn] as Range).Value2);
+                var addictionValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAddictionColumn] as Range).Value2);
+                var fearValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexFearColumn] as Range).Value2);
+                var maniaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexManiaColumn] as Range).Value2);
+                var angerValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAngerColumn] as Range).Value2);
+
+                // 예방집단
+                if (targetValue >= 60 && targetValue < 70)
+                {
+                    // 적성인식
+                    if (paranoiaValue >= 60 || psychosisValue >= 60)
+                    {
+                        Debug.WriteLine("적성인식-예방 열정보 삽입");
+                        preventAptitudeRecList.Add(rowCount);
+                    }
+
+                    // 스트레스
+                    if (depressedValue >= 60 || unrestValue >= 60)
+                    {
+                        Debug.WriteLine("스트레스-예방 열정보 삽입");
+                        preventStressList.Add(rowCount);
+                    }
+
+                    // 외상경험
+                    if (ptsdValue >= 60 || addictionValue >= 60)
+                    {
+                        Debug.WriteLine("외상경험-예방 열정보 삽입");
+                        preventTraumaList.Add(rowCount);
+                    }
+
+                    // 고립
+                    if (fearValue >= 60 || paranoiaValue >= 60)
+                    {
+                        Debug.WriteLine("고립-예방 열정보 삽입");
+                        preventIsolateList.Add(rowCount);
+                    }
+
+                    // 대인갈등
+                    if (maniaValue >= 60 || angerValue >= 60)
+                    {
+                        Debug.WriteLine("대인갈등-예방 열정보 삽입");
+                        preventIPConflictList.Add(rowCount);
+                    }
                 }
 
-                studentkeysindex++;
-            }
-            Worker.ReportProgress(70, String.Format("그래프 파일 작업 종료"));
 
-            Debug.WriteLine("=============================그래프 파일 종료=============================");
+                // 문제집단
+                if (targetValue >= 70)
+                {
+                    // 적성인식
+                    if (paranoiaValue >= 70 || psychosisValue >= 70)
+                    {
+                        Debug.WriteLine("적성인식-문제 열정보 삽입");
+                        seriousAptitudeRecList.Add(rowCount);
+                    }
+
+                    // 스트레스
+                    if (depressedValue >= 70 || unrestValue >= 70)
+                    {
+                        Debug.WriteLine("스트레스-문제 열정보 삽입");
+                        seriousStressList.Add(rowCount);
+                    }
+
+                    // 외상경험
+                    if (ptsdValue >= 70 || addictionValue >= 70)
+                    {
+                        Debug.WriteLine("외상경험-문제 열정보 삽입");
+                        seriousTraumaList.Add(rowCount);
+                    }
+
+                    // 고립
+                    if (fearValue >= 70 || paranoiaValue >= 70)
+                    {
+                        Debug.WriteLine("고립-문제 열정보 삽입");
+                        seriousIsolateList.Add(rowCount);
+                    }
+
+                    // 대인갈등
+                    if (maniaValue >= 70 || angerValue >= 70)
+                    {
+                        Debug.WriteLine("대인갈등-문제 열정보 삽입");
+                        seriousIPConflictList.Add(rowCount);
+                    }
+                }
+                if (rowCount == rowCount / 3)
+                {
+                    Worker.ReportProgress(28, String.Format("부적응자 필터링 중."));
+                }
+
+                if (rowCount == rowCount / 2)
+                {
+                    Worker.ReportProgress(30, String.Format("부적응자 필터링 중.."));
+                }
+
+                if (rowCount == (rowCount / 3) * 2)
+                {
+                    Worker.ReportProgress(32, String.Format("부적응자 필터링 중..."));
+                }
+            }
+            PreventAptitudeRecList = preventAptitudeRecList;
+            PreventStressList = preventStressList;
+            PreventTraumaList = preventTraumaList;
+            PreventIsolateList = preventIsolateList;
+            PreventIPConflictList = preventIPConflictList;
+
+            SeriousAptitudeRecList = seriousAptitudeRecList;
+            SeriousStressList = seriousStressList;
+            SeriousTraumaList = seriousTraumaList;
+            SeriousIsolateList = seriousIsolateList;
+            SeriousIPConflictList = seriousIPConflictList;
+
+            Debug.WriteLine("=============================부적응자 필터링 종료=============================");
+
+            MisfitPreventWriting();
         }
+
+        
 
         // 3번째 수행 함수
         public void SeparateEachDepart()
@@ -315,7 +418,10 @@ namespace CentralAptitudeTest.Commands
             // rg1.Value = "hello world";
 
             var inputdataRowCount = InputDataWorksheet.Rows.Count;
-            for(var index = 2; index <= inputdataRowCount; index++)
+
+            ResultRowcountDictionary.Add("전체인원", WholeInputDataRange.Rows.Count);
+
+            for (var index = 2; index <= inputdataRowCount; index++)
             {
                 var currentdepartname = (string)(InputDataWorksheet.Cells[index, 1] as Range).Value2;
 
@@ -474,13 +580,52 @@ namespace CentralAptitudeTest.Commands
             Worker.ReportProgress(68, String.Format("단과대학 별 학과 분류 데이터 기입 종료"));
         }
 
+        // 4번째 수행 함수
+        // StudentNum 딕셔너리 생성이 아직 안되었기에, SeparateEachDepart 다음에 호출
+        public void GraphFileTask()
+        {
+            Worker.ReportProgress(69, String.Format("그래프 파일 작업 시작"));
+            Debug.WriteLine("=============================그래프 파일 시작=============================");
+
+            var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
+            graphSheet.Name = "그래프Data";
+
+            var from = WholeInputDataRange.Range["E1:Z1"];
+            var to = graphSheet.Range["B1:W1"];
+
+            from.Copy(to);
+
+            var graphinputcollegelist = CollegeList;
+
+            var studentkeysindex = 0;
+
+            for (int graphcollegeindex = 2; graphcollegeindex < CollegeList.Count * 2 + 1; graphcollegeindex += 2)
+            {
+                var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + ResultRowcountDictionary[graphinputcollegelist[studentkeysindex]] + ")";
+
+                if (ResultRowcountDictionary[graphinputcollegelist[studentkeysindex]] >= 2)
+                {
+                    var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
+                    targetCell.Value = inputtitle;
+
+                    targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
+                    targetCell.Value = inputtitle;
+                }
+
+                studentkeysindex++;
+            }
+            Worker.ReportProgress(70, String.Format("그래프 파일 작업 종료"));
+
+            Debug.WriteLine("=============================그래프 파일 종료=============================");
+        }
+
         // 5번째 수행 함수
         public void ResultEachCollege()
         {
             Worker.ReportProgress(71, String.Format("최종 결과 작성 작업 시작"));
             Debug.WriteLine("===각 대학 결과 정보 기입===");
 
-            var collegelist = StudentNum.Keys;
+            var collegelist = CollegeList;
 
             var progressCount = 1;
 
@@ -515,12 +660,12 @@ namespace CentralAptitudeTest.Commands
 
                 var writeplace = targetworksheet.Range[targetworksheet.Cells[studentcountindex, 5], targetworksheet.Cells[studentcountindex, 26]];
                 
-                writeplace.Value2 = StudentNum[college];
+                writeplace.Value2 = ResultRowcountDictionary[college];
 
                 // 개별 단과대 개별 이상자 인원수 파악
                 studentcountindex -= 1; // 카운트 낱개 갯수 위치 조정
 
-                // 마지막 끝나느 studentcountindex == 컬럼 갯수 위치
+                // 마지막 끝나는 studentcountindex == 컬럼 갯수 위치
                 for (var columnindex = 5;  columnindex < 27; columnindex++)
                 {
                     var columncount = ColumnCounter(targetworksheet, columnindex, college);
@@ -528,7 +673,7 @@ namespace CentralAptitudeTest.Commands
 
                     studentcountindex += 2;
 
-                    var input = Math.Round((float)columncount / StudentNum[college], 4);
+                    var input = Math.Round((float)columncount / ResultRowcountDictionary[college], 4);
                     (targetworksheet.Cells[studentcountindex, columnindex] as Range).Value2 = input;
                     
                     studentcountindex -= 2;
@@ -583,7 +728,7 @@ namespace CentralAptitudeTest.Commands
 
                 (graphworksheet.Cells[2, columnIndex] as Range).Value2 = inputValue;
 
-                var inputPercentageValue = Math.Round((float)inputValue / StudentNum["전체인원"], 4);
+                var inputPercentageValue = Math.Round((float)inputValue / ResultRowcountDictionary["전체인원"], 4);
 
                 (graphworksheet.Cells[3, columnIndex] as Range).Value2 = inputPercentageValue;
             }
@@ -595,7 +740,7 @@ namespace CentralAptitudeTest.Commands
         {
             var count = 0;
 
-            for(var index = 1; index < StudentNum[college]; index++)
+            for(var index = 1; index < ResultRowcountDictionary[college]; index++)
             {
                 var temp = Convert.ToInt32((targetworksheet.Cells[index, columnindex] as Range).Value2);
 
@@ -606,150 +751,7 @@ namespace CentralAptitudeTest.Commands
             }
 
             return count;
-        }
-
-        // 2번째 수행 함수
-        public void MisfitFiltering()
-        {
-            Worker.ReportProgress(26, String.Format("부적응자 필터링 시작"));
-
-            Debug.WriteLine("=============================부적응자 필터링 시작=============================");
-            var preventAptitudeRecList = new List<int>();
-            var preventStressList = new List<int>();
-            var preventTraumaList = new List<int>();
-            var preventIsolateList = new List<int>();
-            var preventIPConflictList = new List<int>();
-
-            var seriousAptitudeRecList = new List<int>();
-            var seriousStressList = new List<int>();
-            var seriousTraumaList = new List<int>();
-            var seriousIsolateList = new List<int>();
-            var seriousIPConflictList = new List<int>();
-
-            // 전체 데이터 처음 인자부터 돌면서 문제되는 열 탐색.
-            for (int rowCount = 2; rowCount < WholeInputDataRange.Rows.Count; rowCount++)
-            {
-                var targetValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexStressColumn] as Range).Value2);
-
-                var paranoiaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexParanoiaColumn] as Range).Value2);
-                var psychosisValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPsychosisColumn] as Range).Value2);
-                var depressedValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexDepressedColumn] as Range).Value2);
-                var unrestValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexUnrestColumn] as Range).Value2);
-                var ptsdValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexPtsdColumn] as Range).Value2);
-                var addictionValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAddictionColumn] as Range).Value2);
-                var fearValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexFearColumn] as Range).Value2);
-                var maniaValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexManiaColumn] as Range).Value2);
-                var angerValue = Convert.ToInt32((WholeInputDataRange.Cells[rowCount, IndexAngerColumn] as Range).Value2);
-
-                // 예방집단
-                if (targetValue >= 60 && targetValue < 70)
-                {
-                    // 적성인식
-                    if ( paranoiaValue >= 60 || psychosisValue >= 60)
-                    {
-                        Debug.WriteLine("적성인식-예방 열정보 삽입");
-                        preventAptitudeRecList.Add(rowCount);
-                    }
-
-                    // 스트레스
-                    if ( depressedValue >= 60 || unrestValue >= 60)
-                    {
-                        Debug.WriteLine("스트레스-예방 열정보 삽입");
-                        preventStressList.Add(rowCount);
-                    }
-
-                    // 외상경험
-                    if ( ptsdValue >= 60 || addictionValue >= 60)
-                    {
-                        Debug.WriteLine("외상경험-예방 열정보 삽입");
-                        preventTraumaList.Add(rowCount);
-                    }
-
-                    // 고립
-                    if ( fearValue >= 60 || paranoiaValue >= 60)
-                    {
-                        Debug.WriteLine("고립-예방 열정보 삽입");
-                        preventIsolateList.Add(rowCount);
-                    }
-
-                    // 대인갈등
-                    if ( maniaValue >= 60 || angerValue >= 60)
-                    {
-                        Debug.WriteLine("대인갈등-예방 열정보 삽입");
-                        preventIPConflictList.Add(rowCount);
-                    }
-                }
-
-
-                // 문제집단
-                if (targetValue >= 70)
-                {
-                    // 적성인식
-                    if ( paranoiaValue >= 70 || psychosisValue >= 70)
-                    {
-                        Debug.WriteLine("적성인식-문제 열정보 삽입");
-                        seriousAptitudeRecList.Add(rowCount);
-                    }
-
-                    // 스트레스
-                    if ( depressedValue >= 70 || unrestValue >= 70)
-                    {
-                        Debug.WriteLine("스트레스-문제 열정보 삽입");
-                        seriousStressList.Add(rowCount);
-                    }
-
-                    // 외상경험
-                    if ( ptsdValue >= 70 || addictionValue >= 70)
-                    {
-                        Debug.WriteLine("외상경험-문제 열정보 삽입");
-                        seriousTraumaList.Add(rowCount);
-                    }
-
-                    // 고립
-                    if (fearValue >= 70 || paranoiaValue >= 70)
-                    {
-                        Debug.WriteLine("고립-문제 열정보 삽입");
-                        seriousIsolateList.Add(rowCount);
-                    }
-
-                    // 대인갈등
-                    if ( maniaValue >= 70 || angerValue >= 70)
-                    {
-                        Debug.WriteLine("대인갈등-문제 열정보 삽입");
-                        seriousIPConflictList.Add(rowCount);
-                    }                    
-                }
-                if (rowCount == rowCount / 3)
-                {
-                    Worker.ReportProgress(28, String.Format("부적응자 필터링 중."));
-                }
-
-                if (rowCount == rowCount / 2)
-                {
-                    Worker.ReportProgress(30, String.Format("부적응자 필터링 중.."));
-                }
-
-                if (rowCount == (rowCount / 3) * 2)
-                {
-                    Worker.ReportProgress(32, String.Format("부적응자 필터링 중..."));
-                }
-            }
-            PreventAptitudeRecList = preventAptitudeRecList;
-            PreventStressList = preventStressList;
-            PreventTraumaList = preventTraumaList;
-            PreventIsolateList = preventIsolateList;
-            PreventIPConflictList = preventIPConflictList;
-
-            SeriousAptitudeRecList = seriousAptitudeRecList;
-            SeriousStressList = seriousStressList;
-            SeriousTraumaList = seriousTraumaList;
-            SeriousIsolateList = seriousIsolateList;
-            SeriousIPConflictList = seriousIPConflictList;
-
-            Debug.WriteLine("=============================부적응자 필터링 종료=============================");
-
-            MisfitPreventWriting();
-        }
+        }        
 
         private void MisfitPreventWriting()
         {

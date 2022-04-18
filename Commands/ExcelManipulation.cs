@@ -38,6 +38,13 @@ namespace CentralAptitudeTest.Commands
         // ReadCollege() 에서 사용
         private List<string> CollegeList = new List<string>();
         private List<string> DepartList = new List<string>();
+
+        private Dictionary<string, string> DepartCollegeDictionary = new Dictionary<string, string>();
+        // 결과 작성 시 사용
+        private Dictionary<string, int> ResultIndexDictionary = new Dictionary<string, int>();
+        // 각 워크시트 옮겨 적을 때 사용
+        private Dictionary<string, int> ResultRowcountDictionary = new Dictionary<string, int>();
+
         private Dictionary<string, List<string>> ClassData = new Dictionary<string, List<string>>();
         private Dictionary<string, int> StudentNum = new Dictionary<string, int>();
 
@@ -116,12 +123,7 @@ namespace CentralAptitudeTest.Commands
             // application.Visible = true;
 
             OutputAllWorkbook = application.Workbooks.Add();
-            OutputGraphWorkbook = application.Workbooks.Add();
-               
-            // Test용
-            // 기존 Excel 파일(워크북) 불러오기
-            //OutputAllWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학교전체정리.xlsx");
-            //OutputGraphWorkbook = application.Workbooks.Open(@"C:\\code\\대구가톨릭대학그래프정리.xlsx");         
+            OutputGraphWorkbook = application.Workbooks.Add();      
 
             // worksheet 생성하기
             InputDataWorksheet = (Worksheet)InputDataWorkbook.Sheets[1];
@@ -152,7 +154,6 @@ namespace CentralAptitudeTest.Commands
             string graphpath = Path.Combine(DesktopPath, graphfilenaming);
 
             // Save -> SaveAs 순으로 수행
-            // InputDataWorkbook.Save();
             OutputAllWorkbook.SaveAs(Filename: allpath);
             OutputGraphWorkbook.SaveAs(Filename: graphpath);
 
@@ -188,69 +189,53 @@ namespace CentralAptitudeTest.Commands
         {
             Debug.WriteLine("=============================단과대학 및 학과 읽기 시작=============================");
             Worker.ReportProgress(14, String.Format("단과대학 및 학과 읽기 시작"));
-            var Depart = "";
-            var College = "";
-            var DepartStartIndexList = new List<int>();
-            var CollegeRow = CollegeListRange.Rows.Count;
-            var CollegeColumn = CollegeListRange.Columns.Count;
-
+            var depart = "";
+            var college = "";
+            var collegeRow = CollegeListRange.Rows.Count;
+            var collegeColumn = CollegeListRange.Columns.Count;
+            var index = 2;
             // 첫째줄 제목을 지우기 위해 row=2부터 시작
-            for(int row = 2; row <= CollegeRow; row++)
+            Debug.WriteLine("=============================ClassData 딕셔너리 생성 시작=============================");
+            for (int row = 2; row <= collegeRow; row++)
             {
-                Depart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
-                College = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                depart = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;
+                college = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
-                CollegeList.Add(College);
-                if(College != null)
+                if (college != null)
                 {
-                    Debug.WriteLine("단과대 : " + College);
+                    college = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
+                    Debug.WriteLine(college + " 처음찾기 성공");
+
+                    Debug.WriteLine("기입될 데이터 : " + depart + "---" + college);
+                    CollegeList.Add(college);
+
+                    Debug.WriteLine(depart + " 딕셔너리 작성");
+
+                    index = row;
                 }
+                else
+                {
+                    Debug.WriteLine(college + "---중복");
+
+                    college = (string)(CollegeListRange.Cells[index, 1] as Range).Value2;
+
+                    Debug.WriteLine("기입될 데이터 : " + depart + "---" + college);
+                    Debug.WriteLine(depart + " 딕셔너리 작성");
+                }
+                DepartCollegeDictionary.Add(depart, college);
+
                 // Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
                 // collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
 
-                if (College != null)
-                {
-                    DepartStartIndexList.Add(row-2);
-                    Debug.WriteLine("입력 row 수 : {0}", row);
-                }
-
-                DepartList.Add(Depart);
-                Debug.WriteLine("학과 : " + Depart);
                 // Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
                 // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
             }
+            Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
 
             Worker.ReportProgress(17, String.Format("단과대학 및 학과 읽는 중."));
 
             // CollegeList 에서 null값 전부 제거
             CollegeList.RemoveAll(item => item == null);
-
-            DepartStartIndexList.Add(CollegeRow-1);
-
-            // 딕셔너리 생성 loop
-            Debug.WriteLine("=============================ClassData 딕셔너리 생성 시작=============================");
-            for (int DepartIndex = 0; DepartIndex < DepartStartIndexList.Count-1; DepartIndex++)
-            {
-                // 임시 리스트 초기화
-                var DictInputDepartList = new List<string>();
-
-                // 딕셔너리 Value 생성
-                // GetRange( int 시작인덱스, int 갯수 )
-                DictInputDepartList = DepartList.GetRange(DepartStartIndexList[DepartIndex], DepartStartIndexList[DepartIndex + 1] - DepartStartIndexList[DepartIndex]);
-
-                Debug.WriteLine("주입할 대학 이름 : " + CollegeList[DepartIndex]);
-                DictInputDepartList.ForEach(item => Debug.WriteLine("주입할 학부 이름 : " + item));
-
-                Debug.WriteLine("***Dictionary 데이터 주입 준비***");
-
-                ClassData.Add(CollegeList[DepartIndex], DictInputDepartList);
-
-                Debug.WriteLine("***Dictionary 데이터 주입 완료***");
-
-                Worker.ReportProgress(20, String.Format("단과대학 및 학과 읽는 중.."));
-            }
-
-            Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
 
             // ClassData Dictionary 검사 부분
             //foreach(KeyValuePair<string, List<string>> items in ClassData)
@@ -260,12 +245,13 @@ namespace CentralAptitudeTest.Commands
             //}
 
             // 결과 엑셀에 학과별 worksheet 생성
-            for (int workSheetNum = 0; workSheetNum < ClassData.Keys.Count; workSheetNum++)
+            for (int workSheetNum = 0; workSheetNum < CollegeList.Count; workSheetNum++)
             {
                 OutputAllWorkbook.Worksheets.Add(After: OutputAllWorkbook.Worksheets[workSheetNum + 1]);
                 var currentWorksheet = OutputAllWorkbook.Worksheets.Item[workSheetNum + 1] as Worksheet;
 
                 currentWorksheet.Name = CollegeList[workSheetNum];
+                ResultRowcountDictionary.Add(CollegeList[workSheetNum], 1);
 
                 Debug.WriteLine(CollegeList[workSheetNum] + "로 워크 시트 이름 변경 성공!");
 
@@ -323,140 +309,177 @@ namespace CentralAptitudeTest.Commands
         {
             Worker.ReportProgress(36, String.Format("단과대학 별 학과 분류 데이터 기입 시작"));
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
-            
+
             // Excel에 값 삽입하는 기본 문법
             // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
             // rg1.Value = "hello world";
 
-            var dataRowNum = WholeInputDataRange.Rows.Count;
-
-            // 단과대 모음 리스트
-            var collegeNameList = ClassData.Keys;
-            StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
-
-            var progresscount = 1;
-
-            foreach (string collegename in collegeNameList)
+            var inputdataRowCount = InputDataWorksheet.Rows.Count;
+            for(var index = 2; index <= inputdataRowCount; index++)
             {
-                if(progresscount == collegeNameList.Count / 5)
+                var currentdepartname = (string)(InputDataWorksheet.Cells[index, 1] as Range).Value2;
+
+                if(currentdepartname == null)
                 {
-                    Worker.ReportProgress(40, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+                    break;
                 }
-                if (progresscount == collegeNameList.Count / 4)
+
+                Debug.WriteLine("currentdepartname : " + currentdepartname);
+
+                if(DepartCollegeDictionary.ContainsKey(currentdepartname))
                 {
-                    Worker.ReportProgress(44, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
+                    var currentcollegename = DepartCollegeDictionary[currentdepartname];
+                    Debug.WriteLine("currentcollegename : " + currentcollegename);
+                    var writeworksheet = OutputAllWorkbook.Worksheets.Item[currentcollegename] as Worksheet;
+                    var writerowindex = ResultRowcountDictionary[currentcollegename];
+                    ResultRowcountDictionary[currentcollegename] += 1;
+                    var toindex = "A" + writerowindex + ":Z" + writerowindex;
+                    var fromindex = "A" + index + ":Z" + index;
+
+                    Debug.WriteLine("toindex : " + toindex);
+                    Debug.WriteLine("fromindex : " + fromindex);
+
+                    var from = InputDataWorksheet.UsedRange.Range[fromindex];
+                    var to = writeworksheet.Range[toindex];
+                    from.Copy(to);
+                    Debug.WriteLine("복사 성공...!");
                 }
-                if (progresscount == collegeNameList.Count / 3)
+                else
                 {
-                    Worker.ReportProgress(48, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
+                    Debug.WriteLine("없는 학과 명 입니다." + currentdepartname);
                 }
-                if (progresscount == collegeNameList.Count / 2)
-                {
-                    Worker.ReportProgress(52, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
-                }
-                if (progresscount == (collegeNameList.Count / 3) * 2)
-                {
-                    Worker.ReportProgress(56, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
-                }
-                if (progresscount == (collegeNameList.Count / 4) * 3)
-                {
-                    Worker.ReportProgress(60, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
-                }
-                if (progresscount == (collegeNameList.Count / 5) * 4)
-                {
-                    Worker.ReportProgress(64, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
-                }
-                progresscount++;
-                // 출력 워크시트 설정
-                var targetWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
 
-                Debug.WriteLine(collegename + " 학부 기재 작업 준비");
+            }
 
-                // 단과대 학부 리스트 불러오기
-                var departNameList = ClassData[collegename];
+            //var dataRowNum = WholeInputDataRange.Rows.Count;
 
-                var isFirst = true;
+            //// 단과대 모음 리스트
+            //var collegeNameList = ClassData.Keys;
+            //StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
 
-                foreach (string departName in departNameList)
-                {
-                    Debug.WriteLine(departName + " 작업 시작!!!");
+            //var progresscount = 1;
 
-                    // 엑셀 데이터 쓰기 위치 값
-                    int nextStartIndex = targetWorksheet.UsedRange.Rows.Count + 1;
+            //foreach (string collegename in collegeNameList)
+            //{
+            //    if(progresscount == collegeNameList.Count / 5)
+            //    {
+            //        Worker.ReportProgress(40, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+            //    }
+            //    if (progresscount == collegeNameList.Count / 4)
+            //    {
+            //        Worker.ReportProgress(44, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
+            //    }
+            //    if (progresscount == collegeNameList.Count / 3)
+            //    {
+            //        Worker.ReportProgress(48, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
+            //    }
+            //    if (progresscount == collegeNameList.Count / 2)
+            //    {
+            //        Worker.ReportProgress(52, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+            //    }
+            //    if (progresscount == (collegeNameList.Count / 3) * 2)
+            //    {
+            //        Worker.ReportProgress(56, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
+            //    }
+            //    if (progresscount == (collegeNameList.Count / 4) * 3)
+            //    {
+            //        Worker.ReportProgress(60, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
+            //    }
+            //    if (progresscount == (collegeNameList.Count / 5) * 4)
+            //    {
+            //        Worker.ReportProgress(64, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
+            //    }
+            //    progresscount++;
+            //    // 출력 워크시트 설정
+            //    var targetWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
 
-                    if (isFirst)
-                    {
-                        nextStartIndex -= 1;
-                        isFirst = false;
-                    }
+            //    Debug.WriteLine(collegename + " 학부 기재 작업 준비");
 
-                    Debug.WriteLine(departName + " 기입 시작 위치 : {0}", nextStartIndex);
+            //    // 단과대 학부 리스트 불러오기
+            //    var departNameList = ClassData[collegename];
 
-                    // 복사 시작 인덱스 위치 판별
-                    var isCopyStartIndex = true;
+            //    var isFirst = true;
 
-                    // 복사 시작 인덱스 위치값
-                    int copyStartIndex = 0;
+            //    foreach (string departName in departNameList)
+            //    {
+            //        Debug.WriteLine(departName + " 작업 시작!!!");
 
-                    // 복사 종료 인덱스 위치값
-                    int copyEndIndex = 0;
+            //        // 엑셀 데이터 쓰기 위치 값
+            //        int nextStartIndex = targetWorksheet.UsedRange.Rows.Count + 1;
 
-                    // from 위치값 찾기
-                    for (int rowCount = 1; rowCount < dataRowNum; rowCount++)
-                    {
-                        if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex)
-                        {
-                            copyStartIndex = rowCount;
-                            Debug.WriteLine(departName + " 복사 시작 좌표값 : {0}", rowCount);
-                            isCopyStartIndex = false;
-                        }
+            //        if (isFirst)
+            //        {
+            //            nextStartIndex -= 1;
+            //            isFirst = false;
+            //        }
 
-                        if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex == false)
-                        {
-                            copyEndIndex = rowCount;
-                        }
-                    }
+            //        Debug.WriteLine(departName + " 기입 시작 위치 : {0}", nextStartIndex);
 
-                    if (copyStartIndex == 0 || copyEndIndex == 0)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Debug.WriteLine(departName + " 복사 종료 좌표값 : {0}", copyEndIndex);
-                        Debug.WriteLine(departName + " 복사 범위 값 : {0}", copyEndIndex - copyStartIndex + 1);
+            //        // 복사 시작 인덱스 위치 판별
+            //        var isCopyStartIndex = true;
 
-                        int nextEndIndex = nextStartIndex + copyEndIndex - copyStartIndex;
+            //        // 복사 시작 인덱스 위치값
+            //        int copyStartIndex = 0;
 
-                        Debug.WriteLine(departName + " 기입 마지막 위치 : {0}", nextEndIndex);
+            //        // 복사 종료 인덱스 위치값
+            //        int copyEndIndex = 0;
 
-                        var fromIndex = "A" + copyStartIndex.ToString() + ":Z" + copyEndIndex.ToString();
-                        var toIndex = "A" + nextStartIndex.ToString() + ":Z" + nextEndIndex.ToString();
+            //        // from 위치값 찾기
+            //        for (int rowCount = 1; rowCount < dataRowNum; rowCount++)
+            //        {
+            //            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex)
+            //            {
+            //                copyStartIndex = rowCount;
+            //                Debug.WriteLine(departName + " 복사 시작 좌표값 : {0}", rowCount);
+            //                isCopyStartIndex = false;
+            //            }
 
-                        var from = InputDataWorksheet.Range[fromIndex];
-                        var toWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
-                        var to = toWorksheet.Range[toIndex];
+            //            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex == false)
+            //            {
+            //                copyEndIndex = rowCount;
+            //            }
+            //        }
 
-                        from.Copy(to);
-                    }                    
-                }
-                Debug.WriteLine(targetWorksheet.UsedRange.Rows.Count);
+            //        if (copyStartIndex == 0 || copyEndIndex == 0)
+            //        {
+            //            continue;
+            //        }
+            //        else
+            //        {
+            //            Debug.WriteLine(departName + " 복사 종료 좌표값 : {0}", copyEndIndex);
+            //            Debug.WriteLine(departName + " 복사 범위 값 : {0}", copyEndIndex - copyStartIndex + 1);
 
-                if (targetWorksheet.UsedRange.Rows.Count >= 2)
-                {
-                    StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
-                }
-            }            
+            //            int nextEndIndex = nextStartIndex + copyEndIndex - copyStartIndex;
+
+            //            Debug.WriteLine(departName + " 기입 마지막 위치 : {0}", nextEndIndex);
+
+            //            var fromIndex = "A" + copyStartIndex.ToString() + ":Z" + copyEndIndex.ToString();
+            //            var toIndex = "A" + nextStartIndex.ToString() + ":Z" + nextEndIndex.ToString();
+
+            //            var from = InputDataWorksheet.Range[fromIndex];
+            //            var toWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
+            //            var to = toWorksheet.Range[toIndex];
+
+            //            from.Copy(to);
+            //        }                    
+            //    }
+            //    Debug.WriteLine(targetWorksheet.UsedRange.Rows.Count);
+
+            //    if (targetWorksheet.UsedRange.Rows.Count >= 2)
+            //    {
+            //        StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
+            //    }
+            //}            
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
             Worker.ReportProgress(68, String.Format("단과대학 별 학과 분류 데이터 기입 종료"));
         }
-
-        Dictionary<string, int> ResultIndexDictionary = new Dictionary<string, int>();
 
         // 5번째 수행 함수
         public void ResultEachCollege()
         {
             Worker.ReportProgress(71, String.Format("최종 결과 작성 작업 시작"));
+            Debug.WriteLine("===각 대학 결과 정보 기입===");
+
             var collegelist = StudentNum.Keys;
 
             var progressCount = 1;

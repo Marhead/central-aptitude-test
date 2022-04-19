@@ -757,8 +757,8 @@ namespace CentralAptitudeTest.Commands
 
             (targetWorksheet.Cells[currentRowIndex, preventTitleColumnIndex] as Range).Value = title;
 
-            currentRowIndex+=2;
-
+            currentRowIndex += 2;
+            // 각주 쓰기
             (targetWorksheet.Cells[currentRowIndex, departIndex] as Range).Value = "학과";
             (targetWorksheet.Cells[currentRowIndex, numIndex] as Range).Value = "학번";
             (targetWorksheet.Cells[currentRowIndex, nameIndex] as Range).Value = "성명";
@@ -775,9 +775,9 @@ namespace CentralAptitudeTest.Commands
                 (targetWorksheet.Cells[currentRowIndex, numIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 2] as Range).Value2;
                 (targetWorksheet.Cells[currentRowIndex, nameIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 3] as Range).Value2;
                 (targetWorksheet.Cells[currentRowIndex, sexIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 4] as Range).Value2;
-                (targetWorksheet.Cells[currentRowIndex, target1Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target1Index] as Range).Value2;
-                (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target2Index] as Range).Value2;
-                (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, stressIndex] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, target1Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target1] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target2] as Range).Value2;
+                (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 24] as Range).Value2;
 
                 currentRowIndex++;
             }

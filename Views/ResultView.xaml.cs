@@ -63,7 +63,7 @@ namespace CentralAptitudeTest.Views
             }*/
 
             // 3번째 작업
-            //excelManipulation.SeparateEachDepart();
+            excelManipulation.SeparateEachDepart();
             /*
             try
             {
@@ -75,7 +75,7 @@ namespace CentralAptitudeTest.Views
             }*/
 
             // 4번째 작업
-            //excelManipulation.GraphFileTask();
+            excelManipulation.GraphFileTask();
             /*
             try
             {
@@ -87,7 +87,7 @@ namespace CentralAptitudeTest.Views
             }*/
 
             // 5번째 작업
-            //excelManipulation.ResultEachCollege();
+            excelManipulation.ResultEachCollege();
             /*
             try
             {

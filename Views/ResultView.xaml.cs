@@ -51,6 +51,8 @@ namespace CentralAptitudeTest.Views
             excelManipulation.ReadCollege();
 
             // 2번째 작업
+            excelManipulation.MisfitFiltering();
+            /*
             try
             {
                 excelManipulation.MisfitFiltering();
@@ -58,9 +60,11 @@ namespace CentralAptitudeTest.Views
             catch (Exception exception)
             {
                 MessageBox.Show("필터링 중 오류발생!!!\n다시 작동 시켜주세요!");
-            }
+            }*/
 
             // 3번째 작업
+            //excelManipulation.SeparateEachDepart();
+            /*
             try
             {
                 excelManipulation.SeparateEachDepart();
@@ -68,10 +72,10 @@ namespace CentralAptitudeTest.Views
             catch (Exception exception)
             {
                 MessageBox.Show("Excel 입력 데이터 오류 발견!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
-            }
+            }*/
 
             // 4번째 작업
-            excelManipulation.GraphFileTask();
+            //excelManipulation.GraphFileTask();
             /*
             try
             {
@@ -83,6 +87,8 @@ namespace CentralAptitudeTest.Views
             }*/
 
             // 5번째 작업
+            //excelManipulation.ResultEachCollege();
+            /*
             try
             {
                 excelManipulation.ResultEachCollege();
@@ -90,7 +96,7 @@ namespace CentralAptitudeTest.Views
             catch (Exception exception)
             {
                 MessageBox.Show("각 엑셀시트 결과 산출 오류!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
-            }
+            }*/
 
             excelManipulation.CloseFile();
         }

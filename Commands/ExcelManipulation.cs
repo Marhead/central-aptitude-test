@@ -1,6 +1,7 @@
 ﻿using CentralAptitudeTest.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;   // 사용한 엑셀 객체들을 해제 해주기 위한 참조
@@ -186,11 +187,13 @@ namespace CentralAptitudeTest.Commands
         {
             Debug.WriteLine("=============================단과대학 및 학과 읽기 시작=============================");
             Worker.ReportProgress(14, String.Format("단과대학 및 학과 읽기 시작"));
+
             var depart = "";
             var college = "";
             var collegeRow = CollegeListRange.Rows.Count;
             var collegeColumn = CollegeListRange.Columns.Count;
             var index = 2;
+
             // 첫째줄 제목을 지우기 위해 row=2부터 시작
             Debug.WriteLine("=============================ClassData 딕셔너리 생성 시작=============================");
             for (int row = 2; row <= collegeRow; row++)
@@ -221,25 +224,15 @@ namespace CentralAptitudeTest.Commands
                 }
                 DepartCollegeDictionary.Add(depart, college);
 
-                // Range collegeinput = (Range)OutputAllWorksheet.Cells[row, 1];
-                // collegeinput.Value = (string)(CollegeListRange.Cells[row, 1] as Range).Value2;
-
-                // Range departinput = (Range)OutputAllWorksheet.Cells[row, 2];
-                // departinput.Value = (string)(CollegeListRange.Cells[row, 2] as Range).Value2;                
+                // Excel에 값 삽입하는 기본 문법
+                // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
+                // rg1.Value = "hello world";       
             }
             Debug.WriteLine("=============================ClassData 딕셔너리 생성 완료=============================");
-
             Worker.ReportProgress(17, String.Format("단과대학 및 학과 읽는 중."));
 
             // CollegeList 에서 null값 전부 제거
             CollegeList.RemoveAll(item => item == null);
-
-            // ClassData Dictionary 검사 부분
-            //foreach(KeyValuePair<string, List<string>> items in ClassData)
-            //{
-            //    Debug.WriteLine(items.Key);
-            //    ClassData[items.Key].ForEach(depart => Debug.WriteLine(depart));
-            //}
 
             // 결과 엑셀에 학과별 worksheet 생성
             for (int workSheetNum = 0; workSheetNum < CollegeList.Count; workSheetNum++)
@@ -334,7 +327,6 @@ namespace CentralAptitudeTest.Commands
                     }
                 }
 
-
                 // 문제집단
                 if (targetValue >= 70)
                 {
@@ -405,21 +397,17 @@ namespace CentralAptitudeTest.Commands
             MisfitPreventWriting();
         }
 
-        
-
         // 3번째 수행 함수
         public void SeparateEachDepart()
         {
             Worker.ReportProgress(36, String.Format("단과대학 별 학과 분류 데이터 기입 시작"));
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
-
-            // Excel에 값 삽입하는 기본 문법
-            // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
-            // rg1.Value = "hello world";
-
+                       
             var inputdataRowCount = InputDataWorksheet.Rows.Count;
 
-            ResultRowcountDictionary.Add("전체인원", WholeInputDataRange.Rows.Count);
+            ResultRowcountDictionary.Add("전체Data", WholeInputDataRange.Rows.Count);
+
+            InputDataWorksheet.Copy(OutputAllWorkbook.Worksheets[OutputAllWorkbook.Worksheets.Count]);
 
             for (var index = 2; index <= inputdataRowCount; index++)
             {
@@ -454,128 +442,15 @@ namespace CentralAptitudeTest.Commands
                 {
                     Debug.WriteLine("없는 학과 명 입니다." + currentdepartname);
                 }
-
             }
 
-            //var dataRowNum = WholeInputDataRange.Rows.Count;
+            for(var index = 0; index < ResultRowcountDictionary.Keys.Count; index++)
+            {
+                var keylist = ResultRowcountDictionary.Keys.ToList();
+                var key = keylist[index];
+                ResultRowcountDictionary[key] -= 1;
+            }
 
-            //// 단과대 모음 리스트
-            //var collegeNameList = ClassData.Keys;
-            //StudentNum.Add("전체인원", WholeInputDataRange.Rows.Count);
-
-            //var progresscount = 1;
-
-            //foreach (string collegename in collegeNameList)
-            //{
-            //    if(progresscount == collegeNameList.Count / 5)
-            //    {
-            //        Worker.ReportProgress(40, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
-            //    }
-            //    if (progresscount == collegeNameList.Count / 4)
-            //    {
-            //        Worker.ReportProgress(44, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
-            //    }
-            //    if (progresscount == collegeNameList.Count / 3)
-            //    {
-            //        Worker.ReportProgress(48, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
-            //    }
-            //    if (progresscount == collegeNameList.Count / 2)
-            //    {
-            //        Worker.ReportProgress(52, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
-            //    }
-            //    if (progresscount == (collegeNameList.Count / 3) * 2)
-            //    {
-            //        Worker.ReportProgress(56, String.Format("단과대학 별 학과 분류 데이터 기입 중.."));
-            //    }
-            //    if (progresscount == (collegeNameList.Count / 4) * 3)
-            //    {
-            //        Worker.ReportProgress(60, String.Format("단과대학 별 학과 분류 데이터 기입 중..."));
-            //    }
-            //    if (progresscount == (collegeNameList.Count / 5) * 4)
-            //    {
-            //        Worker.ReportProgress(64, String.Format("단과대학 별 학과 분류 데이터 기입 중."));
-            //    }
-            //    progresscount++;
-            //    // 출력 워크시트 설정
-            //    var targetWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
-
-            //    Debug.WriteLine(collegename + " 학부 기재 작업 준비");
-
-            //    // 단과대 학부 리스트 불러오기
-            //    var departNameList = ClassData[collegename];
-
-            //    var isFirst = true;
-
-            //    foreach (string departName in departNameList)
-            //    {
-            //        Debug.WriteLine(departName + " 작업 시작!!!");
-
-            //        // 엑셀 데이터 쓰기 위치 값
-            //        int nextStartIndex = targetWorksheet.UsedRange.Rows.Count + 1;
-
-            //        if (isFirst)
-            //        {
-            //            nextStartIndex -= 1;
-            //            isFirst = false;
-            //        }
-
-            //        Debug.WriteLine(departName + " 기입 시작 위치 : {0}", nextStartIndex);
-
-            //        // 복사 시작 인덱스 위치 판별
-            //        var isCopyStartIndex = true;
-
-            //        // 복사 시작 인덱스 위치값
-            //        int copyStartIndex = 0;
-
-            //        // 복사 종료 인덱스 위치값
-            //        int copyEndIndex = 0;
-
-            //        // from 위치값 찾기
-            //        for (int rowCount = 1; rowCount < dataRowNum; rowCount++)
-            //        {
-            //            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex)
-            //            {
-            //                copyStartIndex = rowCount;
-            //                Debug.WriteLine(departName + " 복사 시작 좌표값 : {0}", rowCount);
-            //                isCopyStartIndex = false;
-            //            }
-
-            //            if (departName == (string)(WholeInputDataRange.Cells[rowCount, 1] as Range).Value2 && isCopyStartIndex == false)
-            //            {
-            //                copyEndIndex = rowCount;
-            //            }
-            //        }
-
-            //        if (copyStartIndex == 0 || copyEndIndex == 0)
-            //        {
-            //            continue;
-            //        }
-            //        else
-            //        {
-            //            Debug.WriteLine(departName + " 복사 종료 좌표값 : {0}", copyEndIndex);
-            //            Debug.WriteLine(departName + " 복사 범위 값 : {0}", copyEndIndex - copyStartIndex + 1);
-
-            //            int nextEndIndex = nextStartIndex + copyEndIndex - copyStartIndex;
-
-            //            Debug.WriteLine(departName + " 기입 마지막 위치 : {0}", nextEndIndex);
-
-            //            var fromIndex = "A" + copyStartIndex.ToString() + ":Z" + copyEndIndex.ToString();
-            //            var toIndex = "A" + nextStartIndex.ToString() + ":Z" + nextEndIndex.ToString();
-
-            //            var from = InputDataWorksheet.Range[fromIndex];
-            //            var toWorksheet = OutputAllWorkbook.Worksheets.Item[collegename] as Worksheet;
-            //            var to = toWorksheet.Range[toIndex];
-
-            //            from.Copy(to);
-            //        }                    
-            //    }
-            //    Debug.WriteLine(targetWorksheet.UsedRange.Rows.Count);
-
-            //    if (targetWorksheet.UsedRange.Rows.Count >= 2)
-            //    {
-            //        StudentNum.Add(collegename, targetWorksheet.UsedRange.Rows.Count);
-            //    }
-            //}            
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
             Worker.ReportProgress(68, String.Format("단과대학 별 학과 분류 데이터 기입 종료"));
         }
@@ -595,15 +470,30 @@ namespace CentralAptitudeTest.Commands
 
             from.Copy(to);
 
-            var graphinputcollegelist = CollegeList;
+            CollegeList.Reverse();
+            CollegeList.Add("전체Data");
+            CollegeList.Reverse();
+
+            for (var index = 0; index < CollegeList.Count; index++)
+            {
+                var college = CollegeList[index];
+                if (ResultRowcountDictionary[college] < 2)
+                {
+                    CollegeList.Remove(college);
+                    var worksheet = OutputAllWorkbook.Worksheets.Item[college] as Worksheet;
+                    worksheet.Delete();
+                }
+            }
+
+            var collegelist = CollegeList;
 
             var studentkeysindex = 0;
 
             for (int graphcollegeindex = 2; graphcollegeindex < CollegeList.Count * 2 + 1; graphcollegeindex += 2)
             {
-                var inputtitle = graphinputcollegelist[studentkeysindex] + "(n=" + ResultRowcountDictionary[graphinputcollegelist[studentkeysindex]] + ")";
+                var inputtitle = collegelist[studentkeysindex] + "(n=" + ResultRowcountDictionary[collegelist[studentkeysindex]] + ")";
 
-                if (ResultRowcountDictionary[graphinputcollegelist[studentkeysindex]] >= 2)
+                if (ResultRowcountDictionary[collegelist[studentkeysindex]] >= 2)
                 {
                     var targetCell = (graphSheet.Cells[graphcollegeindex, 1] as Range);
                     targetCell.Value = inputtitle;
@@ -633,7 +523,7 @@ namespace CentralAptitudeTest.Commands
             {
                 Debug.WriteLine(college + " 결과 작성 시작");
 
-                if(college == "전체인원")
+                if(college == "전체Data")
                 {
                     continue;
                 }
@@ -728,7 +618,7 @@ namespace CentralAptitudeTest.Commands
 
                 (graphworksheet.Cells[2, columnIndex] as Range).Value2 = inputValue;
 
-                var inputPercentageValue = Math.Round((float)inputValue / ResultRowcountDictionary["전체인원"], 4);
+                var inputPercentageValue = Math.Round((float)inputValue / ResultRowcountDictionary["전체Data"], 4);
 
                 (graphworksheet.Cells[3, columnIndex] as Range).Value2 = inputPercentageValue;
             }
@@ -740,15 +630,32 @@ namespace CentralAptitudeTest.Commands
         {
             var count = 0;
 
-            for(var index = 1; index < ResultRowcountDictionary[college]; index++)
+            if(college == "전체Data")
             {
-                var temp = Convert.ToInt32((targetworksheet.Cells[index, columnindex] as Range).Value2);
-
-                if(temp >= 70)
+                for (var index = 2; index < ResultRowcountDictionary[college]; index++)
                 {
-                    count++;
+                    Range range = targetworksheet.Cells[index, columnindex] as Range;
+                    var temp = Convert.ToInt32(range.Value2);
+
+                    if (temp >= 70)
+                    {
+                        count++;
+                    }
                 }
             }
+            else
+            {
+                for (var index = 1; index < ResultRowcountDictionary[college]; index++)
+                {
+                    Range range = targetworksheet.Cells[index, columnindex] as Range;
+                    var temp = Convert.ToInt32(range.Value2);
+
+                    if (temp >= 70)
+                    {
+                        count++;
+                    }
+                }
+            }            
 
             return count;
         }        
@@ -860,6 +767,8 @@ namespace CentralAptitudeTest.Commands
             (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value = (WholeInputDataRange.Cells[1, target2] as Range).Value2;
             (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value = "스트레스취약성";
 
+            currentRowIndex++;
+
             foreach (var index in targetlist)
             {
                 (targetWorksheet.Cells[currentRowIndex, departIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 1] as Range).Value2;
@@ -872,6 +781,8 @@ namespace CentralAptitudeTest.Commands
 
                 currentRowIndex++;
             }
+
+            currentRowIndex += 2;
 
             return currentRowIndex;
         }

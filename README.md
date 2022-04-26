@@ -13,8 +13,6 @@
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
+![App Screenshot](https://github.com/Marhead/CentralAptitudeTest/blob/main/image/%EC%A4%91%EC%95%99%EC%A0%81%EC%84%B1%EC%97%B0%EA%B5%AC%EC%86%8C-%EA%B2%80%EC%82%AC%EA%B8%B01.png)
+![App Screenshot](https://github.com/Marhead/CentralAptitudeTest/blob/main/image/%EC%A4%91%EC%95%99%EC%A0%81%EC%84%B1%EC%97%B0%EA%B5%AC%EC%86%8C-%EA%B2%80%EC%82%AC%EA%B8%B02.png)
+![App Screenshot](https://github.com/Marhead/CentralAptitudeTest/blob/main/image/%EC%A4%91%EC%95%99%EC%A0%81%EC%84%B1%EC%97%B0%EA%B5%AC%EC%86%8C-%EA%B2%80%EC%82%AC%EA%B8%B03.png)

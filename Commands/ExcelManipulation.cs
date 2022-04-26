@@ -398,7 +398,7 @@ namespace CentralAptitudeTest.Commands
         }
 
         // 3번째 수행 함수
-        public void SeparateEachDepart()
+        public string SeparateEachDepart()
         {
             Worker.ReportProgress(36, String.Format("단과대학 별 학과 분류 데이터 기입 시작"));
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 시작=============================");
@@ -441,6 +441,8 @@ namespace CentralAptitudeTest.Commands
                 else
                 {
                     Debug.WriteLine("없는 학과 명 입니다." + currentdepartname);
+                    Worker.ReportProgress(0,String.Format("없는 학과명 발생!!!!!! 입력 데이터를 확인해 주세요!"));
+                    return currentdepartname;
                 }
             }
 
@@ -453,6 +455,8 @@ namespace CentralAptitudeTest.Commands
 
             Debug.WriteLine("=============================단과대별 학과 분류하여 워크시트 데이터 기입 종료=============================");
             Worker.ReportProgress(68, String.Format("단과대학 별 학과 분류 데이터 기입 종료"));
+
+            return null;
         }
 
         // 4번째 수행 함수

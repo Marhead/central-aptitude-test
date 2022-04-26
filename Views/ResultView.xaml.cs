@@ -47,44 +47,63 @@ namespace CentralAptitudeTest.Views
             ExcelManipulation ExcelManipulation = new ExcelManipulation(config, worker);
             excelManipulation = ExcelManipulation;
 
-            excelManipulation.ReadCollege();
+            // 1번째 작업
+            try
+            {
+                excelManipulation.ReadCollege();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message + "\n학과 데이터에 오류가 있습니다. 학과데이터 파일을 확인해주세요.");
+            }
 
+            // 2번째 작업
+            // excelManipulation.MisfitFiltering();
             try
             {
                 excelManipulation.MisfitFiltering();
             }
             catch (Exception exception)
             {
-                MessageBox.Show("필터링 중 오류발생!!!\n다시 작동 시켜주세요!");
+                MessageBox.Show(exception.Message);
             }
 
+            // 3번째 작업
+            // excelManipulation.SeparateEachDepart();
             try
             {
-                excelManipulation.SeparateEachDepart();
+                var ret = excelManipulation.SeparateEachDepart();
+                if(ret != null)
+                {
+                    MessageBox.Show("일람표 데이터 중, 학과표에 없는 데이터가 있습니다.\n학과 데이터 확인 해주세요.\n문제 학과 : " + ret);
+                }
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Excel 입력 데이터 오류 발견!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
+                MessageBox.Show(exception.Message + "\n학과 데이터와 일람표 데이터 간에 차이가 있습니다. 확인 부탁드립니다.");
             }
 
+            // 4번째 작업
+            // excelManipulation.GraphFileTask();
             try
             {
                 excelManipulation.GraphFileTask();
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Excel graph 결과 출력 오류!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
+                MessageBox.Show(exception.Message + "\n그래프 파일 작성 중 문제가 발생했습니다.\n일람표 워크시트 명을 확인해 주세요.");
             }
 
+            // 5번째 작업
+            // excelManipulation.ResultEachCollege();
             try
             {
                 excelManipulation.ResultEachCollege();
             }
             catch (Exception exception)
             {
-                MessageBox.Show("각 엑셀시트 결과 산출 오류!!!\n데이터를 수정하고 다시 작동 시켜주세요!");
+                MessageBox.Show(exception.Message + "\n결과 데이터 작성 중 문제가 발생하였습니다.\n일람표 워크시트 명을 확인해 주세요.");
             }
-
 
             excelManipulation.CloseFile();
         }

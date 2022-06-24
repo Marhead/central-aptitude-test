@@ -20,9 +20,14 @@ namespace CentralAptitudeTest.Commands
 
         private Application application;
 
+        // 전체 데이터.xlsx
         private Workbook InputDataWorkbook;
+        // 학과 데이터.xlsx
         private Workbook InputCollegeWorkbook;
+
+        // 전체 정리 데이터.xlsx
         private Workbook OutputAllWorkbook;
+        // 그래프 결과 데이터.xlsx
         private Workbook OutputGraphWorkbook;
 
         private Worksheet InputDataWorksheet;
@@ -45,6 +50,8 @@ namespace CentralAptitudeTest.Commands
         private Dictionary<string, int> ResultIndexDictionary = new Dictionary<string, int>();
         // 각 워크시트 옮겨 적을 때 사용
         private Dictionary<string, int> ResultRowcountDictionary = new Dictionary<string, int>();
+
+        private Dictionary<string, int> MisfitCounting = new Dictionary<string, int>();
 
         // 스트레스 취약성
         private int IndexStressColumn = 24;
@@ -208,9 +215,9 @@ namespace CentralAptitudeTest.Commands
 
                     Debug.WriteLine("기입될 데이터 : " + depart + "---" + college);
                     CollegeList.Add(college);
+                    DepartList.Add(depart);
 
                     Debug.WriteLine(depart + " 딕셔너리 작성");
-
                     index = row;
                 }
                 else
@@ -218,6 +225,7 @@ namespace CentralAptitudeTest.Commands
                     Debug.WriteLine(college + "---중복");
 
                     college = (string)(CollegeListRange.Cells[index, 1] as Range).Value2;
+                    DepartList.Add(depart);
 
                     Debug.WriteLine("기입될 데이터 : " + depart + "---" + college);
                     Debug.WriteLine(depart + " 딕셔너리 작성");
@@ -250,6 +258,10 @@ namespace CentralAptitudeTest.Commands
 
             var lastWorksheet = OutputAllWorkbook.Worksheets.Item[OutputAllWorkbook.Worksheets.Count] as Worksheet;
             lastWorksheet.Name = outputAllSheetName;
+
+            OutputGraphWorkbook.Worksheets.Add();
+            var graphcountingworksheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
+            graphcountingworksheet.Name = "학과 갯수 결과";
 
             Worker.ReportProgress(25, String.Format("단과대학 및 학과 읽기 종료"));
             Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
@@ -463,10 +475,10 @@ namespace CentralAptitudeTest.Commands
         // StudentNum 딕셔너리 생성이 아직 안되었기에, SeparateEachDepart 다음에 호출
         public void GraphFileTask()
         {
-            Worker.ReportProgress(69, String.Format("그래프 파일 작업 시작"));
+            Worker.ReportProgress(60, String.Format("그래프 파일 작업 시작"));
             Debug.WriteLine("=============================그래프 파일 시작=============================");
 
-            var graphSheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
+            var graphSheet = OutputGraphWorkbook.Worksheets.Item[2] as Worksheet;
             graphSheet.Name = "그래프Data";
 
             var from = WholeInputDataRange.Range["E1:Z1"];
@@ -505,7 +517,6 @@ namespace CentralAptitudeTest.Commands
                     targetCell = (graphSheet.Cells[graphcollegeindex + 1, 1] as Range);
                     targetCell.Value = inputtitle;
                 }
-
                 studentkeysindex++;
             }
             Worker.ReportProgress(70, String.Format("그래프 파일 작업 종료"));
@@ -514,6 +525,7 @@ namespace CentralAptitudeTest.Commands
         }
 
         // 5번째 수행 함수
+        // 각 단과대 워크시트 하단부에 총 이상인원 기재 하는 함수
         public void ResultEachCollege()
         {
             Worker.ReportProgress(71, String.Format("최종 결과 작성 작업 시작"));
@@ -702,7 +714,6 @@ namespace CentralAptitudeTest.Commands
             var target1Index = 5;
             var target2Index = 6;
             var stressIndex = 7;
-
             if (isSerious)
             {
                 preventTitleColumnIndex = 10;
@@ -758,7 +769,6 @@ namespace CentralAptitudeTest.Commands
                     targetlist = PreventIPConflictList;
                 }
             }
-
             (targetWorksheet.Cells[currentRowIndex, preventTitleColumnIndex] as Range).Value = title;
 
             currentRowIndex += 2;
@@ -783,12 +793,114 @@ namespace CentralAptitudeTest.Commands
                 (targetWorksheet.Cells[currentRowIndex, target2Index] as Range).Value2 = (WholeInputDataRange.Cells[index, target2] as Range).Value2;
                 (targetWorksheet.Cells[currentRowIndex, stressIndex] as Range).Value2 = (WholeInputDataRange.Cells[index, 24] as Range).Value2;
 
+                var departname = (string)(WholeInputDataRange.Cells[index, 1] as Range).Value2;
+
+                if(MisfitCounting==null || MisfitCounting.Count < 1 || !MisfitCounting.Keys.Contains(departname))
+                {
+                    MisfitCounting.Add(departname, 1);
+                }
+                else
+                {
+                    MisfitCounting[departname]++;
+                }
+
                 currentRowIndex++;
             }
-
             currentRowIndex += 2;
+
+            MisfitRewriting(title);
+            MisfitCounting.Clear();
 
             return currentRowIndex;
         }
+
+        public void MisfitRewriting(string title)
+        {
+            var writeworksheet = OutputGraphWorkbook.Worksheets.Item["학과 갯수 결과"] as Worksheet;
+
+            var startindex = writeworksheet.UsedRange.Rows.Count;
+
+            if(startindex > 2)
+            {
+                startindex += 2;
+            }
+
+            writeworksheet.Range["A" + startindex].Value = title;
+            startindex++;
+
+            foreach (var index in MisfitCounting.Keys)
+            {
+                startindex++;
+                writeworksheet.Range["A" + startindex].Value = index;
+                writeworksheet.Range["B" + startindex].Value = MisfitCounting[index];
+            }
+        }
+
+        /*public void MisfitRewriting()
+        {
+            var readworksheet = OutputAllWorkbook.Worksheets.Item["부적응Data"] as Worksheet;
+
+            var searchrange = readworksheet.UsedRange.Rows.Count;
+            var keys = DepartCollegeDictionary.Keys;
+
+            var preventsubject = "";
+            var problemsubject = "";
+
+            for (var i = 1; i <= searchrange; i++)
+            {
+                var preventindex = "A" + i;
+                var problemindex = "J" + i;
+
+                var preventdepart = readworksheet.Range[preventindex].Value;
+                var problemdepart = readworksheet.Range[problemindex].Value;
+
+                var preventvalue = (string)preventdepart;
+                var problemvalue = (string)problemdepart;
+
+                if (preventvalue != null)
+                {
+                    if (preventvalue.Contains("예방"))
+                    {
+                        preventsubject = preventvalue;
+                    }
+                }
+
+                if(keys.Contains(preventdepart))
+                {
+                    var writeworksheet = OutputAllWorkbook.Worksheets[DepartCollegeDictionary[(string)preventdepart]] as Worksheet;
+                    
+                    var writeindex = writeworksheet.UsedRange.Rows.Count + 2;
+                    var writerow = "A" + writeindex;
+                    writeworksheet.Range[writerow].Value = preventsubject;
+
+                    writeindex = writeworksheet.UsedRange.Rows.Count + 1;
+                    var getcontextindex = "A" + i + ":G" + i;
+                    writerow = "A" + writeindex + ":G" + writeindex;
+                    readworksheet.Range[getcontextindex].Copy(writeworksheet.Range[writerow]);
+                }
+
+                if (problemvalue != null)
+                {
+                    if (problemvalue.Contains("문제"))
+                    {
+                        problemsubject = problemvalue;
+                    }
+                }
+
+                if (keys.Contains(problemdepart))
+                {
+                    var writeworksheet = OutputAllWorkbook.Worksheets[DepartCollegeDictionary[(string)problemdepart]] as Worksheet;
+
+                    var writeindex = writeworksheet.UsedRange.Rows.Count + 2;
+                    var writerow = "J" + writeindex;
+                    writeworksheet.Range[writerow].Value = problemsubject;
+
+                    writeindex = writeworksheet.UsedRange.Rows.Count + 1;
+                    var getcontextindex = "J" + i + ":P" + i;
+                    writerow = "J" + writeindex + ":P" + writeindex;
+                    readworksheet.Range[getcontextindex].Copy(writeworksheet.Range[writerow]);
+                }
+            }
+        }*/
     }
 }

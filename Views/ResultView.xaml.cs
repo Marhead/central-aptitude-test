@@ -105,6 +105,14 @@ namespace CentralAptitudeTest.Views
                 MessageBox.Show(exception.Message + "\n결과 데이터 작성 중 문제가 발생하였습니다.\n일람표 워크시트 명을 확인해 주세요.");
             }
 
+            try
+            {
+                excelManipulation.CountEachDepart();
+            }catch(Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+
             excelManipulation.CloseFile();
         }
 

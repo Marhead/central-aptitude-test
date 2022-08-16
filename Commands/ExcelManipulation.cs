@@ -95,6 +95,9 @@ namespace CentralAptitudeTest.Commands
         List<int> SeriousIsolateList = new List<int>();
         List<int> SeriousIPConflictList = new List<int>();
 
+        Dictionary<string, List<int>> departmisfitcount = new Dictionary<string, List<int>>();
+        List<int> eachdepart = new List<int>();
+
         public ExcelManipulation(Config config, BackgroundWorker worker)
         {
             Worker = worker;
@@ -231,6 +234,8 @@ namespace CentralAptitudeTest.Commands
                     Debug.WriteLine(depart + " 딕셔너리 작성");
                 }
                 DepartCollegeDictionary.Add(depart, college);
+                var templist = Enumerable.Repeat(0, 22).ToList();
+                departmisfitcount.Add(depart, templist);
 
                 // Excel에 값 삽입하는 기본 문법
                 // Range rg1 = (Range)OutputAllWorksheet.Cells[1, 1];
@@ -264,6 +269,7 @@ namespace CentralAptitudeTest.Commands
             graphcountingworksheet.Name = "학과 갯수 결과";
 
             Worker.ReportProgress(25, String.Format("단과대학 및 학과 읽기 종료"));
+
             Debug.WriteLine("=============================단과대학 및 학과 읽기 종료=============================");
         }
 
@@ -665,10 +671,11 @@ namespace CentralAptitudeTest.Commands
                 {
                     Range range = targetworksheet.Cells[index, columnindex] as Range;
                     var temp = Convert.ToInt32(range.Value2);
-
+                    string departname = targetworksheet.Range["A" + index].Value as string;
                     if (temp >= 70)
                     {
                         count++;
+                        departmisfitcount[departname][columnindex - 5]++;
                     }
                 }
             }            
@@ -902,5 +909,33 @@ namespace CentralAptitudeTest.Commands
                 }
             }
         }*/
+        public void CountEachDepart()
+        {
+            OutputGraphWorkbook.Worksheets.Add();
+            var currentworksheet = OutputGraphWorkbook.Worksheets.Item[1] as Worksheet;
+            currentworksheet.Name = "학과별결과포함 그래프";
+            var writeworksheet = OutputGraphWorkbook.Worksheets.Item["학과별결과포함 그래프"] as Worksheet;
+
+            var from = WholeInputDataRange.Range["E1:Z1"];
+            var to = writeworksheet.Range["B1:W1"];
+
+            from.Copy(to);
+
+            var index = 2;
+
+            foreach(var depart in departmisfitcount.Keys)
+            {
+                var writecell = writeworksheet.Cells[index, 1] as Range;
+                writecell.Value = depart;
+
+                for(var point = 0; point < departmisfitcount[depart].Count; point++)
+                {
+                    writecell = writeworksheet.Cells[index, point + 2] as Range;
+                    writecell.Value = departmisfitcount[depart][point];
+                }
+
+                index++;
+            }
+        }
     }
 }
